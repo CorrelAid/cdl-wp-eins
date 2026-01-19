@@ -12,6 +12,16 @@ if (existsSync(distPath)) {
   console.log(`✅ dist directory exists`);
   const files = readdirSync(distPath);
   console.log(`dist contents: ${files.join(', ')}`);
+
+  // Check for page subdirectories
+  const einleitung = existsSync('./dist/einleitung');
+  const surveyTools = existsSync('./dist/survey_tools');
+  console.log(`einleitung dir exists: ${einleitung}`);
+  console.log(`survey_tools dir exists: ${surveyTools}`);
+
+  if (einleitung) {
+    console.log(`einleitung contents: ${readdirSync('./dist/einleitung').join(', ')}`);
+  }
 } else {
   console.error(`❌ dist directory NOT FOUND at ${distPath}`);
   console.log(`Current directory contents:`, readdirSync('.'));
