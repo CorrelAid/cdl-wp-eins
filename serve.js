@@ -1,6 +1,9 @@
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || "0.0.0.0";
 
+console.log(`Starting server on ${HOST}:${PORT}...`);
+console.log(`Working directory: ${process.cwd()}`);
+
 const server = Bun.serve({
   port: PORT,
   hostname: HOST,
@@ -8,6 +11,8 @@ const server = Bun.serve({
   async fetch(req) {
     const url = new URL(req.url);
     let pathname = url.pathname;
+
+    console.log(`[${new Date().toISOString()}] ${req.method} ${pathname}`);
 
     // Default to index.html for directory requests
     if (pathname.endsWith("/")) {
@@ -19,6 +24,7 @@ const server = Bun.serve({
     let file = Bun.file(filePath);
 
     if (await file.exists()) {
+      console.log(`  → Serving: ${filePath}`);
       return new Response(file);
     }
 
@@ -26,6 +32,7 @@ const server = Bun.serve({
     if (!pathname.endsWith(".html") && !pathname.endsWith("/")) {
       const dirIndexFile = Bun.file(`./dist${pathname}/index.html`);
       if (await dirIndexFile.exists()) {
+        console.log(`  → Serving: ./dist${pathname}/index.html`);
         return new Response(dirIndexFile);
       }
     }
@@ -34,13 +41,15 @@ const server = Bun.serve({
     if (!pathname.endsWith(".html")) {
       const htmlFile = Bun.file(`${filePath}.html`);
       if (await htmlFile.exists()) {
+        console.log(`  → Serving: ${filePath}.html`);
         return new Response(htmlFile);
       }
     }
 
     // 404
+    console.log(`  → 404 Not Found: ${pathname}`);
     return new Response("Not Found", { status: 404 });
   },
 });
 
-console.log(`🚀 Server running at ${server.url}`);
+console.log(`✅ Server running at ${server.url}`);
