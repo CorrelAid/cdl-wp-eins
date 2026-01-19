@@ -5,7 +5,7 @@ import { z } from 'astro/zod';
 const pages = defineCollection({
     loader: glob({
         pattern: "**/*.mdx",
-        base: "/home/jstet/Code/CorrelAid/CDL/wp_eins/src/content/pages",
+        base: "./src/content/pages",
         generateId: ({ entry }) => {
             // Use filename without extension as the slug/id
             return entry.replace(/\.mdx$/, '');
