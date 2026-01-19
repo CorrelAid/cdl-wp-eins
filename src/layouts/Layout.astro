@@ -1,0 +1,98 @@
+---
+import { getCollection } from "astro:content";
+import "../lib/styles/gen_tokens.css";
+import "../lib/styles/main.css";
+import toc from "../toc.json";
+import SideNav from "../components/SideNav.svelte";
+import TitleLine from "../components/TitleLine.svelte";
+
+const { title, teaser, line = true } = Astro.props;
+const allPages = await getCollection("pages");
+
+// Create a map of id (filename) to page data for easy lookup
+const pageMap = Object.fromEntries(
+    allPages.map(page => [page.id, page])
+);
+
+// Build nested structure from toc.js
+function buildNavStructure(tocArray: any[]): any[] {
+    return tocArray.map((item: any) => {
+        if (typeof item === 'string') {
+            return { slug: item, page: pageMap[item] };
+        } else if (typeof item === 'object') {
+            const [key, children] = Object.entries(item)[0];
+            return {
+                slug: key,
+                page: pageMap[key],
+                children: buildNavStructure(children as any[])
+            };
+        }
+        return null;
+    }).filter(Boolean);
+}
+
+const navStructure = buildNavStructure(toc);
+
+// Recursive component for rendering nav items
+function renderNavItem(item: any, level = 0): any {
+    if (!item.page) return null;
+
+    const hasChildren = item.children && item.children.length > 0;
+    const itemId = `nav-${item.slug}`; // slug here is the filename from toc
+
+    return {
+        id: itemId,
+        slug: item.slug, // This is the filename (entry.id)
+        title: item.page.data.tocTitle,
+        hasChildren,
+        children: hasChildren ? item.children.map((child: any) => renderNavItem(child, level + 1)).filter((x: any) => x !== null) : [],
+        level
+    };
+}
+
+const navItems = navStructure.map((item: any) => renderNavItem(item)).filter((x: any) => x !== null);
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <SideNav navItems={navItems} client:load />
+        <main>
+            {title && <h1>{title}</h1> }
+            {teaser && <p class="teaser">{teaser}</p>}
+            {line === true && <TitleLine client:load /> }
+            <article>
+                <slot />
+                <!-- your content is injected here -->
+            </article>
+        </main>
+    </body>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+        }
+
+        .teaser {
+            color: var(--color-text-primary);
+            margin-bottom: var(--dimension-spacing-lg);
+            text-align: center;
+        }
+
+        main {
+            flex: 1;
+            margin-inline: auto;
+            max-width: 750px;
+            padding: 4rem var(--dimension-spacing-sm) var(--dimension-spacing-lg);
+        }
+
+    </style>
+</html>

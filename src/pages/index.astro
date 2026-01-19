@@ -1,16 +1,63 @@
 ---
-
+import Layout from "../layouts/Layout.astro";
+import Hardhat from "../lib/svg/hardhat.svg";
+import TitleLine from "../components/TitleLine.svelte";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
+<Layout line="false">
 	<body>
-		<h1>Astro</h1>
+		<div class="logo-container">
+			<h1>Werkstattphase 1</h1>
+			<Hardhat />
+		</div>
+		<TitleLine client:load />
+		<section>Hier wird das Konzept beschrieben.</section>
 	</body>
-</html>
+</Layout>
+
+<style>
+	section {
+		margin-top: 2.5rem;
+	}
+	h1{
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	.logo-container {
+		margin-top: 1rem;
+		padding-top: 1rem;
+		margin-bottom: 2.5rem;
+		background-color: var(--color-tertiary);
+		border-radius: 2rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		
+	}
+
+	.logo-container :global(svg) {
+		padding-bottom: 3.5rem;
+		width: 100%;
+		max-width: 600px;
+		height: auto;
+	}
+
+	@media (max-width: 768px) {
+		.logo-container :global(svg) {
+			max-width: 100%;
+			padding: 1rem;
+			padding-bottom: 0.5rem;
+		}
+
+		.logo-container {
+			margin-left: 1rem;
+			margin-right: 1rem;
+		}
+
+		h1 {
+			font-size: 1.5rem;
+		}
+	}
+</style>
