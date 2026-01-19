@@ -20,9 +20,12 @@ cmds = ["bun run build"]
 cacheDirectories = [
   "node_modules",
   "node_modules/.cache",
-  ".astro",
-  "dist"
+  ".astro"
 ]
 
 [start]
 cmd = "bun serve.js"
+
+# Ensure dist directory is included in the final image
+[staticAssets]
+"dist" = "dist"

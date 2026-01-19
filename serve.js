@@ -1,8 +1,21 @@
+import { existsSync, readdirSync } from 'fs';
+
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || "0.0.0.0";
 
 console.log(`Starting server on ${HOST}:${PORT}...`);
 console.log(`Working directory: ${process.cwd()}`);
+
+// Check if dist directory exists
+const distPath = './dist';
+if (existsSync(distPath)) {
+  console.log(`✅ dist directory exists`);
+  const files = readdirSync(distPath);
+  console.log(`dist contents: ${files.join(', ')}`);
+} else {
+  console.error(`❌ dist directory NOT FOUND at ${distPath}`);
+  console.log(`Current directory contents:`, readdirSync('.'));
+}
 
 const server = Bun.serve({
   port: PORT,
