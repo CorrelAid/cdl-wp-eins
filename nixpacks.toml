@@ -25,4 +25,4 @@ cacheDirectories = [
 ]
 
 [start]
-cmd = "bun --bun ./dist/server/entry.mjs"
+cmd = "bun serve.js"

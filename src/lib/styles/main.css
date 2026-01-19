@@ -146,7 +146,7 @@ h1 {
     max-width: var(--dimension-content-max-width);
 }
 
-:global(ul, ol) {
+:global(ul), :global(ol) {
     margin-bottom: var(--dimension-spacing-sm);
     padding-left: var(--dimension-spacing-lg);
     max-width: var(--dimension-content-max-width);
@@ -167,7 +167,7 @@ h1 {
     }
 }
 
-:global(th, td) {
+:global(th), :global(td) {
     padding: var(--dimension-table-padding);
     text-align: left;
     background-color: var(--color-white);
