@@ -1,5 +1,6 @@
 [
     "einleitung",
+    "llm_synthetic_survey_data",
     {
         "survey_tools": [
             "limesurvey",

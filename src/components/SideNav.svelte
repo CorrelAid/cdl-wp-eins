@@ -273,9 +273,11 @@
         }
 
         nav {
-            position: static;
+            position: fixed;
             left: 0;
+            top: 0;
             width: 250px;
+            height: 100vh;
             flex-shrink: 0;
         }
     }
