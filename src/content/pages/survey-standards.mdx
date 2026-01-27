@@ -1,0 +1,55 @@
+---
+tocTitle: Survey standards
+teaser: Survey standards
+---
+
+## Literature 
+
+- Dupriez, O., & Asghar, M. (2022, November). Standards and good practice for survey data documentation. Inter-Secretariat Working Group on Household Surveys, Task Force on Metadata Standards.
+    - https://unstats.un.org/iswghs/documents/ISWGHS-metadata-20221123.pdf
+    - "A tool that would map XLSForm files used by applications like Kobo Toolbox
+could also be developed, to automate the production of DDI-compliant metadata by users of data entry
+applications compatible with XLSForm."
+
+## Tool standards
+
+### Lime Survey
+    - LimeSurvey has its own internal XML format
+
+## Tool independent Standards
+
+### Instrument definition (Survey Design)
+
+#### DDI Lifecycle
+
+- https://docs.ddialliance.org/DDI-Lifecycle/
+- Not just for surveys
+- Quite complicated
+- Documentation: https://docs.ddialliance.org/DDI-Lifecycle/3.3/model
+
+### queXML
+
+- queXML is a simple XML schema for designing questionnaires.
+- **queXML is compatible with the DDI standard for data description.**
+- Does not include survey logic/filter optiosn
+- Compatible with:
+    - Lime Survey
+    - 
+
+### XLSForm/ODK XForms
+
+- XLSForm is a form standard created to help simplify the authoring of forms in Excel (or other spreadsheet programs)
+- Supported by ODK and Kobo Toolbox and others: https://xlsform.org/en/#tools-that-support-xlsforms
+- https://getodk.github.io/xforms-spec/#introduction
+
+
+## Collected data (Survey Design)
+
+- **DDI Lifecycle**: DDI is purely metadata — it documents data, doesn't store it.
+- SDMX
+- CSV-W
+
+## Related Tools
+
+- Eno: transform questionnaires from their formal description in DDI: https://github.com/InseeFr/Eno
+- XSLT: language for transforming XML documents into other XML documents, HTML, or plain text.
