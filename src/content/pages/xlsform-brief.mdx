@@ -1,0 +1,84 @@
+--- 
+tocTitle: XLSForm - Brief Overview
+teaser: A concise introduction to XLSForm with examples
+--- 
+
+import SpreadsheetWithTabs from '../../components/SpreadsheetWithTabs.svelte';
+
+# XLSForm - Brief Overview
+
+XLSForm is a standard for creating forms using Excel spreadsheets. It's widely used in survey and data collection tools.
+
+## Key Concepts
+
+- **Excel-based form design**: Create forms using familiar spreadsheet software
+- **Standardized structure**: Uses specific worksheet names and column formats
+- **Interoperable**: Works with tools like ODK, KoboToolbox, SurveyCTO
+
+## Basic Structure
+
+<SpreadsheetWithTabs client:load worksheets={[
+  {
+    id: 'survey',
+    title: 'Survey Worksheet',
+    headers: ['type', 'name', 'label', 'hint', 'required', 'constraint'],
+    data: [
+      ['text', 'respondent_name', 'What is your name?', 'Enter full name', 'yes', ''],
+      ['integer', 'age', 'What is your age?', 'Enter age in years', 'yes', '. > 0'],
+      ['select_one gender', 'gender', 'What is your gender?', '', 'yes', ''],
+      ['select_multiple languages', 'languages', 'Which languages do you speak?', 'Select all that apply', 'no', '']
+    ]
+  },
+  {
+    id: 'choices',
+    title: 'Choices Worksheet',
+    headers: ['list_name', 'name', 'label'],
+    data: [
+      ['gender', 'male', 'Male'],
+      ['gender', 'female', 'Female'],
+      ['gender', 'other', 'Other'],
+      ['gender', 'prefer_not_to_say', 'Prefer not to say'],
+      ['languages', 'english', 'English'],
+      ['languages', 'spanish', 'Spanish'],
+      ['languages', 'french', 'French'],
+      ['languages', 'german', 'German']
+    ]
+  },
+  {
+    id: 'settings',
+    title: 'Settings Worksheet',
+    headers: ['parameter', 'value'],
+    data: [
+      ['form_title', 'Demographic Survey'],
+      ['form_id', 'demo_survey'],
+      ['version', '1.0'],
+      ['submission_url', 'https://example.com/submit']
+    ]
+  }
+]} />
+
+## Common Question Types
+
+- `text`: Free text response
+- `integer`: Whole numbers
+- `decimal`: Decimal numbers
+- `select_one`: Single choice from list
+- `select_multiple`: Multiple choices from list
+- `date`: Date picker
+- `geopoint`: GPS coordinates
+
+## Benefits
+
+- **No coding required**: Design forms using Excel
+- **Reusable**: Same form works across multiple platforms
+- **Version control**: Easy to track changes
+- **Collaboration**: Multiple people can work on the same form
+
+## Tools that Support XLSForm
+
+- ODK Collect
+- KoboToolbox
+- SurveyCTO
+- Ona
+- CommCare
+- Many others...

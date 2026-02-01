@@ -90,6 +90,10 @@ body {
     color: var(--color-text-primary);
 }
 
+:root {
+    --color-border: #e0e0e0; /* Default border color */
+}
+
 /* Line Heights */
 body {
     line-height: var(--typography-body-line-height);
