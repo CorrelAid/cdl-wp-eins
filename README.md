@@ -22,7 +22,8 @@ Literature is managed via a Zotero group and fetched live. To cite an item in an
 1. Find the Zotero key of the item (e.g., by looking at the `/literature` page) or its DOI.
 2. Use the `Citation` component (available globally in MDX):
    ```mdx
-   <Citation key="3SZ58NRP" mode="narrative" />
+   {/* Find the key in the browser url of the item, e.g. https://www.zotero.org/groups/6410519/cdl-wp/items/3SZ58NRP/item-list*/}
+   <Citation key="3SZ58NRP" mode="narrative" /> 
    {/* OR */}
    <Citation doi="10.48550/ARXIV.2510.08338" mode="parenthetical" />
    ```
