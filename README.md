@@ -35,3 +35,9 @@ Literature is managed via a Zotero group and fetched live. To cite an item in an
 - `mode` (optional): `'parenthetical'` (default, e.g., "(Author, Year)") or `'narrative'` (e.g., "Author (Year)").
 - `includePages` (optional): Boolean to include page numbers.
 - `pages` (optional): String for page numbers.
+
+# Misc
+
+## Draft structure
+
+- Intro

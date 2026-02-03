@@ -17,6 +17,7 @@
     "@terrazzo/parser": "^0.10.5",
     "@terrazzo/plugin-css": "^0.10.4",
     "astro": "^5.16.11",
+    "minisearch": "^7.2.0",
     "scule": "^1.3.0",
     "svelte": "^5.47.0",
     "typescript": "^5.9.3"

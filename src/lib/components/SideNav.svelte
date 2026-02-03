@@ -38,6 +38,8 @@
     function closeMenu() {
         isOpen = false;
     }
+
+    import Search from './Search.svelte';
 </script>
 
 <button id="menu-toggle" class:active={isOpen} aria-label="Toggle menu" onclick={toggleMenu}>
@@ -79,6 +81,7 @@
             </li>
         {/each}
     </ul>
+    <Search />
 </nav>
 
 <div

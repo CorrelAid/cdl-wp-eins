@@ -1,0 +1,10 @@
+---
+import Layout from "@layouts/Layout.astro";
+import SearchResults from "@components/SearchResults.svelte";
+import Search from "@components/Search.svelte";
+
+---
+
+<Layout title="Search Results" teaser="Search through our documentation">
+    <SearchResults client:load />
+</Layout>

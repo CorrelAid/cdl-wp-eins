@@ -28,6 +28,8 @@
 
     let { items = [], error = null }: Props = $props();
 
+    import Card from './Card.svelte';
+
     let activeId = $state<string | null>(null);
     let copiedId = $state<string | null>(null);
 
@@ -103,58 +105,60 @@
     {:else if items.length > 0}
         <ul class="literature-list">
             {#each items as item (item.id)}
-                <li 
-                    class="literature-item" 
-                    class:active={activeId === item.id}
-                    id={item.id}
-                >
-                    <a 
-                        href={`#${item.id}`} 
-                        class="anchor-link" 
-                        aria-label="Link to this item"
-                        onclick={(e) => handleAnchorClick(e, item.id)}
+                <li class="literature-item-wrapper">
+                    <Card 
+                        id={item.id}
+                        active={activeId === item.id}
+                        className="literature-card"
                     >
-                        {copiedId === item.id ? '📋' : '#'}
-                    </a>
-                    <div class="apa-citation">
-                        {#if item.data.creators && item.data.creators.length > 0}
-                            <span class="apa-authors">
-                                {#each item.data.creators as creator, i}
-                                    <span>
-                                        {creator.name}{i < item.data.creators.length - 1 ? ', ' : ''}
-                                    </span>
-                                {/each}
-                            </span>
-                        {/if}
-                        
-                        {#if item.data.creators && item.data.creators.length > 0 && (item.data.date || item.data.title)}
-                             {' ('}
-                        {/if}
+                        <a 
+                            href={`#${item.id}`} 
+                            class="anchor-link" 
+                            aria-label="Link to this item"
+                            onclick={(e) => handleAnchorClick(e, item.id)}
+                        >
+                            {copiedId === item.id ? '📋' : '#'}
+                        </a>
+                        <div class="apa-citation">
+                            {#if item.data.creators && item.data.creators.length > 0}
+                                <span class="apa-authors">
+                                    {#each item.data.creators as creator, i}
+                                        <span>
+                                            {creator.name}{i < item.data.creators.length - 1 ? ', ' : ''}
+                                        </span>
+                                    {/each}
+                                </span>
+                            {/if}
+                            
+                            {#if item.data.creators && item.data.creators.length > 0 && (item.data.date || item.data.title)}
+                                 {' ('}
+                            {/if}
 
-                        {#if item.data.date}
-                            <span class="apa-date">{item.data.date}</span>
-                        {/if}
+                            {#if item.data.date}
+                                <span class="apa-date">{item.data.date}</span>
+                            {/if}
 
-                        {#if item.data.creators && item.data.creators.length > 0 && (item.data.date || item.data.title)}
-                             {'). '}
-                        {/if}
+                            {#if item.data.creators && item.data.creators.length > 0 && (item.data.date || item.data.title)}
+                                 {'). '}
+                            {/if}
 
-                        {#if item.data.title}
-                            <span class="apa-title">{item.data.title}. </span>
-                        {/if}
+                            {#if item.data.title}
+                                <span class="apa-title">{item.data.title}. </span>
+                            {/if}
 
-                        {#if item.data.publicationTitle}
-                            <span class="apa-source"><em>{item.data.publicationTitle}</em>.</span>
-                        {/if}
+                            {#if item.data.publicationTitle}
+                                <span class="apa-source"><em>{item.data.publicationTitle}</em>.</span>
+                            {/if}
 
-                        {#if item.data.DOI}
-                            <span class="apa-doi"> <a href={`https://doi.org/${item.data.DOI}`} target="_blank">https://doi.org/{item.data.DOI}</a></span>
-                        {/if}
+                            {#if item.data.DOI}
+                                <span class="apa-doi"> <a href={`https://doi.org/${item.data.DOI}`} target="_blank">https://doi.org/{item.data.DOI}</a></span>
+                            {/if}
 
-                        {#if item.data.url && !item.data.DOI}
-                            <span class="apa-url"> <a href={item.data.url} target="_blank">{item.data.url}</a></span>
-                        {/if}
-                    </div>
+                            {#if item.data.url && !item.data.DOI}
+                                <span class="apa-url"> <a href={item.data.url} target="_blank">{item.data.url}</a></span>
+                            {/if}
+                        </div>
+                    </Card>
                 </li>
             {/each}
         </ul>
@@ -168,152 +172,136 @@
         max-width: 1200px;
         margin: 0 auto;
         color: var(--color-text-secondary);
+    }
 
-        h1 {
-            margin-bottom: 0.5rem;
-            color: var(--color-primary);
-        }
+    h1 {
+        margin-bottom: 0.5rem;
+        color: var(--color-primary);
+    }
 
-        .sort-info {
-            color: var(--color-text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            font-style: italic;
-        }
+    .sort-info {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+    }
 
-        .literature-list {
-            list-style: none;
-            padding: 0;
+    .literature-list {
+        list-style: none;
+        padding: 0;
+    }
 
-            .literature-item {
-                background-color: var(--color-secondary);
-                border-radius: 8px;
-                padding: 1.5rem;
-                padding-right: 3rem; /* Space for anchor link */
-                margin-bottom: 1.5rem;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                transition: transform 0.2s ease;
-                position: relative;
+    /* Target the Card component via global/deep selector or just rely on class passed */
+    :global(.literature-card) {
+        padding-right: 3rem; /* Space for anchor link */
+    }
 
-                &:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    :global(.literature-card:hover .anchor-link) {
+        opacity: 1;
+    }
 
-                    .anchor-link {
-                        opacity: 1;
-                    }
-                }
+    :global(.literature-card.active .anchor-link) {
+        opacity: 1 !important;
+        color: var(--color-surface-1);
+    }
 
-                &.active {
-                    box-shadow: inset -8px 0 0 0 white, 0 4px 8px rgba(0, 0, 0, 0.15);
-                    transform: translateY(-2px) !important;
-                    position: relative !important;
-                    transition: all 0.3s ease !important;
+    .anchor-link {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        background-color: var(--color-accent);
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        text-decoration: none;
+        z-index: 10;
+    }
 
-                    .anchor-link {
-                        opacity: 1 !important;
-                        background-color: var(--color-text-primary);
-                        color: var(--color-surface-1);
-                    }
-                }
+    .apa-citation {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--color-text);
+        margin: 0;
+        padding: 0;
+        padding-right: 1rem; /* Extra safety for long text */
+        font-family: var(--font-sans);
+        display: block;
+        border-left: 3px solid var(--color-accent);
+        padding-left: 10px;
+    }
 
-                .anchor-link {
-                    position: absolute;
-                    top: 1rem;
-                    right: 1rem;
-                    opacity: 0;
-                    transition: opacity 0.2s ease;
-                    background-color: var(--color-accent);
-                    color: white;
-                    border-radius: 50%;
-                    width: 24px;
-                    height: 24px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 14px;
-                    text-decoration: none;
-                    z-index: 10;
-                }
+    .apa-authors {
+        font-weight: 600;
+        color: var(--color-text);
+    }
 
-                .apa-citation {
-                    font-size: 1rem;
-                    line-height: 1.6;
-                    color: var(--color-text);
-                    margin: 0;
-                    padding: 0;
-                    padding-right: 1rem; /* Extra safety for long text */
-                    font-family: var(--font-sans);
-                    display: block;
-                    border-left: 3px solid var(--color-accent);
-                    padding-left: 10px;
+    .apa-title {
+        font-style: normal;
+        font-weight: 400;
+        color: var(--color-text);
+    }
 
-                    .apa-authors {
-                        font-weight: 600;
-                        color: var(--color-text);
-                    }
+    .apa-source {
+        font-style: italic;
+        font-weight: 400;
+        color: var(--color-text-secondary);
+    }
 
-                    .apa-title {
-                        font-style: normal;
-                        font-weight: 400;
-                        color: var(--color-text);
-                    }
+    .apa-doi,
+    .apa-url {
+        color: var(--color-accent);
+        font-size: 0.9rem;
+        font-weight: 400;
+    }
 
-                    .apa-source {
-                        font-style: italic;
-                        font-weight: 400;
-                        color: var(--color-text-secondary);
-                    }
+    .apa-doi a,
+    .apa-url a {
+        color: var(--color-accent);
+        text-decoration: none;
+        font-weight: 500;
+    }
 
-                    .apa-doi,
-                    .apa-url {
-                        color: var(--color-accent);
-                        font-size: 0.9rem;
-                        font-weight: 400;
+    .apa-doi a:hover,
+    .apa-url a:hover {
+        text-decoration: underline;
+    }
 
-                        a {
-                            color: var(--color-accent);
-                            text-decoration: none;
-                            font-weight: 500;
+    .no-results {
+        color: var(--color-text-secondary);
+        font-style: italic;
+        text-align: center;
+        margin-top: 2rem;
+    }
 
-                            &:hover {
-                                text-decoration: underline;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        .no-results {
-            color: var(--color-text-secondary);
-            font-style: italic;
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .error-message {
-            background-color: #ffebee;
-            color: #c62828;
-            border: 1px solid #ef9a9a;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            text-align: center;
-
-            p {
-                margin: 0.5rem 0;
-            }
-        }
+    .error-message {
+        background-color: #ffebee;
+        color: #c62828;
+        border: 1px solid #ef9a9a;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        text-align: center;
+    }
+    
+    .error-message p {
+        margin: 0.5rem 0;
     }
 
     @media (max-width: 768px) {
         .literature-container {
             padding: 1rem;
-
-            .literature-list .literature-item {
-                padding: 1rem;
-            }
+        }
+        
+        /* Adjust global styles if needed */
+        :global(.literature-card) {
+             padding: 1rem;
         }
     }
 </style>
