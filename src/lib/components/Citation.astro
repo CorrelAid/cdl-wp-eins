@@ -1,0 +1,238 @@
+---
+import { getLiveCollection } from "astro:content";
+
+interface Props {
+    /**
+     * Zotero key of the item to cite
+     */
+    key?: string;
+
+    /**
+     * DOI of the item to cite
+     */
+    doi?: string;
+    
+    /**
+     * Citation mode/style
+     * - 'narrative': "Author (Year)"
+     * - 'parenthetical': "(Author, Year)"
+     */
+    mode?: 'narrative' | 'parenthetical';
+    
+
+    
+    /**
+     * Whether to include page numbers (if available)
+     */
+    includePages?: boolean;
+    
+    /**
+     * Page numbers to cite (if includePages is true)
+     */
+    pages?: string;
+}
+
+const { key, doi, mode = 'parenthetical', includePages = false, pages } = Astro.props;
+
+if (!key && !doi) {
+    console.warn("Citation component requires either a 'key' or a 'doi' prop.");
+}
+
+// Get literature from live collection
+const { entries: literature, error } = await getLiveCollection("literature");
+
+// Find the specific item by key or doi
+let citedItem;
+if (key) {
+    citedItem = literature?.find(item => item.id === key);
+} else if (doi) {
+    citedItem = literature?.find(item => item.data.DOI === doi);
+}
+
+// Handle error cases
+if (error) {
+    console.error("Error loading literature collection:", error);
+}
+
+if (!citedItem) {
+    console.warn(`No literature item found with key: ${key} or DOI: ${doi}`);
+}
+
+// Helper function to format authors for APA style
+function formatAuthors(creators: Array<{name: string, lastName?: string}>): string {
+    if (!creators || creators.length === 0) return '';
+    
+    // Use lastName if available, otherwise fall back to name (for organizations or when split names aren't available)
+    const getName = (creator: {name: string, lastName?: string}) => creator.lastName || creator.name;
+    
+    if (creators.length === 1) {
+        return getName(creators[0]);
+    }
+    
+    if (creators.length === 2) {
+        return `${getName(creators[0])} & ${getName(creators[1])}`;
+    }
+    
+    // For 3+ authors, use "First et al." format
+    return `${getName(creators[0])} et al.`;
+}
+
+// Helper function to format year
+function formatYear(date: string): string {
+    if (!date) return '';
+    
+    // Extract year from date string (handling formats like "2023", "2023-01-01", "07/2023", "2023-07-16")
+    const yearMatch = date.match(/(\d{4})/);
+    return yearMatch ? yearMatch[1] : date;
+}
+
+// Prepare citation data for template
+let citationContent = "";
+let citationClass = "citation-fallback";
+let literatureLink = `/literature#missing`;
+
+if (!citedItem?.data) {
+    const fallbackText = error ? `[Citation error: ${error.message}]` : `[Citation not available]`;
+    citationContent = `${fallbackText}`;
+} else {
+    const { creators, date, title } = citedItem.data;
+    const authors = formatAuthors(creators);
+    const year = formatYear(date);
+    literatureLink = `/literature#${citedItem.id}`;
+    
+    switch (mode) {
+        case 'narrative':
+            citationContent = `${authors} (${year})`;
+            citationClass = "narrative-citation";
+            break;
+        
+        case 'parenthetical':
+            citationContent = `(${authors}, ${year})`;
+            citationClass = "parenthetical-citation";
+            break;
+        
+
+        
+        default:
+            citationContent = `(${authors}, ${year})`;
+            citationClass = "parenthetical-citation";
+    }
+}
+---
+
+{
+    /* Render different citation types with appropriate linking */
+    (() => {
+        switch (mode) {
+            case 'narrative':
+                // Link the year in narrative citations
+                const narrativeParts = citationContent.split('(');
+                const yearPart = narrativeParts[1]?.replace(')', '');
+                return (
+                    <span class={`citation ${citationClass}`} data-citation-mode={mode}>
+                        {narrativeParts[0]}(
+                        <a href={literatureLink} class="literature-link narrative-year" aria-label="View full citation">
+                            {yearPart}⤴
+                        </a>
+                        )
+                    </span>
+                );
+            
+            case 'parenthetical':
+                // Link the entire citation in parenthetical mode with symbol inside parentheses
+                return (
+                    <span class={`citation ${citationClass}`} data-citation-mode={mode}>
+                        <a href={literatureLink} class="literature-link" aria-label="View full citation">
+                            {citationContent.replace(')', '⤴)')}
+                        </a>
+                    </span>
+                );
+            
+
+            
+            default:
+                // Default to parenthetical behavior for unknown modes
+                return (
+                    <span class={`citation ${citationClass}`} data-citation-mode={mode}>
+                        <a href={literatureLink} class="literature-link" aria-label="View full citation">{citationContent}</a>
+                    </span>
+                );
+        }
+    })()
+}
+
+<style>
+    .citation {
+        font-family: var(--font-sans);
+        color: var(--color-text);
+        font-size: 0.95em;
+        position: relative;
+        display: inline;
+    }
+    
+    .literature-link {
+        color: inherit;
+        text-decoration: none;
+        font-weight: normal;
+        border-bottom: none; /* Remove underline */
+        position: relative;
+    }
+    
+    .literature-link:hover {
+        color: var(--color-accent);
+        text-decoration: underline;
+    }
+    
+    /* Link symbol styling */
+    .link-symbol {
+        font-size: 1em;
+        vertical-align: middle;
+        margin-left: 0.3em;
+        color: var(--color-accent);
+        font-weight: bold;
+        display: inline-block;
+        transform: rotate(45deg);
+    }
+    
+    .literature-link:hover .link-symbol {
+        color: var(--color-text-primary);
+        text-decoration: none;
+    }
+    
+    /* For narrative citations, make the symbol smaller */
+    .narrative-year .link-symbol {
+        font-size: 0.9em;
+        vertical-align: super;
+        margin-left: 0.2em;
+    }
+    
+    .citation-fallback {
+        color: var(--color-text-secondary);
+        font-style: italic;
+    }
+    
+    .apa-full-citation {
+        display: block;
+        margin: 0.5em 0;
+        padding: 0.5em;
+        background-color: var(--color-surface-1);
+        border-radius: 4px;
+        font-size: 0.9em;
+        line-height: 1.5;
+    }
+    
+    .apa-full-citation em {
+        font-style: italic;
+        color: var(--color-text-secondary);
+    }
+    
+    /* Style for narrative year links */
+    .literature-link.narrative-year {
+        color: inherit;
+        font-weight: normal;
+    }
+    
+    .literature-link.narrative-year:hover {
+        color: var(--color-accent);
+    }
+</style>

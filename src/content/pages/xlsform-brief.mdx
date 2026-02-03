@@ -3,8 +3,6 @@ tocTitle: XLSForm - Brief Overview
 teaser: A concise introduction to XLSForm with examples
 --- 
 
-import SpreadsheetWithTabs from '../../components/SpreadsheetWithTabs.svelte';
-
 # XLSForm - Brief Overview
 
 XLSForm is a standard for creating forms using Excel spreadsheets. It's widely used in survey and data collection tools.
@@ -17,7 +15,7 @@ XLSForm is a standard for creating forms using Excel spreadsheets. It's widely u
 
 ## Basic Structure
 
-<SpreadsheetWithTabs client:load worksheets={[
+<SpreadsheetWithTabsWrapper worksheets={[
   {
     id: 'survey',
     title: 'Survey Worksheet',

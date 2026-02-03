@@ -1,0 +1,26 @@
+---
+import Layout from "@layouts/Layout.astro";
+import LiteratureList from "@components/Literature.svelte";
+import { getLiveCollection } from "astro:content";
+
+// Get literature from live collection
+const { entries: literature, error } = await getLiveCollection("literature");
+
+// Prepare error message for display
+const errorMessage = error ? (error.message || 'Unknown error loading literature') : null;
+
+if (error) {
+  console.error("Error loading literature collection:", error);
+}
+
+// Sort literature alphabetically by title
+const sortedLiterature = literature ? [...literature].sort((a, b) => {
+  const titleA = a.data.title?.toLowerCase() || '';
+  const titleB = b.data.title?.toLowerCase() || '';
+  return titleA.localeCompare(titleB);
+}) : [];
+---
+
+<Layout title="Literature" teaser="Browse our research literature">
+    <LiteratureList client:load items={sortedLiterature} error={errorMessage} />
+</Layout>

@@ -1,11 +1,11 @@
 ---
 import { getCollection } from "astro:content";
-import "../lib/styles/gen_tokens.css";
-import "../lib/styles/main.css";
-import toc from "../toc.json";
-import SideNav from "../components/SideNav.svelte";
-import TitleLine from "../components/TitleLine.svelte";
-import BaseHead from "../components/BaseHead.astro";
+import "@styles/gen_tokens.css";
+import "@styles/main.css";
+import toc from "@lib/toc.json";
+import SideNav from "@components/SideNav.svelte";
+import TitleLine from "@components/TitleLine.svelte";
+import BaseHead from "@components/BaseHead.astro";
 
 const { title, teaser, line = true } = Astro.props;
 const allPages = await getCollection("pages");
@@ -19,6 +19,18 @@ const pageMap = Object.fromEntries(
 function buildNavStructure(tocArray: any[]): any[] {
     return tocArray.map((item: any) => {
         if (typeof item === 'string') {
+            // Special case for literature page which is not in content collection
+            if (item === 'literature') {
+                return {
+                    slug: item,
+                    page: {
+                        data: {
+                            tocTitle: 'Literature',
+                            teaser: 'Browse our research literature'
+                        }
+                    }
+                };
+            }
             return { slug: item, page: pageMap[item] };
         } else if (typeof item === 'object') {
             const [key, children] = Object.entries(item)[0];
