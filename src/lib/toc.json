@@ -3,6 +3,7 @@
     "llm_synthetic_survey_data",
     {
         "survey_tools": [
+            "bayes_statistik",
             "kobotoolbox",
             "limesurvey",
             "lamapoll",
