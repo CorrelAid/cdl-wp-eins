@@ -16,10 +16,12 @@
     let isOpen = $state(false);
 
     // Initialize with all items that have children expanded by default
-    const initialExpanded = new Set(
-        navItems.filter(item => item.hasChildren).map(item => item.id)
-    );
-    let expandedItems = $state<Set<string>>(initialExpanded);
+    // Note: We intentionally capture the initial value of navItems here
+    // and don't react to changes, preserving user's expansion state
+    let expandedItems = $state<Set<string>>((() => {
+        const initialItems = navItems.filter(item => item.hasChildren).map(item => item.id);
+        return new Set(initialItems);
+    })());
 
     function toggleMenu() {
         isOpen = !isOpen;
@@ -98,8 +100,8 @@
     /* Hamburger Menu Button */
     #menu-toggle {
         position: fixed;
-        top: var(--dimension-spacing-sm);
-        right: var(--dimension-spacing-sm);
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
         z-index: 1001;
         background: var(--color-primary);
         border: none;
@@ -163,7 +165,7 @@
         width: 250px;
         height: 100vh;
         background: var(--color-white);
-        padding: 4rem var(--dimension-spacing-sm) var(--dimension-spacing-lg);
+        padding: 4rem var(--spacing-sm) var(--spacing-lg);
         border-right: var(--dimension-border-width) solid var(--color-text-primary);
         overflow-y: auto;
         z-index: 1000;
@@ -181,7 +183,7 @@
     }
 
     nav li {
-        margin-bottom: var(--dimension-spacing-xs);
+        margin-bottom: var(--spacing-xs);
     }
 
     .nav-item-wrapper {
@@ -235,7 +237,7 @@
     .submenu {
         display: none;
         list-style: none;
-        padding-left: var(--dimension-spacing-md);
+        padding-left: var(--spacing-md);
         margin-top: 0.25rem;
     }
 

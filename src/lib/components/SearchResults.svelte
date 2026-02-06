@@ -83,11 +83,11 @@
 
 <style>
     .search-results-page {
-        padding: var(--dimension-spacing-md) 0;
+        padding: var(--spacing-md) 0;
     }
 
     .loading, .error, .no-query, .no-results {
-        padding: var(--dimension-spacing-lg);
+        padding: var(--spacing-lg);
         text-align: center;
         color: var(--color-text-secondary);
         font-style: italic;
@@ -98,7 +98,7 @@
     }
 
     .results-header {
-        margin-bottom: var(--dimension-spacing-lg);
+        margin-bottom: var(--spacing-lg);
         font-weight: bold;
         color: var(--color-text-primary);
     }
@@ -128,7 +128,7 @@
     
     h3 {
         margin-top: 0;
-        margin-bottom: var(--dimension-spacing-sm);
+        margin-bottom: var(--spacing-sm);
         color: var(--color-text-secondary);
     }
 

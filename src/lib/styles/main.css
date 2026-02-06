@@ -1,190 +1,56 @@
-/* ===========================
-   FONTS
-   =========================== */
-@font-face {
-    font-family: 'PP Fraktion Sans';
-    src: url('/fonts/Sans/PPFraktionSans-Light.otf') format('opentype');
-    font-weight: 300;
-    font-style: normal;
-}
 
-@font-face {
-    font-family: 'PP Fraktion Sans';
-    src: url('/fonts/Sans/PPFraktionSans-LightItalic.otf') format('opentype');
-    font-weight: 300;
-    font-style: italic;
-}
+@import './gen_tokens.css';
+@import './typography.css';
 
-@font-face {
-    font-family: 'PP Fraktion Sans';
-    src: url('/fonts/Sans/PPFraktionSans-Bold.otf') format('opentype');
-    font-weight: 700;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'PP Fraktion Sans';
-    src: url('/fonts/Sans/PPFraktionSans-BoldItalic.otf') format('opentype');
-    font-weight: 700;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'PP Fraktion Mono';
-    src: url('/fonts/Mono/PPFraktionMono-Regular.otf') format('opentype');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'PP Fraktion Mono';
-    src: url('/fonts/Mono/PPFraktionMono-RegularItalic.otf') format('opentype');
-    font-weight: 400;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: 'PP Fraktion Mono';
-    src: url('/fonts/Mono/PPFraktionMono-Bold.otf') format('opentype');
-    font-weight: 700;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'PP Fraktion Mono';
-    src: url('/fonts/Mono/PPFraktionMono-BoldItalic.ttf') format('truetype');
-    font-weight: 700;
-    font-style: italic;
-}
 
 /* ===========================
    RESET
    =========================== */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
 /* ===========================
-   TYPOGRAPHY
+   TABLE LAYOUT
    =========================== */
 
-/* Font Families */
-body {
-    font-family: var(--typography-body-font-family);
-}
-
-h1,
-:global(h2),
-:global(h3),
-:global(h4),
-:global(h5),
-:global(h6) {
-    font-family: var(--typography-heading-font-family);
-}
-
-/* Colors */
-body {
-    background-color: var(--color-background-primary);
-    color: var(--color-text-primary);
-}
-
-:root {
-    --color-border: #e0e0e0; /* Default border color */
-}
-
-/* Line Heights */
-body {
-    line-height: var(--typography-body-line-height);
-}
-
-h1,
-:global(h2),
-:global(h3),
-:global(h4),
-:global(h5),
-:global(h6) {
-    line-height: var(--typography-heading-line-height);
-}
-
-/* Font Sizes - Fluid Typography */
-body {
-    font-size: clamp(var(--dimension-font-size-body-min), 1rem + 0.5vw, var(--dimension-font-size-body-max));
-}
-
-h1 {
-    font-size: clamp(var(--dimension-font-size-h1-min), 2rem + 2vw, var(--dimension-font-size-h1-max));
-}
-
-:global(h2) {
-    font-size: clamp(var(--dimension-font-size-h2-min), 1.625rem + 1vw, var(--dimension-font-size-h2-max));
-}
-
-:global(h3) {
-    font-size: clamp(var(--dimension-font-size-h3-min), 1.375rem + 0.5vw, var(--dimension-font-size-h3-max));
-}
-
-:global(small),
-:global(.caption) {
-    font-size: clamp(var(--dimension-font-size-small-min), 0.9375rem + 0.5vw, var(--dimension-font-size-small-max));
-}
-
-/* Spacing */
-h1 {
-    margin-bottom: var(--dimension-spacing-md);
-}
-
-:global(h2) {
-    margin-top: var(--dimension-spacing-lg);
-    margin-bottom: var(--dimension-spacing-sm);
-}
-
-:global(h3) {
-    margin-top: var(--dimension-spacing-md);
-    margin-bottom: var(--dimension-spacing-xs);
-}
-
-:global(p) {
-    margin-bottom: var(--dimension-spacing-sm);
-    max-width: var(--dimension-content-max-width);
-}
-
-:global(ul), :global(ol) {
-    margin-bottom: var(--dimension-spacing-sm);
-    padding-left: var(--dimension-spacing-lg);
-    max-width: var(--dimension-content-max-width);
-}
-
-/* Table Layout */
-:global(table) {
+table {
     width: 100%;
     max-width: var(--dimension-table-max-width);
     overflow-x: auto;
     border-collapse: collapse;
-    margin-top: var(--dimension-spacing-sm);
+    margin-top: var(--spacing-sm);
 }
 
 @media (min-width: 768px) {
-    :global(table) {
+    table {
         display: table;
     }
 }
 
-:global(th), :global(td) {
+th, td {
     padding: var(--dimension-table-padding);
     text-align: left;
     background-color: var(--color-white);
 }
 
-:global(td) {
+td {
     border: var(--dimension-border-width) solid var(--color-text-primary);
 }
 
-:global(th) {
+th {
     background-color: var(--color-text-primary);
     color: var(--color-white);
 }
+
+
+/* ===========================
+   LINKS
+   =========================== */
 
 a {
     text-decoration: none;

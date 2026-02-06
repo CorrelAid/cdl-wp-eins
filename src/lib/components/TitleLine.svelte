@@ -56,8 +56,8 @@
     .title-line-container {
         width: 100%;
         height: 70px;
-        margin-top: var(--dimension-spacing-sm);
-        margin-bottom: var(--dimension-spacing-md);
+        margin-top: var(--spacing-sm);
+        margin-bottom: var(--spacing-md);
         color: var(--color-text-primary);
     }
 

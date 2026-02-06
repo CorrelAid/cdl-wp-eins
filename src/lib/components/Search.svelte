@@ -41,8 +41,8 @@
         display: flex;
         gap: 0.5rem;
         width: 100%;
-        margin-top: var(--dimension-spacing-md);
-        margin-bottom: var(--dimension-spacing-md);
+        margin-top: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
     }
 
     .input-wrapper {
