@@ -122,8 +122,6 @@ body {
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-relaxed);
     letter-spacing: var(--letter-spacing-normal);
-    color: var(--color-text-primary);
-    background-color: var(--color-background-primary);
 }
 
 

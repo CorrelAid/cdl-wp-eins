@@ -1,0 +1,376 @@
+---
+import { getCollection, render } from "astro:content";
+// @ts-ignore
+import { getLiveCollection } from "astro:content";
+import LiteratureList from "@components/Literature.svelte";
+import Citation from "@components/Citation.astro";
+import SpreadsheetWithTabsWrapper from "@components/SpreadsheetWithTabsWrapper.astro";
+import toc from "@lib/toc.json";
+import "@styles/main.css";
+import "@styles/gen_tokens.css";
+import BaseHead from "@components/BaseHead.astro";
+
+const allPages = await getCollection("pages");
+const pageMap = new Map(allPages.map((p) => [p.id, p]));
+
+let sortedLiterature: any[] = [];
+try {
+    // @ts-ignore
+    const { entries: literature } = await getLiveCollection("literature");
+    sortedLiterature = literature
+        ? [...literature].sort((a: any, b: any) =>
+              (a.data.title || "").localeCompare(b.data.title || ""),
+          )
+        : [];
+} catch (e) {
+    console.error("Failed to fetch literature for PDF", e);
+}
+
+interface Chapter {
+    slug: string;
+    level: number;
+    title: string;
+    entry?: any;
+    isLiterature?: boolean;
+}
+
+function flattenToc(items: any[], level = 1): Chapter[] {
+    let chapters: Chapter[] = [];
+    for (const item of items) {
+        if (typeof item === "string") {
+            if (item === "literature") {
+                chapters.push({
+                    slug: "literature",
+                    level,
+                    title: "Literaturverzeichnis",
+                    isLiterature: true,
+                });
+            } else {
+                const entry = pageMap.get(item);
+                if (entry)
+                    chapters.push({
+                        slug: item,
+                        level,
+                        title: entry.data.tocTitle,
+                        entry,
+                    });
+            }
+        } else if (typeof item === "object") {
+            const [parentSlug, children] = Object.entries(item)[0];
+            const parentEntry = pageMap.get(parentSlug);
+            if (parentEntry)
+                chapters.push({
+                    slug: parentSlug,
+                    level,
+                    title: parentEntry.data.tocTitle,
+                    entry: parentEntry,
+                });
+            if (Array.isArray(children))
+                chapters = chapters.concat(
+                    flattenToc(children as any[], level + 1),
+                );
+        }
+    }
+    return chapters;
+}
+
+const chapters = flattenToc(toc);
+
+const renderedChapters = await Promise.all(
+    chapters.map(async (chapter) => {
+        if (chapter.entry) {
+            const { Content } = await render(chapter.entry);
+            return { ...chapter, Content };
+        }
+        return chapter;
+    }),
+);
+---
+
+<html lang="de">
+    <head>
+        <BaseHead title="Book Preview" description="Book Preview" />
+    </head>
+
+    <body>
+        <div id="loading">
+            <p>Dokument wird vorbereitet…</p>
+        </div>
+
+        <div id="content">
+            <div class="cover-page">
+                <h1>Wissensplattform Eins</h1>
+                <p>Leitfaden für Umfrage-Tools</p>
+                <p class="cover-date">
+                    {
+                        new Date().toLocaleDateString("de-DE", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                        })
+                    }
+                </p>
+            </div>
+
+            <div class="toc-section">
+                <h2>Inhaltsverzeichnis</h2>
+                <ul>
+                    {
+                        chapters.map((ch) => (
+                            <li
+                                style={`padding-left: ${(ch.level - 1) * 1.5}rem`}
+                            >
+                                <a href={`#${ch.slug}`}>{ch.title}</a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+
+            {
+                renderedChapters.map((chapter) => (
+                    <div class="chapter" id={chapter.slug}>
+                        {chapter.isLiterature ? (
+                            <div>
+                                <h1>{chapter.title}</h1>
+                                <LiteratureList
+                                    items={sortedLiterature}
+                                    client:idle
+                                />
+                            </div>
+                        ) : (
+                            <div>
+                                {chapter.Content && (
+                                    <chapter.Content
+                                        components={{
+                                            Citation,
+                                            SpreadsheetWithTabsWrapper,
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        )}
+                    </div>
+                ))
+            }
+        </div>
+
+        <script>
+            import { Previewer } from "pagedjs";
+
+            window.PagedConfig = { auto: false };
+
+            window.addEventListener("load", () => {
+                setTimeout(async () => {
+                    const content = document.getElementById("content");
+                    if (!content) return;
+
+                    const walker = document.createTreeWalker(
+                        content,
+                        NodeFilter.SHOW_COMMENT,
+                    );
+                    const comments: Node[] = [];
+                    while (walker.nextNode()) comments.push(walker.currentNode);
+                    comments.forEach((c) => c.parentNode?.removeChild(c));
+
+                    const contentHTML = content.innerHTML;
+
+                    // Remove source content entirely — we don't need it anymore
+                    content.remove();
+
+                    const loading = document.getElementById("loading");
+                    const paged = new Previewer();
+
+                    try {
+                        const flow = await paged.preview(
+                            contentHTML,
+                            [],
+                            document.body,
+                        );
+                        console.log(`Paged.js rendered ${flow.total} pages`);
+                        loading?.remove();
+                    } catch (err) {
+                        console.error("Paged.js error:", err);
+                        loading?.remove();
+                    }
+                }, 500);
+            });
+        </script>
+    </body>
+</html>
+
+<style is:global>
+    /* Source content hidden while Paged.js reads it */
+    #content {
+        position: absolute;
+        opacity: 0;
+        z-index: -1;
+    }
+
+    /* Loading */
+    #loading {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        z-index: 9999;
+        font-family: system-ui, sans-serif;
+        color: #666;
+    }
+
+    /* Cover */
+    .cover-page {
+        break-after: page;
+        height: 297mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 40mm 30mm;
+        background: #86185f;
+        color: white;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .cover-page h1 {
+        font-size: 36pt;
+        border: none;
+        margin: 0 0 0.3em;
+    }
+
+    .cover-page p {
+        font-size: 16pt;
+        margin: 0;
+    }
+
+    .cover-date {
+        margin-top: 2rem;
+        font-size: 11pt;
+        opacity: 0.7;
+    }
+
+    /* TOC */
+    .toc-section h2 {
+        color: #86185f;
+        border-bottom: 2px solid #86185f;
+        padding-bottom: 0.5rem;
+    }
+
+    .toc-section ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .toc-section li {
+        margin: 0.3rem 0;
+        line-height: 1.6;
+    }
+
+    .toc-section a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    /* Chapters */
+    .chapter {
+        break-before: page;
+    }
+
+    .chapter h1 {
+        color: #86185f;
+        border-bottom: 1.5px solid #86185f;
+        padding-bottom: 0.4rem;
+    }
+
+    .chapter h2,
+    .chapter h3 {
+        break-after: avoid;
+    }
+
+    .chapter pre,
+    .chapter blockquote,
+    .chapter img,
+    .chapter figure,
+    .chapter table {
+        break-inside: avoid;
+    }
+
+    .chapter p {
+        orphans: 3;
+        widows: 3;
+    }
+
+    /* Screen preview */
+    @media screen {
+        body {
+            background: #e8e8e8;
+        }
+
+        .pagedjs_page {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            margin-bottom: 12px;
+        }
+
+        .pagedjs_pages {
+            max-width: 210mm;
+            margin: 20px auto;
+        }
+    }
+
+    /* Print: just print the Paged.js output as-is */
+    /* Page setup — Paged.js reads these on screen */
+    @page {
+        size: A4;
+        margin: 25mm 20mm 30mm 20mm;
+    }
+
+    @page:first {
+        margin: 0;
+    }
+
+    @media print {
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            background: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .pagedjs_pages {
+            margin: 0;
+        }
+
+        .pagedjs_page {
+            break-before: auto !important;
+            break-after: auto !important;
+            break-inside: avoid !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+        }
+
+        .cover-page,
+        .chapter {
+            break-before: auto !important;
+            break-after: auto !important;
+        }
+
+        .toc-section {
+    break-after: page;
+    break-inside: avoid;
+}
+
+        .cover-page {
+            background: #86185f !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    }
+</style>

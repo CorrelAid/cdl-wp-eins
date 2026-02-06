@@ -84,6 +84,12 @@
         {/each}
     </ul>
     <Search />
+    <div class="pdf-download">
+        <a href="/pdf" target="_blank" rel="noopener noreferrer">
+            <span class="icon">📖</span>
+            View as book
+        </a>
+    </div>
 </nav>
 
 <div
@@ -265,6 +271,25 @@
     nav a:hover {
         background-color: var(--color-primary);
         color: var(--color-white);
+    }
+
+    .pdf-download {
+        margin-top: 2rem;
+        padding-top: var(--spacing-md);
+        border-top: 1px solid var(--color-text-tertiary);
+    }
+
+    .pdf-download a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: var(--color-background-secondary);
+        font-weight: bold;
+    }
+
+    .pdf-download .icon {
+        font-size: 1.2em;
+        line-height: 1;
     }
 
     /* Desktop View - Show sidebar by default */
