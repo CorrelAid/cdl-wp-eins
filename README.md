@@ -12,7 +12,7 @@
     - you can add new pages to the doc by adding a new .mdx
     - make sure to include frontmatter 
 
-- To include content in the page navigation, add it to `src/toc.json`
+- To include content in the page navigation, add it to `src/lib/toc.json`
 - You can check how your md looks by running `bun dev`. The page will update on every change.
 
 ### Literature & Citations
