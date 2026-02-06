@@ -179,13 +179,6 @@
         color: var(--color-primary);
     }
 
-    .sort-info {
-        color: var(--color-text-secondary);
-        font-size: 0.9rem;
-        margin-bottom: 1.5rem;
-        font-style: italic;
-    }
-
     .literature-list {
         list-style: none;
         padding: 0;

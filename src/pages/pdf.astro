@@ -131,15 +131,22 @@ const renderedChapters = await Promise.all(
                 renderedChapters.map((chapter) => (
                     <div class="chapter" id={chapter.slug}>
                         {chapter.isLiterature ? (
-                            <div>
-                                <h1>{chapter.title}</h1>
-                                <LiteratureList
-                                    items={sortedLiterature}
-                                    client:idle
-                                />
-                            </div>
+                            <LiteratureList
+                                items={sortedLiterature}
+                                client:idle
+                            />
                         ) : (
                             <div>
+                                {chapter.level === 1 && (
+                                    <h1>{chapter.title}</h1>
+                                )}
+                                {chapter.level === 2 && (
+                                    <h2>{chapter.title}</h2>
+                                )}
+                                {chapter.level === 3 && (
+                                    <h3>{chapter.title}</h3>
+                                )}
+                                {chapter.level > 3 && <h4>{chapter.title}</h4>}
                                 {chapter.Content && (
                                     <chapter.Content
                                         components={{
@@ -174,8 +181,6 @@ const renderedChapters = await Promise.all(
                     comments.forEach((c) => c.parentNode?.removeChild(c));
 
                     const contentHTML = content.innerHTML;
-
-                    // Remove source content entirely — we don't need it anymore
                     content.remove();
 
                     const loading = document.getElementById("loading");
@@ -220,6 +225,22 @@ const renderedChapters = await Promise.all(
         color: #666;
     }
 
+    /* Page setup — zero margin so Paged.js fills the whole page box */
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    /* Paged.js internal padding acts as our margins */
+    .pagedjs_area {
+        padding: 25mm 20mm 30mm 20mm;
+    }
+
+    /* Cover page: no padding */
+    .pagedjs_first_page .pagedjs_area {
+        padding: 0;
+    }
+
     /* Cover */
     .cover-page {
         break-after: page;
@@ -252,6 +273,7 @@ const renderedChapters = await Promise.all(
     }
 
     /* TOC */
+
     .toc-section h2 {
         color: #86185f;
         border-bottom: 2px solid #86185f;
@@ -273,15 +295,24 @@ const renderedChapters = await Promise.all(
         color: #333;
     }
 
-    /* Chapters */
-    .chapter {
-        break-before: page;
+    .chapter p {
+        orphans: 3;
+        widows: 3;
     }
 
-    .chapter h1 {
-        color: #86185f;
-        border-bottom: 1.5px solid #86185f;
-        padding-bottom: 0.4rem;
+    .toc-section {
+        min-height: 297mm;
+    }
+
+    /* .cover-page {
+        break-before: auto !important;
+        break-after: auto !important;
+    } */
+
+    .chapter {
+        
+        min-height: 297mm;
+
     }
 
     .chapter h2,
@@ -295,11 +326,6 @@ const renderedChapters = await Promise.all(
     .chapter figure,
     .chapter table {
         break-inside: avoid;
-    }
-
-    .chapter p {
-        orphans: 3;
-        widows: 3;
     }
 
     /* Screen preview */
@@ -320,17 +346,7 @@ const renderedChapters = await Promise.all(
         }
     }
 
-    /* Print: just print the Paged.js output as-is */
-    /* Page setup — Paged.js reads these on screen */
-    @page {
-        size: A4;
-        margin: 25mm 20mm 30mm 20mm;
-    }
-
-    @page:first {
-        margin: 0;
-    }
-
+    /* Print — each pagedjs_page maps 1:1 to a physical page */
     @media print {
         @page {
             size: A4;
@@ -342,29 +358,6 @@ const renderedChapters = await Promise.all(
             margin: 0;
             padding: 0;
         }
-
-        .pagedjs_pages {
-            margin: 0;
-        }
-
-        .pagedjs_page {
-            break-before: auto !important;
-            break-after: auto !important;
-            break-inside: avoid !important;
-            box-shadow: none !important;
-            margin: 0 !important;
-        }
-
-        .cover-page,
-        .chapter {
-            break-before: auto !important;
-            break-after: auto !important;
-        }
-
-        .toc-section {
-    break-after: page;
-    break-inside: avoid;
-}
 
         .cover-page {
             background: #86185f !important;
