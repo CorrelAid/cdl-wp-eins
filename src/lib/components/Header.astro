@@ -1,0 +1,62 @@
+---
+import logo from "@lib/svg/logo.svg?raw";
+---
+
+<header class="site-header">
+    <div class="header-container">
+        <a href="/" class="logo-link">
+            <Fragment set:html={logo} />
+        </a>
+    </div>
+</header>
+
+<script>
+    const header = document.querySelector('.site-header');
+    
+    function handleScroll() {
+        if (window.scrollY > 20) {
+            header?.classList.add('scrolled');
+        } else {
+            header?.classList.remove('scrolled');
+        }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    // Initial check
+    handleScroll();
+</script>
+
+<style>
+    .site-header {
+        width: 100%;
+        height: var(--dimension-header-height, 64px);
+        /* border-bottom: var(--dimension-border-width) solid var(--color-text-primary); */
+        background-color: var(--color-background-primary);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1002;
+        transition: box-shadow 0.2s ease-in-out;
+    }
+
+    .site-header.scrolled {
+        box-shadow: rgba(83, 137, 223, 0.4) 0px 1px 14px 0px;
+    }
+
+    .header-container {
+        height: 100%;
+        padding: 0 var(--spacing-base);
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-link {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-link :global(svg) {
+        height: 40px;
+        width: auto;
+    }
+</style>

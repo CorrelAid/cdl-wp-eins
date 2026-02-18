@@ -1,0 +1,78 @@
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <a href="/imprint" class="footer-link">Impressum</a>
+            <span class="footer-divider">|</span>
+            <div class="footer-copyright">
+                © {new Date().getFullYear()} CorrelAid e.V. | <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" class="cc-link">CC BY 4.0</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .site-footer {
+        width: 100%;
+        background-color: var(--color-background-primary);
+        padding: var(--spacing-lg) 0;
+        margin-top: var(--spacing-2xl);
+    }
+
+    .footer-container {
+        width: 100%;
+        padding: 0 var(--spacing-lg);
+        box-sizing: border-box;
+    }
+
+    .footer-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        gap: var(--spacing-sm);
+        /* Removed flex-wrap to prevent vertical stacking */
+    }
+
+    .footer-link {
+        color: var(--color-text-primary);
+        text-decoration: none;
+        font-weight: var(--font-weight-medium);
+        transition: color 0.2s ease-in-out;
+        white-space: nowrap; /* Prevent text wrapping */
+    }
+
+    .footer-link:hover {
+        color: var(--color-primary-darker);
+    }
+
+    .footer-divider {
+        color: var(--color-text-primary);
+    }
+
+    .footer-copyright {
+        color: var(--color-text-primary);
+        font-size: var(--font-size-sm);
+        white-space: nowrap; /* Prevent text wrapping */
+    }
+
+    .cc-link {
+        color: inherit;
+        text-decoration: underline;
+    }
+
+    .cc-link:hover {
+        color: var(--color-primary-darker);
+    }
+
+    @media (max-width: 600px) {
+        .footer-content {
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            gap: var(--spacing-xs);
+        }
+        .footer-divider {
+            display: none;
+        }
+    }
+</style>

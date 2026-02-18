@@ -2,6 +2,9 @@
 @import './gen_tokens.css';
 @import './typography.css';
 
+:root {
+    --dimension-header-height: 64px;
+}
 
 body {
     color: var(--color-text-primary);

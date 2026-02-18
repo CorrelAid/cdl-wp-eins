@@ -1,13 +1,40 @@
 [
     "einleitung",
-    "llm_synthetic_survey_data",
     {
-        "survey_tools": [
-            "bayes_statistik",
+        "Konzeption": [
+            "konzeption-einleitung",
+            "sampling-theorie"
+        ]
+    },
+    {
+        "Fragebogendesign": [
+            "design-einleitung",
+            "xlsform-standard",
+            "fragetypen",
+            "reihenfolgeeffekte",
+            "formulaid"
+        ]
+    },
+    {
+        "Erhebung": [
+            "erhebung-einleitung",
             "kobotoolbox",
             "limesurvey",
-            "lamapoll",
-            "xlsform-brief"
+            "lamapoll"
+        ]
+    },
+    {
+        "Aufbereitung & Analyse": [
+            "analyse-einleitung",
+            "ddi-lifecycle",
+            "jasp-statistik",
+            "llm-synthetic-survey-data",
+            "bayes-statistik"
+        ]
+    },
+    {
+        "Entscheiden & Handeln": [
+            "handeln-einleitung"
         ]
     },
     "literature"

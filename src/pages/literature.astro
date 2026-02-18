@@ -1,10 +1,36 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import LiteratureList from "@components/Literature.svelte";
-import { getLiveCollection } from "astro:content";
+import { getLiveCollection, getCollection } from "astro:content";
+
+// Get all pages to find used citations
+const allPages = await getCollection("pages");
+const usedKeys = new Set<string>();
+const usedDois = new Set<string>();
+
+allPages.forEach(page => {
+  const content = page.body || "";
+  
+  // Extract keys
+  const keyMatches = content.matchAll(/<Citation[^>]*key=["']([^"']+)["'][^>]*>/g);
+  for (const match of keyMatches) {
+    usedKeys.add(match[1]);
+  }
+  
+  // Extract DOIs
+  const doiMatches = content.matchAll(/<Citation[^>]*doi=["']([^"']+)["'][^>]*>/g);
+  for (const match of doiMatches) {
+    usedDois.add(match[1]);
+  }
+});
 
 // Get literature from live collection
 const { entries: literature, error } = await getLiveCollection("literature");
+
+// Filter literature to only include used items
+const usedLiterature = literature ? literature.filter(item => {
+  return usedKeys.has(item.id) || (item.data.DOI && usedDois.has(item.data.DOI));
+}) : [];
 
 // Prepare error message for display
 const errorMessage = error ? (error.message || 'Unknown error loading literature') : null;
@@ -13,12 +39,21 @@ if (error) {
   console.error("Error loading literature collection:", error);
 }
 
-// Sort literature alphabetically by title
-const sortedLiterature = literature ? [...literature].sort((a, b) => {
-  const titleA = a.data.title?.toLowerCase() || '';
-  const titleB = b.data.title?.toLowerCase() || '';
-  return titleA.localeCompare(titleB);
-}) : [];
+// Sort literature alphabetically by first author's last name
+const sortedLiterature = usedLiterature.sort((a, b) => {
+  const getSortName = (item: any) => {
+    const firstCreator = item.data.creators?.[0];
+    if (!firstCreator) return item.data.title || '';
+    return firstCreator.lastName || firstCreator.name || '';
+  };
+
+  const nameA = getSortName(a).toLowerCase();
+  const nameB = getSortName(b).toLowerCase();
+  
+  if (nameA < nameB) return -1;
+  if (nameA > nameB) return 1;
+  return 0;
+});
 ---
 
 <Layout title="Literature" teaser="Browse our research literature">

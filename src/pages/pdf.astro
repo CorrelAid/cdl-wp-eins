@@ -13,15 +13,47 @@ import BaseHead from "@components/BaseHead.astro";
 const allPages = await getCollection("pages");
 const pageMap = new Map(allPages.map((p) => [p.id, p]));
 
+// Find used citations
+const usedKeys = new Set<string>();
+const usedDois = new Set<string>();
+
+allPages.forEach(page => {
+  const content = page.body || "";
+  const keyMatches = content.matchAll(/<Citation[^>]*key=["']([^"']+)["'][^>]*>/g);
+  for (const match of keyMatches) {
+    usedKeys.add(match[1]);
+  }
+  const doiMatches = content.matchAll(/<Citation[^>]*doi=["']([^"']+)["'][^>]*>/g);
+  for (const match of doiMatches) {
+    usedDois.add(match[1]);
+  }
+});
+
 let sortedLiterature: any[] = [];
 try {
     // @ts-ignore
     const { entries: literature } = await getLiveCollection("literature");
-    sortedLiterature = literature
-        ? [...literature].sort((a: any, b: any) =>
-              (a.data.title || "").localeCompare(b.data.title || ""),
-          )
-        : [];
+    
+    // Filter to used items
+    const usedLiterature = literature ? literature.filter((item: any) => {
+        return usedKeys.has(item.id) || (item.data.DOI && usedDois.has(item.data.DOI));
+    }) : [];
+
+    // Sort by first author's last name
+    sortedLiterature = usedLiterature.sort((a: any, b: any) => {
+        const getSortName = (item: any) => {
+            const firstCreator = item.data.creators?.[0];
+            if (!firstCreator) return item.data.title || '';
+            return firstCreator.lastName || firstCreator.name || '';
+        };
+
+        const nameA = getSortName(a).toLowerCase();
+        const nameB = getSortName(b).toLowerCase();
+        
+        if (nameA < nameB) return -1;
+        if (nameA > nameB) return 1;
+        return 0;
+    });
 } catch (e) {
     console.error("Failed to fetch literature for PDF", e);
 }

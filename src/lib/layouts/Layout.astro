@@ -6,6 +6,8 @@ import toc from "@lib/toc.json";
 import SideNav from "@components/SideNav.svelte";
 import TitleLine from "@components/TitleLine.svelte";
 import BaseHead from "@components/BaseHead.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
 
 const { title, teaser, line = true } = Astro.props;
 const allPages = await getCollection("pages");
@@ -15,7 +17,7 @@ const pageMap = Object.fromEntries(
     allPages.map(page => [page.id, page])
 );
 
-// Build nested structure from toc.js
+// Build nested structure from toc.json
 function buildNavStructure(tocArray: any[]): any[] {
     return tocArray.map((item: any) => {
         if (typeof item === 'string') {
@@ -34,9 +36,12 @@ function buildNavStructure(tocArray: any[]): any[] {
             return { slug: item, page: pageMap[item] };
         } else if (typeof item === 'object') {
             const [key, children] = Object.entries(item)[0];
+            // key can be a slug (if it matches a page) or just a category label
+            const page = pageMap[key];
             return {
                 slug: key,
-                page: pageMap[key],
+                label: key, // Fallback label
+                page: page,
                 children: buildNavStructure(children as any[])
             };
         }
@@ -48,16 +53,15 @@ const navStructure = buildNavStructure(toc);
 
 // Recursive component for rendering nav items
 function renderNavItem(item: any, level = 0): any {
-    if (!item.page) return null;
-
     const hasChildren = item.children && item.children.length > 0;
-    const itemId = `nav-${item.slug}`; // slug here is the filename from toc
+    const itemId = `nav-${item.slug}`; 
 
     return {
         id: itemId,
-        slug: item.slug, // This is the filename (entry.id)
-        title: item.page.data.tocTitle,
+        slug: item.slug,
+        title: item.page ? item.page.data.tocTitle : item.label,
         hasChildren,
+        isLink: !!item.page,
         children: hasChildren ? item.children.map((child: any) => renderNavItem(child, level + 1)).filter((x: any) => x !== null) : [],
         level
     };
@@ -72,15 +76,18 @@ const navItems = navStructure.map((item: any) => renderNavItem(item)).filter((x:
     </head>
     <body>
         <SideNav navItems={navItems} client:load />
-        <main>
-            {title && <h1>{title}</h1> }
-            {teaser && <p class="teaser">{teaser}</p>}
-            {line === true && <TitleLine client:load /> }
-            <article>
-                <slot />
-                <!-- your content is injected here -->
-            </article>
-        </main>
+        <div class="content-wrapper">
+            <main>
+                {title && <h1>{title}</h1> }
+                {teaser && <p class="teaser">{teaser}</p>}
+                {line === true && <TitleLine client:load /> }
+                <article>
+                    <slot />
+                    <!-- your content is injected here -->
+                </article>
+            </main>
+            <Footer />
+        </div>
     </body>
     <style>
         
@@ -93,18 +100,28 @@ const navItems = navStructure.map((item: any) => renderNavItem(item)).filter((x:
             text-align: center;
         }
 
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
         main {
             flex: 1;
             margin-inline: auto;
             max-width: 750px;
-            padding: 4rem var(--spacing-sm) var(--spacing-lg);
+            padding: var(--spacing-2xl) var(--spacing-sm) var(--spacing-lg);
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        /* @media (min-width: 768px) {
-            main {
-                margin-left: 250px;
+        @media (min-width: 768px) {
+            .content-wrapper {
+                padding-left: 250px; /* Use padding instead of margin to ensure background colors fill the space */
             }
-        } */
+        }
 
     </style>
 </html>

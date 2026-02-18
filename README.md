@@ -23,16 +23,16 @@ Literature is managed via a Zotero group and fetched live. To cite an item in an
 2. Use the `Citation` component (available globally in MDX):
    ```mdx
    {/* Find the key in the browser url of the item, e.g. https://www.zotero.org/groups/6410519/cdl-wp/items/3SZ58NRP/item-list*/}
-   <Citation key="3SZ58NRP" mode="narrative" /> 
+   <Citation key="3SZ58NRP" mode="na" /> 
    {/* OR */}
-   <Citation doi="10.48550/ARXIV.2510.08338" mode="parenthetical" />
+   <Citation doi="10.48550/ARXIV.2510.08338" mode="pa" />
    ```
 
 **Props:**
 - `key` (optional): The Zotero item key.
 - `doi` (optional): The DOI of the item.
 - Note: Either `key` or `doi` must be provided.
-- `mode` (optional): `'parenthetical'` (default, e.g., "(Author, Year)") or `'narrative'` (e.g., "Author (Year)").
+- `mode` (optional): `'pa'` (default, e.g., "(Author, Year)") or `'na'` (e.g., "Author (Year)").
 - `includePages` (optional): Boolean to include page numbers.
 - `pages` (optional): String for page numbers.
 

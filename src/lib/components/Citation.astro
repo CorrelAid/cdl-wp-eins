@@ -14,10 +14,10 @@ interface Props {
     
     /**
      * Citation mode/style
-     * - 'narrative': "Author (Year)"
-     * - 'parenthetical': "(Author, Year)"
+     * - 'na': "Author (Year)"
+     * - 'pa': "(Author, Year)"
      */
-    mode?: 'narrative' | 'parenthetical';
+    mode?: 'na' | 'pa';
     
 
     
@@ -32,7 +32,7 @@ interface Props {
     pages?: string;
 }
 
-const { key, doi, mode = 'parenthetical', includePages = false, pages } = Astro.props;
+const { key, doi, mode = 'pa', includePages = false, pages } = Astro.props;
 
 if (!key && !doi) {
     console.warn("Citation component requires either a 'key' or a 'doi' prop.");
@@ -101,21 +101,21 @@ if (!citedItem?.data) {
     literatureLink = `/literature#${citedItem.id}`;
     
     switch (mode) {
-        case 'narrative':
+        case 'na':
             citationContent = `${authors} (${year})`;
-            citationClass = "narrative-citation";
+            citationClass = "na-citation";
             break;
         
-        case 'parenthetical':
+        case 'pa':
             citationContent = `(${authors}, ${year})`;
-            citationClass = "parenthetical-citation";
+            citationClass = "pa-citation";
             break;
         
 
         
         default:
             citationContent = `(${authors}, ${year})`;
-            citationClass = "parenthetical-citation";
+            citationClass = "pa-citation";
     }
 }
 ---
@@ -124,22 +124,22 @@ if (!citedItem?.data) {
     /* Render different citation types with appropriate linking */
     (() => {
         switch (mode) {
-            case 'narrative':
-                // Link the year in narrative citations
-                const narrativeParts = citationContent.split('(');
-                const yearPart = narrativeParts[1]?.replace(')', '');
+            case 'na':
+                // Link the year in na citations
+                const naParts = citationContent.split('(');
+                const yearPart = naParts[1]?.replace(')', '');
                 return (
                     <span class={`citation ${citationClass}`} data-citation-mode={mode}>
-                        {narrativeParts[0]}(
-                        <a href={literatureLink} class="literature-link narrative-year" aria-label="View full citation">
+                        {naParts[0]}(
+                        <a href={literatureLink} class="literature-link na-year" aria-label="View full citation">
                             {yearPart}⤴
                         </a>
                         )
                     </span>
                 );
             
-            case 'parenthetical':
-                // Link the entire citation in parenthetical mode with symbol inside parentheses
+            case 'pa':
+                // Link the entire citation in pa mode with symbol inside parentheses
                 return (
                     <span class={`citation ${citationClass}`} data-citation-mode={mode}>
                         <a href={literatureLink} class="literature-link" aria-label="View full citation">
@@ -151,7 +151,7 @@ if (!citedItem?.data) {
 
             
             default:
-                // Default to parenthetical behavior for unknown modes
+                // Default to pa behavior for unknown modes
                 return (
                     <span class={`citation ${citationClass}`} data-citation-mode={mode}>
                         <a href={literatureLink} class="literature-link" aria-label="View full citation">{citationContent}</a>
@@ -199,8 +199,8 @@ if (!citedItem?.data) {
         text-decoration: none;
     }
     
-    /* For narrative citations, make the symbol smaller */
-    .narrative-year .link-symbol {
+    /* For na citations, make the symbol smaller */
+    .na-year .link-symbol {
         font-size: 0.9em;
         vertical-align: super;
         margin-left: 0.2em;
@@ -226,13 +226,13 @@ if (!citedItem?.data) {
         color: var(--color-text-secondary);
     }
     
-    /* Style for narrative year links */
-    .literature-link.narrative-year {
+    /* Style for na year links */
+    .literature-link.na-year {
         color: inherit;
         font-weight: normal;
     }
     
-    .literature-link.narrative-year:hover {
+    .literature-link.na-year:hover {
         color: var(--color-accent);
     }
 </style>

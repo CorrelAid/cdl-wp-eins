@@ -3,6 +3,8 @@
 
     interface Creator {
         name?: string;
+        firstName?: string;
+        lastName?: string;
         creatorType?: string;
     }
 
@@ -32,6 +34,22 @@
 
     let activeId = $state<string | null>(null);
     let copiedId = $state<string | null>(null);
+
+    function formatAuthor(creator: Creator): string {
+        if (creator.lastName && creator.firstName) {
+            return `${creator.lastName}, ${creator.firstName}`;
+        }
+        return creator.name || 'Unknown';
+    }
+
+    function formatAuthorList(creators: Creator[] | undefined): string {
+        if (!creators || creators.length === 0) return '';
+        if (creators.length === 1) return formatAuthor(creators[0]);
+        
+        const formattedAuthors = creators.map(formatAuthor);
+        const lastAuthor = formattedAuthors.pop();
+        return `${formattedAuthors.join(', ')} & ${lastAuthor}`;
+    }
 
     function scrollToItem(id: string) {
         const targetId = id.startsWith('#') ? id.substring(1) : id;
@@ -122,11 +140,7 @@
                         <div class="apa-citation">
                             {#if item.data.creators && item.data.creators.length > 0}
                                 <span class="apa-authors">
-                                    {#each item.data.creators as creator, i}
-                                        <span>
-                                            {creator.name}{i < item.data.creators.length - 1 ? ', ' : ''}
-                                        </span>
-                                    {/each}
+                                    {formatAuthorList(item.data.creators)}
                                 </span>
                             {/if}
                             

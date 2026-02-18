@@ -2,17 +2,55 @@
 import Layout from "@layouts/Layout.astro";
 import Hardhat from "@lib/svg/hardhat.svg";
 import TitleLine from "@components/TitleLine.svelte";
-import CustomHeading from '@components/CustomHeading.astro';
+import CustomHeading from "@components/CustomHeading.astro";
+import SurveyPhases from "@components/SurveyPhases.svelte";
 ---
 
 <Layout line="false">
 	<body>
 		<div class="logo-container">
-			<h1>Werkstattphase 1</h1>
+			<!-- <h1>CDL Werksschau  I - Online-Umfragen</h1> -->
 			<Hardhat />
 		</div>
 		<TitleLine client:load />
-		<section>Hier wird das Konzept beschrieben.</section>
+		<section>
+			<p>
+				Wilkommen auf der Dokumentationseite der Ergebnisse aus der
+				ersten Werkstattphase des <a href="https://civic-data.dey"
+					>Civic Data Labs</a
+				>. Werkstattphasen sind ein Format, in dem wir uns im über einen
+				Zeitraum von 2-3 Monaten mit einem Thema beschäftigen, bei dem
+				wir indentifiziert haben, dass es dort in der Zivilgesellschaft
+				an Wissen und Tools fehlt. Das Ergebnis von Werkstattphasen sind
+				unter anderem strukturierte Wissenssammlungen in Form von Websites,
+				die wir als <b>Bedienungsanleitung</b> bezeichnen, aber auch Open Source Code und Apps die wir als <b>Werkzeugkasten</b> auf diesen Websites präsentieren. Das Thema dieser
+				Werkstattphase sind Online-Umfragen.
+			</p>
+			<p>
+				Online-Umfragen sind eine wichtige Methode zur Erhebung von
+				Daten, die auch in der Zivilgesellschaft für vielfältige Zwecke
+				eingesetzt werden kann. Als Civic Data Lab haben wir aus
+				Gesprächen mit zivilgesellschaftlichen Akteuren verschiedene
+				Bedarfe im Umgang mit dieser Methode identifiziert, die uns dazu
+				bewegt haben, sie in dieser Werkstattphase zu behandeln.
+			</p>
+			<h3>Phasenmodell von Umfragen</h3>
+			<p>
+				Eine Beobachtung, die wir in der Vergangenheit gemacht haben,
+				betrifft die konzeptuelle und allgemeine Einbettung von
+				Umfragen: oft wird nicht bis zur Auswertung und darüber hinaus
+				gedacht und es fehlt ein Anknüpfen an Best Practices und
+				vorhandene Standards. In dieser Werkstattphase haben wir Wissen
+				zusammengestellt und begleitende Tools entwickelt, die alle Phasen einer Umfrage, von der Konzeption bis
+				zur Auswertung, abbildet. Deswegen folgt diese Wissenssammlungen
+				diesem Phasenmodell und stellt Standards vor, die Umfragen
+				unabhängig von Tools abbilden können.
+			</p>
+			<p>
+				Mit unserem Modell verbunden ist ein Ansatz, wie man Umfragen unabhängig von bestimmten Tools konzipieren, durchführen und auswerten kann.
+			</p>
+			<SurveyPhases client:load />
+		</section>
 	</body>
 </Layout>
 
@@ -20,7 +58,7 @@ import CustomHeading from '@components/CustomHeading.astro';
 	section {
 		margin-top: 2.5rem;
 	}
-	h1{
+	h1 {
 		padding-left: 10px;
 		padding-right: 10px;
 	}
@@ -35,11 +73,11 @@ import CustomHeading from '@components/CustomHeading.astro';
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		
 	}
 
 	.logo-container :global(svg) {
 		padding-bottom: 3.5rem;
+		padding-top: 3.5rem;
 		width: 100%;
 		max-width: 600px;
 		height: auto;
