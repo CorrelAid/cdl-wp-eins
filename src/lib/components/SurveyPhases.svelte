@@ -34,7 +34,7 @@
 
   const markers = [
     // Spanning Knowledge Markers (Bedienungsanleitung)
-    { label: 'DDI Lifecycle', type: 'knowledge', href: '/ddi-lifecycle', startRow: 3, endRow: 8, column: 1 },
+    { label: 'DDI Codebook', type: 'knowledge', href: '/ddi-codebook', startRow: 3, endRow: 8, column: 1 },
     { label: 'XLSForm', type: 'knowledge', href: '/xlsform-standard', startRow: 3, endRow: 4, column: 2 },
     
     // Phase-specific Knowledge (Bedienungsanleitung)

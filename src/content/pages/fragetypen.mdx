@@ -1,8 +1,103 @@
 ---
 tocTitle: Fragetypen
-teaser: Die Werkzeuge der Befragung.
+teaser: Dieser Leitfaden beschreibt, wie in diesem ecosystem verwendete Fragetypen in DDI 2.5 Codebook XML und xlsform abgebildet werden können.
 ---
 
-# Fragetypen
+## 1. Integer
+Verwendet für numerische Antworten ohne Dezimalstellen.
 
-Übersicht über verschiedene Antwortformate und deren Skalenniveaus.
+*   **XLSForm Typ**: `integer`
+*   **DDI Beispiel**:
+```xml
+<var ID="V1" name="age" intrvl="discrete">
+  <labl>Age</labl>
+  <qstn ID="Q1" responseDomainType="numeric">
+    <qstnLit>What is your age in years?</qstnLit>
+  </qstn>
+  <varFormat type="numeric" schema="other"/>
+</var>
+```
+
+## 2. Text
+Verwendet für offene Textantworten.
+
+*   **XLSForm Typ**: `text`
+*   **DDI Beispiel**:
+```xml
+<var ID="V2" name="comments" intrvl="discrete">
+  <labl>Comments</labl>
+  <qstn ID="Q2" responseDomainType="text">
+    <qstnLit>Do you have any additional feedback?</qstnLit>
+  </qstn>
+  <varFormat type="character" schema="other"/>
+</var>
+```
+
+## 3. Select One
+Verwendet, wenn eine Antwortperson genau eine Option aus einer Liste auswählen muss.
+
+*   **XLSForm Typ**: `select_one [list_name]`
+*   **DDI Beispiel**:
+```xml
+<var ID="V3" name="gender" intrvl="discrete">
+  <labl>Gender</labl>
+  <qstn ID="Q3" responseDomainType="category">
+    <qstnLit>What is your gender?</qstnLit>
+  </qstn>
+  <varFormat type="numeric" schema="other"/>
+  <catgry>
+    <catValu>1</catValu>
+    <labl>Male</labl>
+  </catgry>
+  <catgry>
+    <catValu>2</catValu>
+    <labl>Female</labl>
+  </catgry>
+</var>
+```
+
+## 4. Select Multiple (Checkboxes)
+Erfordert einen **strukturierten Ansatz**, um sowohl die konzeptionelle Frage als auch die diskreten Datenspalten zu erhalten.
+
+*   **XLSForm Typ**: `select_multiple [list_name]`
+*   **DDI Beispiel**:
+```xml
+<!-- Alle Gruppen MÜSSEN vor allen Variablen definiert werden -->
+<varGrp ID="VG1" type="multipleResp" var="V4_1 V4_2">
+  <labl>Devices Owned</labl>
+  <txt>Which of these devices do you own? Please check all that apply.</txt>
+</varGrp>
+
+<var ID="V4_1" name="device_phone" intrvl="discrete">
+  <labl>Smartphone</labl>
+  <qstn ID="Q4_1" responseDomainType="multiple">
+    <preQTxt>Which of these devices do you own? Please check all that apply.</preQTxt>
+    <qstnLit>Smartphone</qstnLit>
+  </qstn>
+  <varFormat type="numeric" schema="other"/>
+  <catgry><catValu>0</catValu><labl>Not mentioned</labl></catgry>
+  <catgry><catValu>1</catValu><labl>Mentioned</labl></catgry>
+</var>
+
+<var ID="V4_2" name="device_laptop" intrvl="discrete">
+  <labl>Laptop</labl>
+  <qstn ID="Q4_2" responseDomainType="multiple">
+    <preQTxt>Which of these devices do you own? Please check all that apply.</preQTxt>
+    <qstnLit>Laptop</qstnLit>
+  </qstn>
+  <varFormat type="numeric" schema="other"/>
+  <catgry><catValu>0</catValu><labl>Not mentioned</labl></catgry>
+  <catgry><catValu>1</catValu><labl>Mentioned</labl></catgry>
+</var>
+```
+
+---
+
+## Zusammenfassungstabelle
+
+| XLSForm Typ | DDI Intervall | Response Domain | item literal location |
+| :--- | :--- | :--- | :--- |
+| `integer` | `discrete` | `numeric` | `qstnLit` |
+| `text` | `discrete` | `text` | `qstnLit` |
+| `select_one` | `discrete` | `category` | `qstnLit` |
+| `select_multiple` | `discrete` | `multiple` | `qstnLit` (mit `preQTxt`) |

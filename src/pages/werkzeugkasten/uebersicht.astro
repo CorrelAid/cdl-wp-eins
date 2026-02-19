@@ -1,0 +1,35 @@
+---
+import Layout from "../../lib/layouts/Layout.astro";
+
+const pageTitle = "CDL Werkzeugkasten II";
+const pageDescription = "Übersicht und Einschränkungen";
+---
+
+<Layout title={pageTitle} teaser={pageDescription}>
+  <h2>Was haben wir im Kasten?</h2>
+
+  <h2>Was haben wir nicht im Kasten?</h2>
+
+  <div class="tool-characteristics">
+    <h3>Einschränkungen dieser Tool-Serie</h3>
+    <ul class="characteristics-list">
+      <li>Begrenzt auf Online/Internet-basierte Umfragen</li>
+      <li>Konzentriert sich auf quantitative Methoden</li>
+      <li>Workflows innerhalb des Ökosystems beschränken sich auf folgende Fragetypen (nach <a href="https://xlsform.org/en/#question-types">xlsforms</a>):
+        <ul class="question-types">
+          <li>integer</li>
+          <li>text</li>
+          <li>select_one [options]</li>
+          <li>select_multiple [options]</li>
+        </ul>
+      </li>
+      <li>Die Transformationen zwischen Tools und Standards umfassen nicht alle Möglichkeiten</li>
+    </ul>
+  </div>
+
+
+  
+</Layout>
+
+
+
