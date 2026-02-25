@@ -1,23 +1,28 @@
 [
-    "einleitung",
     {
         "Konzeption": [
             "konzeption-einleitung",
-            "sampling-theorie"
+            "studiendesign",
+            "forschungsfragen",
+            "konzepte-konstrukte",
+            "sampling-theorie",
+            "ethik-datenschutz"
         ]
     },
     {
         "Fragebogendesign": [
             "design-einleitung",
+            "operationalisierung",
             "xlsform-standard",
-            "fragetypen",
-            "reihenfolgeeffekte",
-            "formulaid"
+            "gute-fragen-schreiben",
+            "fragebogenaufbau",
+            "pretesting"
         ]
     },
     {
         "Erhebung": [
             "erhebung-einleitung",
+            "feldphase-monitoring",
             "kobotoolbox",
             "limesurvey",
             "lamapoll"
@@ -26,15 +31,18 @@
     {
         "Aufbereitung & Analyse": [
             "analyse-einleitung",
-            "ddi-lifecycle",
-            "jasp-statistik",
-            "llm-synthetic-survey-data",
-            "bayes-statistik"
+            "datenbereinigung",
+            "deskriptive-auswertung",
+            "jasp-statistik"
         ]
     },
     {
-        "Entscheiden & Handeln": [
-            "handeln-einleitung"
+        "Von Daten zu Taten": [
+            "handeln-einleitung",
+            "datenvisualisierung",
+            "ergebnisse-kommunizieren",
+            "ergebnisse-zu-massnahmen",
+            "methodik-veroeffentlichen"
         ]
     },
     "literature"

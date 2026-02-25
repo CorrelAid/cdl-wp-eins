@@ -6,3 +6,103 @@ teaser: Der Standard für digitale Formulare.
 # XLSForm Standard
 
 Einführung in die Erstellung von Formularen mit Excel.
+
+## Fragetypen in XLSForm & DDI
+
+Wie in diesem Ecosystem verwendete Fragetypen in DDI 2.5 Codebook XML und XLSForm abgebildet werden können.
+
+### 1. Integer
+*   **XLSForm Type**: `integer`
+*   **DDI Example**:
+```xml
+<var ID="V1" name="age" intrvl="discrete">
+  <labl>Age</labl>
+  <qstn ID="Q1" responseDomainType="numeric"><qstnLit>What is your age?</qstnLit></qstn>
+  <varFormat type="numeric" schema="other"/>
+</var>
+```
+
+### 2. Text
+*   **XLSForm Type**: `text`
+*   **DDI Example**:
+```xml
+<var ID="V2" name="comments" intrvl="discrete">
+  <labl>Comments</labl>
+  <qstn ID="Q2" responseDomainType="text"><qstnLit>Any feedback?</qstnLit></qstn>
+  <varFormat type="character" schema="other"/>
+</var>
+```
+
+### 3. Select One
+*   **XLSForm Type**: `select_one [list_name]`
+*   **DDI Example**:
+```xml
+<var ID="V3" name="gender" intrvl="discrete">
+  <labl>Gender</labl>
+  <qstn ID="Q3" responseDomainType="category"><qstnLit>What is your gender?</qstnLit></qstn>
+  <catgry><catValu>1</catValu><labl>Male</labl></catgry>
+  <catgry><catValu>2</catValu><labl>Female</labl></catgry>
+  <varFormat type="numeric" schema="other"/>
+</var>
+```
+
+### 4. Select Multiple (Checkboxes)
+*   **XLSForm Type**: `select_multiple [list_name]`
+*   **DDI Mapping**: Use a `varGrp` with `type="multipleResp"`.
+*   **DDI Example**:
+```xml
+<varGrp ID="VG1" type="multipleResp" var="V4_1 V4_2">
+  <labl>Devices Owned</labl>
+  <txt>Which of these devices do you own? Please check all that apply.</txt>
+</varGrp>
+
+<var ID="V4_1" name="device_phone" intrvl="discrete">
+  <labl>Smartphone</labl>
+  <qstn ID="Q4_1" responseDomainType="multiple">
+    <preQTxt>Which of these devices do you own?...</preQTxt>
+    <qstnLit>Smartphone</qstnLit>
+  </qstn>
+  <catgry><catValu>0</catValu><labl>Not mentioned</labl></catgry>
+  <catgry><catValu>1</catValu><labl>Mentioned</labl></catgry>
+  <varFormat type="numeric" schema="other"/>
+</var>
+```
+
+### 5. Matrix / Likert Grid
+Used for a group of questions that share the same scale and instructions.
+
+*   **XLSForm Type**: `begin_kobomatrix` / `begin_group` with appearance `grid`.
+*   **DDI Mapping**: Use a `varGrp` with `type="grid"`.
+*   **Consistency Rule**: The `varGrp/txt` and the `qstn/preQTxt` of every variable in the group SHOULD be identical. This ensures the question context is preserved at both the group and variable levels.
+*   **DDI Example**:
+```xml
+<varGrp ID="VG2" type="grid" var="V5_1 V5_2">
+  <labl>Trust in Institutions</labl>
+  <txt>How much do you trust each of the following institutions on a scale from 1 to 5?</txt>
+</varGrp>
+
+<var ID="V5_1" name="trust_parl" intrvl="discrete">
+  <labl>Trust: Parliament</labl>
+  <qstn ID="Q5_1" responseDomainType="category">
+    <preQTxt>How much do you trust each of the following institutions...?</preQTxt>
+    <qstnLit>The Parliament</qstnLit>
+  </qstn>
+  <!-- DDI 2.5 NOTE: Categories MUST be repeated for every variable in the grid -->
+  <catgry><catValu>1</catValu><labl>Not at all</labl></catgry>
+  <catgry><catValu>5</catValu><labl>Completely</labl></catgry>
+  <varFormat type="numeric" schema="other"/>
+</var>
+```
+*Note: While DDI 3.x supports shared code lists, DDI 2.5 requires full category definitions within each variable.*
+
+---
+
+### Übersicht
+
+| XLSForm Type | DDI Interval | Response Domain | Container | item literal location |
+| :--- | :--- | :--- | :--- | :--- |
+| `integer` | `discrete` | `numeric` | `var` | `qstnLit` |
+| `text` | `discrete` | `text` | `var` | `qstnLit` |
+| `select_one` | `discrete` | `category` | `var` | `qstnLit` |
+| `select_multiple` | `discrete` | `multiple` | `varGrp(multipleResp)` | `qstnLit` (w/ `preQTxt`) |
+| `matrix` | `discrete` | `category` | `varGrp(grid)` | `qstnLit` (w/ `preQTxt`) |

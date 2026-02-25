@@ -1,49 +1,48 @@
 ---
-tocTitle: LLM survey data generation
-teaser: Research notes
+tocTitle: Pretesting
+teaser: Probleme finden, bevor es zu spät ist.
 ---
 
-# Notes on papers 
+# Pretesting
 
+## Pretesting mit LLMs
 
-## Preliminary Conclusion:
 LLM generated survey responses can mimick some aspects of human responses when you know the sociodemographics of the expected human respondents and condition the LLM on that via "personas". The survey responses often reproduce averages fairly reliably but lack variance. For our purposes this seems surely good enough.
 
 
-## Simulating Human Opinions with Large Language Models: Opportunities and Challenges for Personalized Survey Data Modeling
+### Simulating Human Opinions with Large Language Models: Opportunities and Challenges for Personalized Survey Data Modeling
 
-<Citation key="MH35S3ET" mode="na" /> created ASPIRE (Automated Synthetic Persona Interview and Response Engine) (Couldn’t find their python code though).
+<Citation key="MH35S3ET" mode="na" /> created ASPIRE (Automated Synthetic Persona Interview and Response Engine) (Couldn't find their python code though).
 
 They create personas based on real sociodemographic data:
 
-> “You are a [ethnicity] [sex] living in [state]. You were born in the year [year] in [country of birth]. Your nationality is [nationality] and you speak [language] fluently. Your education level is: [education level] and your profession is: [profession]. You describe your financial situation with [financial situation].”
+> "You are a [ethnicity] [sex] living in [state]. You were born in the year [year] in [country of birth]. Your nationality is [nationality] and you speak [language] fluently. Your education level is: [education level] and your profession is: [profession]. You describe your financial situation with [financial situation]."
 
 **Conclusion**: Synthetic data is better than random (average agreement between synthetic and real responses was 78% (p&lt;0.001)). However, they found a positivity bias where synthetic responses are more positive than real ones. No strong evidence of sociodemographic bias was found (though this doesn't mean there's no bias!). They also observed lower variance in synthetic responses <Citation key="MH35S3ET" mode="pa" />.
 
-## Out of One, Many: Using Language Models to Simulate Human Samples
+### Out of One, Many: Using Language Models to Simulate Human Samples
 
 <Citation key="3SZ58NRP" mode="na" /> seems to be (among the) first to look in detail at how closely LLM responses map to human responses. They claim that LLMs are very good at reproducing the biases and views of subpopulations when prompted with personas.
 
 
-## Synthetic Replacements for Human Survey Data? The Perils of Large Language Models.
+### Synthetic Replacements for Human Survey Data? The Perils of Large Language Models.
 <Citation key="VQB2LMBX" mode="pa" />
 
-**Conclusion**: Persona-based LLM reponses are good to model human averages but show less variance and non-faithful regression coefficients.  
+**Conclusion**: Persona-based LLM reponses are good to model human averages but show less variance and non-faithful regression coefficients.
 Not surprising to me: Pre-trained LLMs have great calibration. After RLHF calibration collapses. Plus the temperature is less than 1 usually (so they sample with less variance than what they think the true next-word distribution is.
 
 
-## Large Language Models in Survey Research: Generating Synthetic Data and Unlocking New Possibilities.
+### Large Language Models in Survey Research: Generating Synthetic Data and Unlocking New Possibilities.
 <Citation key="PYJJ3X5U" mode="pa" />
 
 They let the LLM generate the sociodemographic data (e.g. "73% female, 91% White, average age 41.6" and the LLM draws values to match that).
 Generally similar pattern. LLM responses are not a bad approximation but have some problems (too homogeneous, bias).
 
 
-## LLMs Reproduce Human Purchase Intent via Semantic Similarity Elicitation of Likert Ratings
+### LLMs Reproduce Human Purchase Intent via Semantic Similarity Elicitation of Likert Ratings
 <Citation doi="10.48550/ARXIV.2510.08338" mode="pa" />
 
 Also as [blog post](https://www.pymc-labs.com/blog-posts/AI-based-Customer-Research). For Likert Scales (aka numeric responses): First let LLMs produce text, second match text with semantic similarity rating to Likert scale (very negative, negative, etc.). They had less positivity bias than humans in their experiments
 
-## Creating Synthetic User Research: Using Persona Prompting and Autonomous Agents
-[Blog Post](https://medium.com/data-science/creating-synthetic-user-research-using-persona-prompting-and-autonomous-agents-b521e0a80ab6) that let’s the LLM come up with five more detailed personas and let’s them have a group chat over a product with autonomous agents. Less relevant for us.
-
+### Creating Synthetic User Research: Using Persona Prompting and Autonomous Agents
+[Blog Post](https://medium.com/data-science/creating-synthetic-user-research-using-persona-prompting-and-autonomous-agents-b521e0a80ab6) that let's the LLM come up with five more detailed personas and let's them have a group chat over a product with autonomous agents. Less relevant for us.

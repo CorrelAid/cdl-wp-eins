@@ -11,48 +11,66 @@
 
     interface Props {
         navItems: NavItem[];
+        currentPath: string;
     }
 
-    let { navItems }: Props = $props();
+    let { navItems, currentPath }: Props = $props();
+
+    function isActive(slug: string): boolean {
+        const path = currentPath.replace(/^\/|\/$/g, '');
+        return path === slug;
+    }
     let isOpen = $state(false);
 
     // Initialize state directly from localStorage if available (browser-only)
-    const isBrowser = typeof window !== 'undefined';
-    
+    const isBrowser = typeof window !== "undefined";
+
     let isManualOpen = $state(
-        isBrowser ? localStorage.getItem('sidenav_manual_open') === 'true' : false
+        isBrowser
+            ? localStorage.getItem("sidenav_manual_open") !== "false"
+            : true,
     );
     let isToolboxOpen = $state(
-        isBrowser ? localStorage.getItem('sidenav_toolbox_open') === 'true' : false
+        isBrowser
+            ? localStorage.getItem("sidenav_toolbox_open") !== "false"
+            : true,
     );
 
-    let expandedItems = $state<Set<string>>((() => {
-        if (isBrowser) {
-            const saved = localStorage.getItem('sidenav_expanded_items');
-            if (saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    if (Array.isArray(parsed)) {
-                        return new Set(parsed);
+    let expandedItems = $state<Set<string>>(
+        (() => {
+            if (isBrowser) {
+                const saved = localStorage.getItem("sidenav_expanded_items");
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        if (Array.isArray(parsed)) {
+                            return new Set(parsed);
+                        }
+                    } catch (e) {
+                        console.error(
+                            "Error parsing sidenav_expanded_items",
+                            e,
+                        );
                     }
-                } catch (e) {
-                    console.error('Error parsing sidenav_expanded_items', e);
                 }
             }
-        }
-        return new Set();
-    })());
+            return new Set();
+        })(),
+    );
 
     $effect(() => {
-        localStorage.setItem('sidenav_manual_open', isManualOpen.toString());
+        localStorage.setItem("sidenav_manual_open", isManualOpen.toString());
     });
 
     $effect(() => {
-        localStorage.setItem('sidenav_toolbox_open', isToolboxOpen.toString());
+        localStorage.setItem("sidenav_toolbox_open", isToolboxOpen.toString());
     });
 
     $effect(() => {
-        localStorage.setItem('sidenav_expanded_items', JSON.stringify([...expandedItems]));
+        localStorage.setItem(
+            "sidenav_expanded_items",
+            JSON.stringify([...expandedItems]),
+        );
     });
 
     function toggleMenu() {
@@ -75,6 +93,17 @@
 
     import Search from "./Search.svelte";
     import logo from "@lib/svg/logo.svg?raw";
+
+    const packageIconPath = `<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line>`;
+
+    const monitorIconPath = `<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line>`;
+
+    const toolboxItems = [
+        { href: "https://github.com/CorrelAid/xlsform2lstsv", label: "xlsform2lstsv", iconPath: packageIconPath },
+         { href: "https://qwac.correlaid.org", label: "qwac", iconPath: monitorIconPath },
+        { href: "https://formulaid.correlaid.org/", label: "FormulAid", iconPath: monitorIconPath },
+        { href: "https://formtransform.correlaid.org/", label: "FormTransform", iconPath: monitorIconPath },
+    ];
 </script>
 
 <button
@@ -93,24 +122,34 @@
         <a href="/" onclick={closeMenu} class="logo-link">
             <div class="logo-comb">
                 <div class="logo">{@html logo}</div>
-                <span class="site-title">Werksschau  I</span>
+                <span class="site-title">Werksschau I</span>
             </div>
         </a>
         <hr />
     </div>
 
+    <a href="/" onclick={closeMenu} class="overview-link">Übersicht</a>
+
     <div class="section">
-        <button 
-            class="section-header" 
-            onclick={() => isManualOpen = !isManualOpen}
+        <button
+            class="section-header"
+            onclick={() => (isManualOpen = !isManualOpen)}
             aria-expanded={isManualOpen}
         >
             Bedienungsanleitung
-            <svg class="chevron" class:rotated={isManualOpen} width="12" height="12" viewBox="0 0 12 12">
-                <path d="M6 9L1.5 4.5L2.55 3.45L6 6.9L9.45 3.45L10.5 4.5L6 9Z" />
+            <svg
+                class="chevron"
+                class:rotated={isManualOpen}
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+            >
+                <path
+                    d="M6 9L1.5 4.5L2.55 3.45L6 6.9L9.45 3.45L10.5 4.5L6 9Z"
+                />
             </svg>
         </button>
-        {#if isManualOpen}
+        <div class="section-body" class:hidden={!isManualOpen}>
             <div class="section-content indented">
                 <ul>
                     {#each navItems as item}
@@ -120,9 +159,11 @@
                         >
                             <div class="nav-item-wrapper">
                                 {#if item.isLink}
-                                    <a href={`/${item.slug}`}>{item.title}</a>
+                                    <a href={`/${item.slug}`} class:active={isActive(item.slug)}>{item.title}</a>
                                 {:else}
-                                    <span class="category-label">{item.title}</span>
+                                    <span class="category-label"
+                                        >{item.title}</span
+                                    >
                                 {/if}
                                 {#if item.hasChildren}
                                     <button
@@ -130,7 +171,11 @@
                                         aria-label={`Toggle ${item.title} submenu`}
                                         onclick={() => toggleSubmenu(item.id)}
                                     >
-                                        <svg width="12" height="12" viewBox="0 0 12 12">
+                                        <svg
+                                            width="12"
+                                            height="12"
+                                            viewBox="0 0 12 12"
+                                        >
                                             <path
                                                 d="M6 9L1.5 4.5L2.55 3.45L6 6.9L9.45 3.45L10.5 4.5L6 9Z"
                                             />
@@ -142,7 +187,9 @@
                                 <ul class="submenu">
                                     {#each item.children as child}
                                         <li>
-                                            <a href={`/${child.slug}`}>{child.title}</a>
+                                            <a href={`/${child.slug}`} class:active={isActive(child.slug)}
+                                                >{child.title}</a
+                                            >
                                         </li>
                                     {/each}
                                 </ul>
@@ -151,57 +198,96 @@
                     {/each}
                 </ul>
             </div>
-        {/if}
+            <a href="/pdf" class="book-link">
+                <svg
+                    class="book-icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    ><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"
+                    ></path><path
+                        d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+                    ></path></svg
+                >
+                Als Buch anzeigen
+            </a>
+        </div>
     </div>
 
     <div class="section">
-        <button 
-            class="section-header" 
-            onclick={() => isToolboxOpen = !isToolboxOpen}
+        <button
+            class="section-header"
+            onclick={() => (isToolboxOpen = !isToolboxOpen)}
             aria-expanded={isToolboxOpen}
         >
             Werkzeugkasten
-            <svg class="chevron" class:rotated={isToolboxOpen} width="12" height="12" viewBox="0 0 12 12">
-                <path d="M6 9L1.5 4.5L2.55 3.45L6 6.9L9.45 3.45L10.5 4.5L6 9Z" />
+            <svg
+                class="chevron"
+                class:rotated={isToolboxOpen}
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+            >
+                <path
+                    d="M6 9L1.5 4.5L2.55 3.45L6 6.9L9.45 3.45L10.5 4.5L6 9Z"
+                />
             </svg>
         </button>
-        {#if isToolboxOpen}
+        <div class="section-body" class:hidden={!isToolboxOpen}>
             <div class="section-content">
                 <ul>
-                    <li>
-                        <a href="/werkzeugkasten/uebersicht">Übersicht</a>
-                    </li>
-                    <li>
-                        <a href="https://formulaid.correlaid.org/" target="_blank" rel="noopener noreferrer" class="toolbox-link">
-                            <span class="icon-group">
-                                <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                                FormulAid
-                            </span>
-                            <svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://formtransform.correlaid.org/" target="_blank" rel="noopener noreferrer" class="toolbox-link">
-                            <span class="icon-group">
-                                <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                                FormTransform
-                            </span>
-                            <svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/CorrelAid/xlsform2lstsv" target="_blank" rel="noopener noreferrer" class="toolbox-link">
-                            <span class="icon-group">
-                                <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                                xlsform2lstsv
-                            </span>
-                            <svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                        </a>
-                    </li>
+                    {#each toolboxItems as item}
+                        <li>
+                            <a
+                                href={item.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="toolbox-link"
+                            >
+                                <span class="icon-group">
+                                    <svg
+                                        class="tool-icon"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                        >{@html item.iconPath}</svg
+                                    >
+                                    {item.label}
+                                </span>
+                                {@render externalLinkIcon()}
+                            </a>
+                        </li>
+                    {/each}
                 </ul>
             </div>
-        {/if}
+        </div>
     </div>
+
+    {#snippet externalLinkIcon()}
+        <svg
+            class="external-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><path
+                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+            ></path><polyline points="15 3 21 3 21 9"
+            ></polyline><line x1="10" y1="14" x2="21" y2="3"
+            ></line></svg
+        >
+    {/snippet}
 
     <div class="search-container">
         <Search />
@@ -321,8 +407,8 @@
         margin-bottom: 0.5rem;
     }
 
-    .sidebar-header{
-          margin-bottom: 1.5rem;
+    .sidebar-header {
+        margin-bottom: 1.5rem;
     }
 
     .logo {
@@ -343,6 +429,22 @@
         font-family: var(--font-family-heading);
     }
 
+    .overview-link {
+        display: block;
+        padding: 0.25rem 0;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: var(--color-text-primary);
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .overview-link:hover {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+    }
+
     .section {
         margin-bottom: 0.5rem;
     }
@@ -361,9 +463,35 @@
         cursor: pointer;
         text-align: left;
     }
-    
+
     .section-header:hover {
         color: var(--color-primary);
+    }
+
+    .book-link {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        padding: 0.2rem 0.5rem;
+        margin-top: 0.1rem;
+        color: var(--color-text-primary);
+        opacity: 0.7;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: opacity 0.2s ease, background-color 0.2s ease;
+    }
+
+    .book-link:hover {
+        opacity: 1;
+        background-color: var(--color-primary);
+        color: var(--color-white);
+    }
+
+    .book-icon {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
     }
 
     .chevron {
@@ -375,6 +503,10 @@
         transform: rotate(180deg);
     }
 
+    .section-body.hidden {
+        display: none;
+    }
+
     .section-content {
         margin-bottom: 0.5rem;
     }
@@ -382,7 +514,8 @@
     .section-content.indented {
         padding-left: 0.25rem;
         margin-left: 0.75rem;
-        border-left: var(--dimension-border-width) solid var(--color-text-primary);
+        border-left: var(--dimension-border-width) solid
+            var(--color-text-primary);
     }
 
     nav ul {
@@ -404,7 +537,7 @@
 
     .nav-item-wrapper a {
         flex: 1;
-        padding: 0.25rem 0.5rem !important;
+        padding: 0.35rem 0.5rem !important;
         pointer-events: auto;
         z-index: 1;
         position: relative;
@@ -416,10 +549,11 @@
 
     .category-label {
         flex: 1;
-        padding: 0.25rem 0.5rem;
+        padding: 0.35rem 0.5rem;
         font-weight: 600;
         color: var(--color-text-primary);
         font-size: 0.95rem;
+        line-height: 1.4;
     }
 
     .toggle-btn {
@@ -458,7 +592,8 @@
         margin-left: 0.5rem;
         margin-top: 0.125rem;
         margin-bottom: 0.5rem;
-        border-left: var(--dimension-border-width) solid var(--color-text-primary);
+        border-left: var(--dimension-border-width) solid
+            var(--color-text-primary);
     }
 
     li.expanded .submenu {
@@ -471,19 +606,26 @@
 
     .submenu a {
         font-size: 0.9em;
-        padding: 0.15rem 0.5rem !important;
+        padding: 0.3rem 0.5rem !important;
     }
 
     nav a {
         text-decoration: none;
         color: var(--color-text-primary);
         display: block;
-        padding: 0.25rem 0.5rem;
+        padding: 0.35rem 0.5rem;
         border-radius: 4px;
         transition: background-color 0.2s ease;
+        line-height: 1.4;
     }
 
     nav a:hover {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+    }
+
+    nav a.active {
+        font-weight: 700;
         background-color: var(--color-primary);
         color: var(--color-white);
     }

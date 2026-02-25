@@ -1,57 +1,53 @@
 <script>
   const phases = [
-    { 
-      id: 'konzeption', 
-      label: 'Konzeption', 
-      sub: 'Forschungsfragen & Stichprobe',
-      href: '/konzeption-einleitung' 
-    },
-    { 
-      id: 'design', 
-      label: 'Fragebogendesign', 
-      sub: 'Operationalisierung & Pretest',
-      href: '/design-einleitung' 
-    },
-    { 
-      id: 'erhebung', 
-      label: 'Erhebung', 
-      sub: 'Feldphase & Monitoring',
-      href: '/erhebung-einleitung' 
-    },
-    { 
-      id: 'analyse', 
-      label: 'Aufbereitung & Analyse', 
-      sub: 'Data Cleaning & Statistik',
-      href: '/analyse-einleitung' 
-    },
-    { 
-      id: 'handeln', 
-      label: 'Entscheiden & Handeln', 
-      sub: 'Reporting & Impact',
-      href: '/handeln-einleitung' 
-    }
+    { id: 'konzeption', label: 'Konzeption', href: '/konzeption-einleitung' },
+    { id: 'design', label: 'Fragebogendesign', href: '/design-einleitung' },
+    { id: 'erhebung', label: 'Erhebung', href: '/erhebung-einleitung' },
+    { id: 'analyse', label: 'Aufbereitung & Analyse', href: '/analyse-einleitung' },
+    { id: 'handeln', label: 'Von Daten zu Taten', href: '/handeln-einleitung' },
   ];
 
   const markers = [
     // Spanning Knowledge Markers (Bedienungsanleitung)
-    { label: 'DDI Codebook', type: 'knowledge', href: '/ddi-codebook', startRow: 3, endRow: 8, column: 1 },
+    { label: 'DDI Codebook', type: 'knowledge', href: '/methodik-veroeffentlichen', startRow: 3, endRow: 8, column: 1 },
     { label: 'XLSForm', type: 'knowledge', href: '/xlsform-standard', startRow: 3, endRow: 4, column: 2 },
-    
-    // Phase-specific Knowledge (Bedienungsanleitung)
-    { label: 'Sampling Theorie', type: 'knowledge', href: '/sampling-theorie', phase: 0 },
-    { label: 'Fragetypen', type: 'knowledge', href: '/fragetypen', phase: 1 },
-    { label: 'Reihenfolgeeffekte', type: 'knowledge', href: '/reihenfolgeeffekte', phase: 1 },
-    { label: 'Pretesting mit LLMs', type: 'knowledge', href: '/llm-synthetic-survey-data', phase: 1 },
+
+    // Phase 0: Konzeption
+    { label: 'Studiendesign & Umfragetypen', type: 'knowledge', href: '/studiendesign', phase: 0 },
+    { label: 'Forschungsfragen', type: 'knowledge', href: '/forschungsfragen', phase: 0 },
+    { label: 'Messtheorie & Konstrukte', type: 'knowledge', href: '/konzepte-konstrukte', phase: 0 },
+    { label: 'Stichprobenauswahl', type: 'knowledge', href: '/sampling-theorie', phase: 0 },
+    { label: 'Ethik & Datenschutz', type: 'knowledge', href: '/ethik-datenschutz', phase: 0 },
+
+    // Phase 1: Fragebogendesign
+    { label: 'Operationalisierung', type: 'knowledge', href: '/operationalisierung', phase: 1 },
+    { label: 'Fragen formulieren', type: 'knowledge', href: '/gute-fragen-schreiben', phase: 1 },
+    { label: 'Fragebogenaufbau', type: 'knowledge', href: '/fragebogenaufbau', phase: 1 },
+    { label: 'Pretesting', type: 'knowledge', href: '/pretesting', phase: 1 },
+
+    // Phase 2: Erhebung
+    { label: 'Feldphase & Monitoring', type: 'knowledge', href: '/feldphase-monitoring', phase: 2 },
     { label: 'KoboToolbox', type: 'knowledge', href: '/kobotoolbox', phase: 2 },
     { label: 'LimeSurvey', type: 'knowledge', href: '/limesurvey', phase: 2 },
     { label: 'LamaPoll', type: 'knowledge', href: '/lamapoll', phase: 2 },
-    { label: 'JASP', type: 'knowledge', href: '/jasp-statistik', phase: 3 },
-    { label: 'Bayes-Statistik', type: 'knowledge', href: '/bayes-statistik', phase: 3 },
+
+    // Phase 3: Aufbereitung & Analyse
+    { label: 'Datenbereinigung', type: 'knowledge', href: '/datenbereinigung', phase: 3 },
+    { label: 'Deskriptive Auswertung', type: 'knowledge', href: '/deskriptive-auswertung', phase: 3 },
+    { label: 'Multivariate Statistik', type: 'knowledge', href: '/jasp-statistik', phase: 3 },
+
+    // Phase 4: Von Daten zu Taten
+    { label: 'Datenvisualisierung', type: 'knowledge', href: '/datenvisualisierung', phase: 4 },
+    { label: 'Ergebnisse kommunizieren', type: 'knowledge', href: '/ergebnisse-kommunizieren', phase: 4 },
+    { label: 'Datenbasiert entscheiden', type: 'knowledge', href: '/ergebnisse-zu-massnahmen', phase: 4 },
+    { label: 'Methodik & Daten veröffentlichen', type: 'knowledge', href: '/methodik-veroeffentlichen', phase: 4 },
 
     // Werkzeugkasten - Apps (Blue + Monitor Icon)
     { label: 'FormulAid', type: 'app', href: 'https://formulaid.correlaid.org/', phase: 1 },
-    { label: 'FormTransform', type: 'app', href: 'https://formtransform.correlaid.org/', phase: 1 },
-    
+    { label: 'FormTransform', type: 'app', href: 'https://formtransform.correlaid.org/', phase: 2 },
+    { label: 'qwac', type: 'app', href: 'https://qwac.correlaid.org/', phase: 4 },
+    { label: 'qwac', type: 'app', href: 'https://qwac.correlaid.org/', phase: 1 },
+
     // Werkzeugkasten - Packages (Blue + Box Icon)
     { label: 'xlsform2lstsv', type: 'package', href: 'https://github.com/CorrelAid/xlsform2lstsv', phase: 2 },
   ];
@@ -84,7 +80,6 @@
         <div class="phase-card-wrapper">
             <a href={phase.href} class="phase-card">
               <span class="phase-title">{phase.label}</span>
-              <span class="phase-sub">{phase.sub}</span>
             </a>
 
             <div class="phase-tools">
@@ -103,9 +98,14 @@
                 {/each}
             </div>
             
-            {#if i === 1}
+            {#if i === 3}
               <div class="feedback-indicator">
-                <span class="loop-icon">⤴</span> Pretesting & Iteration Loop
+                <span class="loop-icon">⤴</span> Pretesting → Fragebogendesign
+              </div>
+            {/if}
+            {#if i === 4}
+              <div class="feedback-indicator">
+                <span class="loop-icon">⤴</span> Panelbefragungen & Längsschnitt → Erhebung
               </div>
             {/if}
         </div>
