@@ -2,6 +2,8 @@
 import { getCollection, render } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import SpreadsheetWithTabsWrapper from "@components/SpreadsheetWithTabsWrapper.astro";
+import TabsWrapper from "@components/TabsWrapper.astro";
+import QuestionTypeBlock from "@components/QuestionTypeBlock.astro";
 import Citation from "@components/Citation.astro";
 
 export async function getStaticPaths() {
@@ -17,5 +19,5 @@ const { Content } = await render(page);
 ---
 
 <Layout title={page.data.tocTitle} teaser={page.data.teaser}>
-    <Content components={{ Citation, SpreadsheetWithTabsWrapper }} />
+    <Content components={{ Citation, SpreadsheetWithTabsWrapper, TabsWrapper, QuestionTypeBlock }} />
 </Layout>

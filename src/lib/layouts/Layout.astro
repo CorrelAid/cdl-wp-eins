@@ -34,22 +34,22 @@ function buildNavStructure(tocArray: any[]): any[] {
                 };
             }
             return { slug: item, page: pageMap[item] };
-        } else if (typeof item === 'object') {
-            const [key, children] = Object.entries(item)[0];
-            // key can be a slug (if it matches a page) or just a category label
-            const page = pageMap[key];
+        } else if (typeof item === 'object' && item.label && item.children) {
+            // Section with explicit label and children array
+            const slug = item.label;
+            const page = pageMap[slug];
             return {
-                slug: key,
-                label: key, // Fallback label
+                slug: slug,
+                label: item.label,
                 page: page,
-                children: buildNavStructure(children as any[])
+                children: buildNavStructure(item.children as any[])
             };
         }
         return null;
     }).filter(Boolean);
 }
 
-const navStructure = buildNavStructure(toc);
+const navStructure = buildNavStructure(toc.sections);
 
 // Recursive component for rendering nav items
 function renderNavItem(item: any, level = 0): any {

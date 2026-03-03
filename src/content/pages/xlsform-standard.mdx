@@ -3,106 +3,78 @@ tocTitle: XLSForm Standard
 teaser: Der Standard für digitale Formulare.
 ---
 
-# XLSForm Standard
+XLSForm is a standard for creating forms using Excel spreadsheets. It's widely used in survey and data collection tools.
 
-Einführung in die Erstellung von Formularen mit Excel.
+## Key Concepts
 
-## Fragetypen in XLSForm & DDI
+- **Excel-based form design**: Create forms using familiar spreadsheet software
+- **Standardized structure**: Uses specific worksheet names and column formats
+- **Interoperable**: Works with tools like ODK, KoboToolbox, SurveyCTO
 
-Wie in diesem Ecosystem verwendete Fragetypen in DDI 2.5 Codebook XML und XLSForm abgebildet werden können.
+## Basic Structure
 
-### 1. Integer
-*   **XLSForm Type**: `integer`
-*   **DDI Example**:
-```xml
-<var ID="V1" name="age" intrvl="discrete">
-  <labl>Age</labl>
-  <qstn ID="Q1" responseDomainType="numeric"><qstnLit>What is your age?</qstnLit></qstn>
-  <varFormat type="numeric" schema="other"/>
-</var>
-```
+<SpreadsheetWithTabsWrapper worksheets={[
+  {
+    id: 'survey',
+    title: 'Survey Worksheet',
+    headers: ['type', 'name', 'label', 'hint', 'required', 'constraint'],
+    data: [
+      ['text', 'respondent_name', 'What is your name?', 'Enter full name', 'yes', ''],
+      ['integer', 'age', 'What is your age?', 'Enter age in years', 'yes', '. > 0'],
+      ['select_one gender', 'gender', 'What is your gender?', '', 'yes', ''],
+      ['select_multiple languages', 'languages', 'Which languages do you speak?', 'Select all that apply', 'no', '']
+    ]
+  },
+  {
+    id: 'choices',
+    title: 'Choices Worksheet',
+    headers: ['list_name', 'name', 'label'],
+    data: [
+      ['gender', 'male', 'Male'],
+      ['gender', 'female', 'Female'],
+      ['gender', 'other', 'Other'],
+      ['gender', 'prefer_not_to_say', 'Prefer not to say'],
+      ['languages', 'english', 'English'],
+      ['languages', 'spanish', 'Spanish'],
+      ['languages', 'french', 'French'],
+      ['languages', 'german', 'German']
+    ]
+  },
+  {
+    id: 'settings',
+    title: 'Settings Worksheet',
+    headers: ['parameter', 'value'],
+    data: [
+      ['form_title', 'Demographic Survey'],
+      ['form_id', 'demo_survey'],
+      ['version', '1.0'],
+      ['submission_url', 'https://example.com/submit']
+    ]
+  }
+]} />
 
-### 2. Text
-*   **XLSForm Type**: `text`
-*   **DDI Example**:
-```xml
-<var ID="V2" name="comments" intrvl="discrete">
-  <labl>Comments</labl>
-  <qstn ID="Q2" responseDomainType="text"><qstnLit>Any feedback?</qstnLit></qstn>
-  <varFormat type="character" schema="other"/>
-</var>
-```
+## Common Question Types
 
-### 3. Select One
-*   **XLSForm Type**: `select_one [list_name]`
-*   **DDI Example**:
-```xml
-<var ID="V3" name="gender" intrvl="discrete">
-  <labl>Gender</labl>
-  <qstn ID="Q3" responseDomainType="category"><qstnLit>What is your gender?</qstnLit></qstn>
-  <catgry><catValu>1</catValu><labl>Male</labl></catgry>
-  <catgry><catValu>2</catValu><labl>Female</labl></catgry>
-  <varFormat type="numeric" schema="other"/>
-</var>
-```
+- `text`: Free text response
+- `integer`: Whole numbers
+- `decimal`: Decimal numbers
+- `select_one`: Single choice from list
+- `select_multiple`: Multiple choices from list
+- `date`: Date picker
+- `geopoint`: GPS coordinates
 
-### 4. Select Multiple (Checkboxes)
-*   **XLSForm Type**: `select_multiple [list_name]`
-*   **DDI Mapping**: Use a `varGrp` with `type="multipleResp"`.
-*   **DDI Example**:
-```xml
-<varGrp ID="VG1" type="multipleResp" var="V4_1 V4_2">
-  <labl>Devices Owned</labl>
-  <txt>Which of these devices do you own? Please check all that apply.</txt>
-</varGrp>
+## Benefits
 
-<var ID="V4_1" name="device_phone" intrvl="discrete">
-  <labl>Smartphone</labl>
-  <qstn ID="Q4_1" responseDomainType="multiple">
-    <preQTxt>Which of these devices do you own?...</preQTxt>
-    <qstnLit>Smartphone</qstnLit>
-  </qstn>
-  <catgry><catValu>0</catValu><labl>Not mentioned</labl></catgry>
-  <catgry><catValu>1</catValu><labl>Mentioned</labl></catgry>
-  <varFormat type="numeric" schema="other"/>
-</var>
-```
+- **No coding required**: Design forms using Excel
+- **Reusable**: Same form works across multiple platforms
+- **Version control**: Easy to track changes
+- **Collaboration**: Multiple people can work on the same form
 
-### 5. Matrix / Likert Grid
-Used for a group of questions that share the same scale and instructions.
+## Tools that Support XLSForm
 
-*   **XLSForm Type**: `begin_kobomatrix` / `begin_group` with appearance `grid`.
-*   **DDI Mapping**: Use a `varGrp` with `type="grid"`.
-*   **Consistency Rule**: The `varGrp/txt` and the `qstn/preQTxt` of every variable in the group SHOULD be identical. This ensures the question context is preserved at both the group and variable levels.
-*   **DDI Example**:
-```xml
-<varGrp ID="VG2" type="grid" var="V5_1 V5_2">
-  <labl>Trust in Institutions</labl>
-  <txt>How much do you trust each of the following institutions on a scale from 1 to 5?</txt>
-</varGrp>
-
-<var ID="V5_1" name="trust_parl" intrvl="discrete">
-  <labl>Trust: Parliament</labl>
-  <qstn ID="Q5_1" responseDomainType="category">
-    <preQTxt>How much do you trust each of the following institutions...?</preQTxt>
-    <qstnLit>The Parliament</qstnLit>
-  </qstn>
-  <!-- DDI 2.5 NOTE: Categories MUST be repeated for every variable in the grid -->
-  <catgry><catValu>1</catValu><labl>Not at all</labl></catgry>
-  <catgry><catValu>5</catValu><labl>Completely</labl></catgry>
-  <varFormat type="numeric" schema="other"/>
-</var>
-```
-*Note: While DDI 3.x supports shared code lists, DDI 2.5 requires full category definitions within each variable.*
-
----
-
-### Übersicht
-
-| XLSForm Type | DDI Interval | Response Domain | Container | item literal location |
-| :--- | :--- | :--- | :--- | :--- |
-| `integer` | `discrete` | `numeric` | `var` | `qstnLit` |
-| `text` | `discrete` | `text` | `var` | `qstnLit` |
-| `select_one` | `discrete` | `category` | `var` | `qstnLit` |
-| `select_multiple` | `discrete` | `multiple` | `varGrp(multipleResp)` | `qstnLit` (w/ `preQTxt`) |
-| `matrix` | `discrete` | `category` | `varGrp(grid)` | `qstnLit` (w/ `preQTxt`) |
+- ODK Collect
+- KoboToolbox
+- SurveyCTO
+- Ona
+- CommCare
+- Many others...

@@ -91,6 +91,12 @@
         isOpen = false;
     }
 
+    let mounted = $state(false);
+    $effect(() => {
+        // Suppress CSS transitions during hydration
+        requestAnimationFrame(() => { mounted = true; });
+    });
+
     import Search from "./Search.svelte";
     import logo from "@lib/svg/logo.svg?raw";
 
@@ -106,6 +112,7 @@
     ];
 </script>
 
+
 <button
     id="menu-toggle"
     class:active={isOpen}
@@ -117,7 +124,7 @@
     <span></span>
 </button>
 
-<nav id="sidebar" class:open={isOpen}>
+<nav id="sidebar" class:open={isOpen} class:no-transition={!mounted}>
     <div class="sidebar-header">
         <a href="/" onclick={closeMenu} class="logo-link">
             <div class="logo-comb">
@@ -161,8 +168,9 @@
                                 {#if item.isLink}
                                     <a href={`/${item.slug}`} class:active={isActive(item.slug)}>{item.title}</a>
                                 {:else}
-                                    <span class="category-label"
-                                        >{item.title}</span
+                                    <button class="category-label"
+                                        onclick={() => toggleSubmenu(item.id)}
+                                        >{item.title}</button
                                     >
                                 {/if}
                                 {#if item.hasChildren}
@@ -305,6 +313,12 @@
 ></div>
 
 <style>
+    /* Disable transitions during hydration to prevent expand animation on page change */
+    nav.no-transition,
+    nav.no-transition * {
+        transition: none !important;
+    }
+
     /* Hamburger Menu Button */
     #menu-toggle {
         position: fixed;
@@ -411,6 +425,12 @@
         margin-bottom: 1.5rem;
     }
 
+    nav hr {
+        border: none;
+        border-top: var(--dimension-border-width) solid var(--color-text-primary);
+        margin: 0;
+    }
+
     .logo {
         height: 60px;
         margin-bottom: 0.5rem;
@@ -441,8 +461,7 @@
     }
 
     .overview-link:hover {
-        background-color: var(--color-primary);
-        color: var(--color-white);
+        color: var(--color-text-primary-darker);
     }
 
     .section {
@@ -465,7 +484,7 @@
     }
 
     .section-header:hover {
-        color: var(--color-primary);
+        color: var(--color-text-primary-darker);
     }
 
     .book-link {
@@ -484,7 +503,7 @@
 
     .book-link:hover {
         opacity: 1;
-        background-color: var(--color-primary);
+        background-color: var(--color-text-primary-darker);
         color: var(--color-white);
     }
 
@@ -554,6 +573,16 @@
         color: var(--color-text-primary);
         font-size: 0.95rem;
         line-height: 1.4;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        border-radius: 4px;
+        font-family: inherit;
+    }
+
+    .category-label:hover {
+        color: var(--color-text-primary-darker);
     }
 
     .toggle-btn {
@@ -620,8 +649,7 @@
     }
 
     nav a:hover {
-        background-color: var(--color-primary);
-        color: var(--color-white);
+        color: var(--color-text-primary-darker);
     }
 
     nav a.active {

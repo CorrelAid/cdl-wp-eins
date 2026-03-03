@@ -1,49 +1,69 @@
-[
-    {
-        "Konzeption": [
-            "konzeption-einleitung",
-            "studiendesign",
-            "forschungsfragen",
-            "konzepte-konstrukte",
-            "sampling-theorie",
-            "ethik-datenschutz"
-        ]
-    },
-    {
-        "Fragebogendesign": [
-            "design-einleitung",
-            "operationalisierung",
-            "xlsform-standard",
-            "gute-fragen-schreiben",
-            "fragebogenaufbau",
-            "pretesting"
-        ]
-    },
-    {
-        "Erhebung": [
-            "erhebung-einleitung",
-            "feldphase-monitoring",
-            "kobotoolbox",
-            "limesurvey",
-            "lamapoll"
-        ]
-    },
-    {
-        "Aufbereitung & Analyse": [
-            "analyse-einleitung",
-            "datenbereinigung",
-            "deskriptive-auswertung",
-            "jasp-statistik"
-        ]
-    },
-    {
-        "Von Daten zu Taten": [
-            "handeln-einleitung",
-            "datenvisualisierung",
-            "ergebnisse-kommunizieren",
-            "ergebnisse-zu-massnahmen",
-            "methodik-veroeffentlichen"
-        ]
-    },
-    "literature"
-]
+{
+    "sections": [
+        {
+            "label": "Konzeption",
+            "children": [
+                "konzeption-einleitung",
+                "studiendesign",
+                "forschungsfragen",
+                "konzepte-konstrukte",
+                "sampling-theorie",
+                "ethik-datenschutz"
+            ]
+        },
+        {
+            "label": "Fragebogendesign",
+            "children": [
+                "design-einleitung",
+                "operationalisierung",
+                "xlsform-standard",
+                "fragetypen",
+                "gute-fragen-schreiben",
+                "fragebogenaufbau",
+                "pretesting"
+            ],
+            "excludeFromGraphic": ["xlsform-standard"]
+        },
+        {
+            "label": "Erhebung",
+            "children": [
+                "erhebung-einleitung",
+                "feldphase-monitoring",
+                "kobotoolbox",
+                "limesurvey",
+                "lamapoll"
+            ]
+        },
+        {
+            "label": "Aufbereitung & Analyse",
+            "children": [
+                "analyse-einleitung",
+                "datenbereinigung",
+                "deskriptive-auswertung",
+                "jasp-statistik"
+            ]
+        },
+        {
+            "label": "Von Daten zu Taten",
+            "children": [
+                "handeln-einleitung",
+                "datenvisualisierung",
+                "ergebnisse-kommunizieren",
+                "ergebnisse-zu-massnahmen",
+                "methodik-veroeffentlichen"
+            ]
+        },
+        "literature"
+    ],
+    "tools": [
+        { "label": "FormulAid", "type": "app", "href": "https://formulaid.correlaid.org/", "phase": 1 },
+        { "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 1 },
+        { "label": "FormTransform", "type": "app", "href": "https://formtransform.correlaid.org/", "phase": 2 },
+        { "label": "xlsform2lstsv", "type": "package", "href": "https://github.com/CorrelAid/xlsform2lstsv", "phase": 2 },
+        { "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 4 }
+    ],
+    "spanning": [
+        { "label": "DDI Codebook", "href": "/methodik-veroeffentlichen", "startPhase": 1, "endPhase": 3, "column": 2 },
+        { "label": "XLSForm", "href": "/xlsform-standard", "startPhase": 1, "endPhase": 1, "column": 3 }
+    ]
+}

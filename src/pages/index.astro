@@ -2,29 +2,73 @@
 import Layout from "@layouts/Layout.astro";
 import Hardhat from "@lib/svg/hardhat.svg";
 import TitleLine from "@components/TitleLine.svelte";
-import CustomHeading from "@components/CustomHeading.astro";
 import SurveyPhases from "@components/SurveyPhases.svelte";
+import { getCollection } from "astro:content";
+import toc from "@lib/toc.json";
+
+const allPages = await getCollection("pages");
+const pageMap = Object.fromEntries(allPages.map(page => [page.id, page]));
+
+// Build phases from toc sections
+const phases = toc.sections
+	.filter((s): s is { label: string; children: string[] } => typeof s === 'object')
+	.map(section => ({
+		id: section.children[0].replace(/-einleitung$/, ''),
+		label: section.label,
+		href: '/' + section.children[0],
+	}));
+
+// Build knowledge markers from toc sections (skip intro pages + excluded slugs)
+const knowledgeMarkers = toc.sections
+	.filter((s): s is { label: string; children: string[]; excludeFromGraphic?: string[] } => typeof s === 'object')
+	.flatMap((section, phaseIndex) => {
+		const exclude = section.excludeFromGraphic || [];
+		return section.children
+			.slice(1) // skip intro page
+			.filter(slug => !exclude.includes(slug))
+			.map(slug => ({
+				label: pageMap[slug]?.data.tocTitle || slug,
+				type: 'knowledge' as const,
+				href: '/' + slug,
+				phase: phaseIndex,
+			}));
+	});
+
+// Spanning markers (compute grid rows from phase indices)
+const spanningMarkers = toc.spanning.map(s => ({
+	label: s.label,
+	type: 'knowledge' as const,
+	href: s.href,
+	startRow: s.startPhase * 2 + 1,
+	endRow: s.endPhase * 2 + 2,
+	column: s.column,
+}));
+
+// External tools stay as-is from toc.json
+const toolMarkers = toc.tools;
+
+const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
 ---
 
 <Layout line="false">
 	<body>
 		<div class="logo-container">
-			<!-- <h1>CDL Werksschau  I - Online-Umfragen</h1> -->
 			<Hardhat />
 		</div>
-		<TitleLine client:load />
 		<section>
 			<p>
 				Wilkommen auf der Dokumentationseite der Ergebnisse aus der
-				ersten Werkstattphase des <a href="https://civic-data.dey"
+				ersten Werkstattphase des <a href="https://civic-data.de"
 					>Civic Data Labs</a
 				>. Werkstattphasen sind ein Format, in dem wir uns im über einen
 				Zeitraum von 2-3 Monaten mit einem Thema beschäftigen, bei dem
 				wir indentifiziert haben, dass es dort in der Zivilgesellschaft
 				an Wissen und Tools fehlt. Das Ergebnis von Werkstattphasen sind
-				unter anderem strukturierte Wissenssammlungen in Form von Websites,
-				die wir als <b>Bedienungsanleitung</b> bezeichnen, aber auch Open Source Code und Apps die wir als <b>Werkzeugkasten</b> auf diesen Websites präsentieren. Das Thema dieser
-				Werkstattphase sind Online-Umfragen.
+				unter anderem strukturierte Wissenssammlungen in Form von
+				Websites, die wir als <b>Bedienungsanleitung</b> bezeichnen, aber
+				auch Open Source Code und Apps die wir als <b>Werkzeugkasten</b> auf
+				diesen Websites präsentieren. Das Thema dieser Werkstattphase sind
+				Online-Umfragen.
 			</p>
 			<p>
 				Online-Umfragen sind eine wichtige Methode zur Erhebung von
@@ -34,21 +78,28 @@ import SurveyPhases from "@components/SurveyPhases.svelte";
 				Bedarfe im Umgang mit dieser Methode identifiziert, die uns dazu
 				bewegt haben, sie in dieser Werkstattphase zu behandeln.
 			</p>
-			<h3>Umfragen-Phasenmodell</h3>
-			<SurveyPhases client:load />
+		</section>
+	
+		<section>
+			<SurveyPhases phases={phases} markers={markers} client:load />
+		</section>
+		<section>
 			<p>
 				Eine Beobachtung, die wir in der Vergangenheit gemacht haben,
 				betrifft die konzeptuelle und allgemeine Einbettung von
 				Umfragen: oft wird nicht bis zur Auswertung und darüber hinaus
 				gedacht und es fehlt ein Anknüpfen an Best Practices und
 				vorhandene Standards. In dieser Werkstattphase haben wir Wissen
-				zusammengestellt und begleitende Tools entwickelt, die alle Phasen einer Umfrage, von der Konzeption bis
-				zur Auswertung, abbildet. Deswegen folgt diese Wissenssammlungen
-				diesem Phasenmodell und stellt Standards vor, die Umfragen
-				unabhängig von Tools abbilden können.
+				zusammengestellt und begleitende Tools entwickelt, die alle
+				Phasen einer Umfrage, von der Konzeption bis zur Auswertung,
+				abbildet. Deswegen folgt diese Wissenssammlungen dem obigen
+				<b>Modell der Phasen einer Umfrage</b> und stellt Standards vor, die Umfragen unabhängig
+				von Tools abbilden können.
 			</p>
 			<p>
-				Mit unserem Modell verbunden ist ein Ansatz, wie man Umfragen unabhängig von bestimmten Tools konzipieren, durchführen und auswerten kann.
+				Mit unserem Modell verbunden ist ein Ansatz, wie man Umfragen
+				unabhängig von bestimmten Tools konzipieren, durchführen und
+				auswerten kann.
 			</p>
 		</section>
 	</body>
@@ -57,10 +108,6 @@ import SurveyPhases from "@components/SurveyPhases.svelte";
 <style>
 	section {
 		margin-top: 2.5rem;
-	}
-	h1 {
-		padding-left: 10px;
-		padding-right: 10px;
 	}
 
 	.logo-container {
@@ -91,12 +138,10 @@ import SurveyPhases from "@components/SurveyPhases.svelte";
 		}
 
 		.logo-container {
+			margin-top: 3rem;
+			margin-bottom: 1rem;
 			margin-left: 1rem;
 			margin-right: 1rem;
-		}
-
-		h1 {
-			font-size: 1.5rem;
 		}
 	}
 </style>

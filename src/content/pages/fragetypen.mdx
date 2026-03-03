@@ -1,0 +1,187 @@
+---
+tocTitle: Fragetypen
+teaser: Offene, geschlossene und hybride Frageformate im Überblick.
+---
+
+# Fragetypen
+
+Fragetypen bilden die Grundlage jeder Umfrage. Je nach Frageformat unterscheiden sich die Kodierung in XLSForm und DDI 2.5 Codebook sowie die Darstellung in Tools wie LimeSurvey und KoboToolbox. Die folgenden fünf Fragetypen werden in diesem Projekt verwendet.
+
+## 1. Offene Zahl (Integer)
+
+Offene numerische Fragen erfassen Zahlenwerte ohne vorgegebene Antwortkategorien — z.B. Alter, Haushaltsgröße oder Anzahl.
+
+<QuestionTypeBlock
+    xlsformData={{
+        headers: ["type", "name", "label"],
+        rows: [["integer", "alter", "Wie alt sind Sie?"]]
+    }}
+    ddiXml={`<var ID="V1" name="alter" intrvl="discrete">
+  <qstn ID="Q1" responseDomainType="numeric">
+    <qstnLit>Wie alt sind Sie?</qstnLit>
+  </qstn>
+  <concept>Alter</concept>
+  <varFormat type="numeric" schema="other"/>
+</var>`}
+/>
+
+## 2. Offener Text
+
+Freitextfragen ermöglichen den Befragten, eigene Antworten in Textform zu formulieren — z.B. für Kommentare oder offene Rückmeldungen.
+
+<QuestionTypeBlock
+    xlsformData={{
+        headers: ["type", "name", "label"],
+        rows: [["text", "anmerkungen", "Haben Sie weitere Anmerkungen?"]]
+    }}
+    ddiXml={`<var ID="V2" name="anmerkungen" intrvl="contin">
+  <qstn ID="Q2" responseDomainType="text">
+    <qstnLit>Haben Sie weitere Anmerkungen?</qstnLit>
+  </qstn>
+  <concept>Offene Anmerkungen</concept>
+  <varFormat type="character" schema="other"/>
+</var>`}
+/>
+
+## 3. Einfachauswahl (Single Choice)
+
+Bei Einfachauswahl-Fragen wählt die befragte Person genau eine Option aus einer vorgegebenen Liste aus — z.B. Geschlecht, Bildungsabschluss oder Zufriedenheitsstufe.
+
+<QuestionTypeBlock
+    xlsformData={{
+        headers: ["type", "name", "label"],
+        rows: [["select_one geschlecht", "geschlecht", "Welches Geschlecht haben Sie?"]]
+    }}
+    choicesData={{
+        headers: ["list_name", "name", "label"],
+        rows: [
+            ["geschlecht", "1", "Männlich"],
+            ["geschlecht", "2", "Weiblich"],
+            ["geschlecht", "3", "Divers"]
+        ]
+    }}
+    ddiXml={`<var ID="V3" name="geschlecht" intrvl="discrete">
+  <qstn ID="Q3" responseDomainType="category">
+    <qstnLit>Welches Geschlecht haben Sie?</qstnLit>
+  </qstn>
+  <catgry><catValu>1</catValu><labl>Männlich</labl></catgry>
+  <catgry><catValu>2</catValu><labl>Weiblich</labl></catgry>
+  <catgry><catValu>3</catValu><labl>Divers</labl></catgry>
+  <concept>Geschlecht</concept>
+  <varFormat type="numeric" schema="other"/>
+</var>`}
+/>
+
+## 4. Mehrfachauswahl (Checkboxes)
+
+Bei Mehrfachauswahl-Fragen können Befragte alle zutreffenden Optionen auswählen. Jede Option wird als eigene binäre Variable kodiert (0 = nicht genannt, 1 = genannt).
+
+<QuestionTypeBlock
+    xlsformData={{
+        headers: ["type", "name", "label"],
+        rows: [["select_multiple geraete", "geraetebesitz", "Welche dieser Geräte besitzen Sie?"]]
+    }}
+    choicesData={{
+        headers: ["list_name", "name", "label"],
+        rows: [
+            ["geraete", "smartphone", "Smartphone"],
+            ["geraete", "laptop", "Laptop"],
+            ["geraete", "tablet", "Tablet"]
+        ]
+    }}
+    ddiXml={`<varGrp ID="VG1" name="geraetebesitz" type="multipleResp" var="V4 V5 V6">
+  <txt>Welche dieser Geräte besitzen Sie? Bitte alles Zutreffende auswählen.</txt>
+  <concept>Gerätebesitz</concept>
+</varGrp>
+
+<var ID="V4" name="geraetebesitz_smartphone" intrvl="discrete">
+  <qstn ID="Q4" responseDomainType="multiple">
+    <preQTxt>Welche dieser Geräte besitzen Sie? Bitte alles Zutreffende auswählen.</preQTxt>
+    <qstnLit>Smartphone</qstnLit>
+  </qstn>
+  <catgry><catValu>0</catValu><labl>Nicht genannt</labl></catgry>
+  <catgry><catValu>1</catValu><labl>Genannt</labl></catgry>
+  <concept>Gerätebesitz: Smartphone</concept>
+  <varFormat type="numeric" schema="other"/>
+</var>
+
+<var ID="V5" name="geraetebesitz_laptop" intrvl="discrete">
+  <qstn ID="Q5" responseDomainType="multiple">
+    <preQTxt>Welche dieser Geräte besitzen Sie? Bitte alles Zutreffende auswählen.</preQTxt>
+    <qstnLit>Laptop</qstnLit>
+  </qstn>
+  <catgry><catValu>0</catValu><labl>Nicht genannt</labl></catgry>
+  <catgry><catValu>1</catValu><labl>Genannt</labl></catgry>
+  <concept>Gerätebesitz: Laptop</concept>
+  <varFormat type="numeric" schema="other"/>
+</var>
+
+<var ID="V6" name="geraetebesitz_tablet" intrvl="discrete">
+  <qstn ID="Q6" responseDomainType="multiple">
+    <preQTxt>Welche dieser Geräte besitzen Sie? Bitte alles Zutreffende auswählen.</preQTxt>
+    <qstnLit>Tablet</qstnLit>
+  </qstn>
+  <catgry><catValu>0</catValu><labl>Nicht genannt</labl></catgry>
+  <catgry><catValu>1</catValu><labl>Genannt</labl></catgry>
+  <concept>Gerätebesitz: Tablet</concept>
+  <varFormat type="numeric" schema="other"/>
+</var>`}
+/>
+
+## 5. Matrix / Likert-Skala (Grid)
+
+Matrix-Fragen fassen mehrere Items zusammen, die dieselbe Antwortskala und denselben Einleitungstext teilen. In DDI 2.5 müssen die Antwortkategorien bei jedem Item wiederholt werden.
+
+<QuestionTypeBlock
+    xlsformData={{
+        headers: ["type", "name", "label", "appearance"],
+        rows: [
+            ["begin_group", "institutionsvertrauen", "Vertrauen in Institutionen", "field-list"],
+            ["select_one skala5", "vertrauen_parlament", "Das Parlament", ""],
+            ["select_one skala5", "vertrauen_polizei", "Die Polizei", ""],
+            ["end_group", "", "", ""]
+        ]
+    }}
+    choicesData={{
+        headers: ["list_name", "name", "label"],
+        rows: [
+            ["skala5", "1", "Gar nicht"],
+            ["skala5", "2", "2"],
+            ["skala5", "3", "3"],
+            ["skala5", "4", "4"],
+            ["skala5", "5", "Vollständig"]
+        ]
+    }}
+    ddiXml={`<varGrp ID="VG2" name="institutionsvertrauen" type="grid" var="V7 V8">
+  <txt>Wie sehr vertrauen Sie den folgenden Institutionen auf einer Skala von 1 bis 5?</txt>
+  <concept>Vertrauen in Institutionen</concept>
+</varGrp>
+
+<var ID="V7" name="institutionsvertrauen_parlament" intrvl="discrete">
+  <qstn ID="Q7" responseDomainType="category">
+    <preQTxt>Wie sehr vertrauen Sie den folgenden Institutionen auf einer Skala von 1 bis 5?</preQTxt>
+    <qstnLit>Das Parlament</qstnLit>
+  </qstn>
+  <catgry><catValu>1</catValu><labl>Gar nicht</labl></catgry>
+  <catgry><catValu>2</catValu><labl>2</labl></catgry>
+  <catgry><catValu>3</catValu><labl>3</labl></catgry>
+  <catgry><catValu>4</catValu><labl>4</labl></catgry>
+  <catgry><catValu>5</catValu><labl>Vollständig</labl></catgry>
+  <concept>Vertrauen: Parlament</concept>
+  <varFormat type="numeric" schema="other"/>
+</var>
+
+<var ID="V8" name="institutionsvertrauen_polizei" intrvl="discrete">
+  <qstn ID="Q8" responseDomainType="category">
+    <preQTxt>Wie sehr vertrauen Sie den folgenden Institutionen auf einer Skala von 1 bis 5?</preQTxt>
+    <qstnLit>Die Polizei</qstnLit>
+  </qstn>
+  <catgry><catValu>1</catValu><labl>Gar nicht</labl></catgry>
+  <catgry><catValu>2</catValu><labl>2</labl></catgry>
+  <catgry><catValu>3</catValu><labl>3</labl></catgry>
+  <catgry><catValu>4</catValu><labl>4</labl></catgry>
+  <catgry><catValu>5</catValu><labl>Vollständig</labl></catgry>
+  <concept>Vertrauen: Polizei</concept>
+  <varFormat type="numeric" schema="other"/>
+</var>`}
+/>

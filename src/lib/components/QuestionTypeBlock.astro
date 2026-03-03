@@ -1,0 +1,151 @@
+---
+import TabsWrapper from "./TabsWrapper.astro";
+import { codeToHtml } from "shiki";
+
+interface Props {
+    xlsformData: {
+        headers: string[];
+        rows: string[][];
+    };
+    choicesData?: {
+        headers: string[];
+        rows: string[][];
+    };
+    ddiXml: string;
+    limesurveySrc?: string;
+    koboSrc?: string;
+}
+
+const { xlsformData, choicesData, ddiXml, limesurveySrc, koboSrc } = Astro.props;
+
+// Syntax highlight DDI XML at build time
+const ddiHtml = `<div class="qt-card"><div class="qt-card-body">${await codeToHtml(ddiXml.trim(), { lang: "xml", theme: "github-light" })}</div></div>`;
+
+// Build XLSForm spreadsheet card
+function buildSheetCard(sheetName: string, data: { headers: string[]; rows: string[][] }) {
+    const headerCells = data.headers.map(h => `<th>${h}</th>`).join("");
+    const bodyRows = data.rows.map(row =>
+        `<tr>${row.map(cell => `<td>${cell}</td>`).join("")}</tr>`
+    ).join("");
+
+    return `<div class="qt-card">
+    <div class="qt-card-header">
+        <span class="qt-sheet-tab">${sheetName}</span>
+    </div>
+    <div class="qt-card-body">
+        <table class="qt-table">
+            <thead><tr>${headerCells}</tr></thead>
+            <tbody>${bodyRows}</tbody>
+        </table>
+    </div>
+</div>`;
+}
+
+let xlsHtml = buildSheetCard("survey", xlsformData);
+if (choicesData) {
+    xlsHtml += buildSheetCard("choices", choicesData);
+}
+
+// Build image tab content
+const placeholderHtml = `<div class="qt-card"><div class="qt-card-body"><div class="qt-placeholder">Screenshot folgt</div></div></div>`;
+
+const lsHtml = limesurveySrc
+    ? `<div class="qt-card"><div class="qt-card-body"><img src="${limesurveySrc}" alt="LimeSurvey" class="qt-img" /></div></div>`
+    : placeholderHtml;
+
+const koboHtml = koboSrc
+    ? `<div class="qt-card"><div class="qt-card-body"><img src="${koboSrc}" alt="KoboToolbox" class="qt-img" /></div></div>`
+    : placeholderHtml;
+
+const tabs = [
+    { title: "XLSForm", content: xlsHtml },
+    { title: "DDI XML", content: ddiHtml },
+    { title: "LimeSurvey", content: lsHtml },
+    { title: "KoboToolbox", content: koboHtml },
+];
+---
+
+<TabsWrapper tabs={tabs} />
+
+<style is:global>
+    .qt-card {
+        background: var(--color-white);
+        border: var(--dimension-border-width) solid var(--color-text-primary);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        margin-bottom: var(--spacing-base);
+    }
+
+    .qt-card:last-child {
+        margin-bottom: 0;
+    }
+
+    .qt-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--spacing-xs) var(--spacing-base);
+        border-bottom: var(--dimension-border-width) solid var(--color-text-primary);
+    }
+
+    .qt-sheet-tab {
+        font-weight: var(--font-weight-semibold);
+        font-size: 0.9rem;
+        color: var(--color-text-primary);
+    }
+
+    .qt-card-body {
+        overflow-x: auto;
+    }
+
+    .qt-card-body pre {
+        margin: 0 !important;
+        border-radius: 0 !important;
+        padding: var(--spacing-base) !important;
+    }
+
+    .qt-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+    }
+
+    .qt-table th {
+        padding: var(--dimension-table-padding);
+        text-align: left;
+        font-family: var(--font-family-mono);
+        font-weight: var(--font-weight-medium);
+        font-size: 0.9rem;
+        color: var(--color-text-primary);
+        background: transparent;
+        border-bottom: var(--dimension-border-width) solid var(--color-text-primary);
+    }
+
+    .qt-table td {
+        padding: var(--dimension-table-padding);
+        font-size: 0.9rem;
+        color: var(--color-text-primary);
+        background: var(--color-white);
+        border: none;
+        border-bottom: 1px solid rgba(134, 24, 95, 0.12);
+    }
+
+    .qt-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .qt-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px;
+        color: var(--color-text-primary);
+        font-style: italic;
+        opacity: 0.5;
+    }
+
+    .qt-img {
+        max-width: 100%;
+        display: block;
+    }
+</style>

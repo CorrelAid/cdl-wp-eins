@@ -1,56 +1,5 @@
 <script>
-  const phases = [
-    { id: 'konzeption', label: 'Konzeption', href: '/konzeption-einleitung' },
-    { id: 'design', label: 'Fragebogendesign', href: '/design-einleitung' },
-    { id: 'erhebung', label: 'Erhebung', href: '/erhebung-einleitung' },
-    { id: 'analyse', label: 'Aufbereitung & Analyse', href: '/analyse-einleitung' },
-    { id: 'handeln', label: 'Von Daten zu Taten', href: '/handeln-einleitung' },
-  ];
-
-  const markers = [
-    // Spanning Knowledge Markers (Bedienungsanleitung)
-    { label: 'DDI Codebook', type: 'knowledge', href: '/methodik-veroeffentlichen', startRow: 3, endRow: 8, column: 1 },
-    { label: 'XLSForm', type: 'knowledge', href: '/xlsform-standard', startRow: 3, endRow: 4, column: 2 },
-
-    // Phase 0: Konzeption
-    { label: 'Studiendesign & Umfragetypen', type: 'knowledge', href: '/studiendesign', phase: 0 },
-    { label: 'Forschungsfragen', type: 'knowledge', href: '/forschungsfragen', phase: 0 },
-    { label: 'Messtheorie & Konstrukte', type: 'knowledge', href: '/konzepte-konstrukte', phase: 0 },
-    { label: 'Stichprobenauswahl', type: 'knowledge', href: '/sampling-theorie', phase: 0 },
-    { label: 'Ethik & Datenschutz', type: 'knowledge', href: '/ethik-datenschutz', phase: 0 },
-
-    // Phase 1: Fragebogendesign
-    { label: 'Operationalisierung', type: 'knowledge', href: '/operationalisierung', phase: 1 },
-    { label: 'Fragen formulieren', type: 'knowledge', href: '/gute-fragen-schreiben', phase: 1 },
-    { label: 'Fragebogenaufbau', type: 'knowledge', href: '/fragebogenaufbau', phase: 1 },
-    { label: 'Pretesting', type: 'knowledge', href: '/pretesting', phase: 1 },
-
-    // Phase 2: Erhebung
-    { label: 'Feldphase & Monitoring', type: 'knowledge', href: '/feldphase-monitoring', phase: 2 },
-    { label: 'KoboToolbox', type: 'knowledge', href: '/kobotoolbox', phase: 2 },
-    { label: 'LimeSurvey', type: 'knowledge', href: '/limesurvey', phase: 2 },
-    { label: 'LamaPoll', type: 'knowledge', href: '/lamapoll', phase: 2 },
-
-    // Phase 3: Aufbereitung & Analyse
-    { label: 'Datenbereinigung', type: 'knowledge', href: '/datenbereinigung', phase: 3 },
-    { label: 'Deskriptive Auswertung', type: 'knowledge', href: '/deskriptive-auswertung', phase: 3 },
-    { label: 'Multivariate Statistik', type: 'knowledge', href: '/jasp-statistik', phase: 3 },
-
-    // Phase 4: Von Daten zu Taten
-    { label: 'Datenvisualisierung', type: 'knowledge', href: '/datenvisualisierung', phase: 4 },
-    { label: 'Ergebnisse kommunizieren', type: 'knowledge', href: '/ergebnisse-kommunizieren', phase: 4 },
-    { label: 'Datenbasiert entscheiden', type: 'knowledge', href: '/ergebnisse-zu-massnahmen', phase: 4 },
-    { label: 'Methodik & Daten veröffentlichen', type: 'knowledge', href: '/methodik-veroeffentlichen', phase: 4 },
-
-    // Werkzeugkasten - Apps (Blue + Monitor Icon)
-    { label: 'FormulAid', type: 'app', href: 'https://formulaid.correlaid.org/', phase: 1 },
-    { label: 'FormTransform', type: 'app', href: 'https://formtransform.correlaid.org/', phase: 2 },
-    { label: 'qwac', type: 'app', href: 'https://qwac.correlaid.org/', phase: 4 },
-    { label: 'qwac', type: 'app', href: 'https://qwac.correlaid.org/', phase: 1 },
-
-    // Werkzeugkasten - Packages (Blue + Box Icon)
-    { label: 'xlsform2lstsv', type: 'package', href: 'https://github.com/CorrelAid/xlsform2lstsv', phase: 2 },
-  ];
+  let { phases = [], markers = [] } = $props();
 </script>
 
 <div class="roadmap-container">
@@ -69,14 +18,14 @@
   {#each phases as phase, i}
     <!-- Arrow/Connector Row -->
     {#if i > 0}
-        <div class="connector-row" style="grid-row: {i * 2}; grid-column: 3;">
+        <div class="connector-row" style="grid-row: {i * 2}; grid-column: 1;">
             <div class="line"></div>
             <div class="arrow-head"></div>
         </div>
     {/if}
 
     <!-- Phase Content Row -->
-    <div class="phase-row" style="grid-row: {i * 2 + 1}; grid-column: 3;">
+    <div class="phase-row" style="grid-row: {i * 2 + 1}; grid-column: 1;">
         <div class="phase-card-wrapper">
             <a href={phase.href} class="phase-card">
               <span class="phase-title">{phase.label}</span>
@@ -116,13 +65,11 @@
 <style>
   .roadmap-container {
     display: grid;
-    /* Col 1: DDI, Col 2: XLSForm, Col 3: Content */
-    grid-template-columns: 35px 35px 1fr;
+    /* Col 1: Content, Col 2: DDI, Col 3: XLSForm */
+    grid-template-columns: 1fr 35px 35px;
     grid-template-rows: repeat(9, auto);
     gap: 0 1.5rem;
-    max-width: 700px;
-    margin: 4rem auto;
-    padding: 0 1rem;
+    margin: 4rem 0;
   }
 
   .spanning-marker {
@@ -193,10 +140,12 @@
   }
   
   /* Knowledge-Styling */
-  .tool-badge.knowledge { 
-      background: var(--color-tertiary); 
-      color: var(--color-text-primary); 
-      border-color: var(--color-text-primary); 
+  .tool-badge.knowledge {
+      background: var(--color-tertiary);
+      color: var(--color-text-primary);
+      border-color: var(--color-text-primary);
+      font-size: 12px;
+      padding: 4px 10px;
   }
 
   .tool-badge:hover { filter: brightness(0.9); transform: translateY(-1px); }
@@ -205,7 +154,7 @@
   .feedback-indicator { font-family: var(--font-family-mono); font-size: 10px; color: var(--color-secondary); font-style: italic; margin-top: 2px; }
 
   @media (max-width: 500px) {
-      .roadmap-container { grid-template-columns: 30px 30px 1fr; gap: 0 0.75rem; }
+      .roadmap-container { grid-template-columns: 1fr 30px 30px; gap: 0 0.75rem; }
       .vertical-text { font-size: 9px; }
       .phase-title { font-size: 0.9rem; }
   }

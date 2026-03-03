@@ -5,6 +5,8 @@ import { getLiveCollection } from "astro:content";
 import LiteratureList from "@components/Literature.svelte";
 import Citation from "@components/Citation.astro";
 import SpreadsheetWithTabsWrapper from "@components/SpreadsheetWithTabsWrapper.astro";
+import TabsWrapper from "@components/TabsWrapper.astro";
+import QuestionTypeBlock from "@components/QuestionTypeBlock.astro";
 import toc from "@lib/toc.json";
 import "@styles/main.css";
 import "@styles/gen_tokens.css";
@@ -87,26 +89,24 @@ function flattenToc(items: any[], level = 1): Chapter[] {
                         entry,
                     });
             }
-        } else if (typeof item === "object") {
-            const [parentSlug, children] = Object.entries(item)[0];
-            const parentEntry = pageMap.get(parentSlug);
+        } else if (typeof item === "object" && item.label && item.children) {
+            const parentEntry = pageMap.get(item.label);
             if (parentEntry)
                 chapters.push({
-                    slug: parentSlug,
+                    slug: item.label,
                     level,
                     title: parentEntry.data.tocTitle,
                     entry: parentEntry,
                 });
-            if (Array.isArray(children))
-                chapters = chapters.concat(
-                    flattenToc(children as any[], level + 1),
-                );
+            chapters = chapters.concat(
+                flattenToc(item.children as any[], level + 1),
+            );
         }
     }
     return chapters;
 }
 
-const chapters = flattenToc(toc);
+const chapters = flattenToc(toc.sections);
 
 const renderedChapters = await Promise.all(
     chapters.map(async (chapter) => {
@@ -184,6 +184,8 @@ const renderedChapters = await Promise.all(
                                         components={{
                                             Citation,
                                             SpreadsheetWithTabsWrapper,
+                                            TabsWrapper,
+                                            QuestionTypeBlock,
                                         }}
                                     />
                                 )}
