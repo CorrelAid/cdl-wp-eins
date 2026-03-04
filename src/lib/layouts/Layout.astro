@@ -8,6 +8,7 @@ import TitleLine from "@components/TitleLine.svelte";
 import BaseHead from "@components/BaseHead.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
+import { ClientRouter } from "astro:transitions";
 
 const { title, teaser, line = true } = Astro.props;
 const allPages = await getCollection("pages");
@@ -74,9 +75,10 @@ const currentPath = Astro.url.pathname;
 <html lang="en">
     <head>
         <BaseHead title={title} description={teaser} />
+        <ClientRouter />
     </head>
     <body>
-        <SideNav navItems={navItems} currentPath={currentPath} client:load />
+        <SideNav navItems={navItems} currentPath={currentPath} client:load transition:persist />
         <div class="content-wrapper">
             <main>
                 {title && <h1>{title}</h1> }

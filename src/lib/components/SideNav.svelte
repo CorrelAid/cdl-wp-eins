@@ -14,10 +14,20 @@
         currentPath: string;
     }
 
-    let { navItems, currentPath }: Props = $props();
+    let { navItems, currentPath: initialPath }: Props = $props();
+
+    // Track current path reactively so it updates when the component
+    // persists across Astro client-side navigations.
+    let activePath = $state(initialPath);
+    $effect(() => {
+        activePath = window.location.pathname;
+        const onNavigate = () => { activePath = window.location.pathname; };
+        document.addEventListener('astro:page-load', onNavigate);
+        return () => document.removeEventListener('astro:page-load', onNavigate);
+    });
 
     function isActive(slug: string): boolean {
-        const path = currentPath.replace(/^\/|\/$/g, '');
+        const path = activePath.replace(/^\/|\/$/g, '');
         return path === slug;
     }
     let isOpen = $state(false);
@@ -28,12 +38,12 @@
     let isManualOpen = $state(
         isBrowser
             ? localStorage.getItem("sidenav_manual_open") !== "false"
-            : true,
+            : false,
     );
     let isToolboxOpen = $state(
         isBrowser
             ? localStorage.getItem("sidenav_toolbox_open") !== "false"
-            : true,
+            : false,
     );
 
     let expandedItems = $state<Set<string>>(
@@ -91,12 +101,6 @@
         isOpen = false;
     }
 
-    let mounted = $state(false);
-    $effect(() => {
-        // Suppress CSS transitions during hydration
-        requestAnimationFrame(() => { mounted = true; });
-    });
-
     import Search from "./Search.svelte";
     import logo from "@lib/svg/logo.svg?raw";
 
@@ -124,7 +128,7 @@
     <span></span>
 </button>
 
-<nav id="sidebar" class:open={isOpen} class:no-transition={!mounted}>
+<nav id="sidebar" class:open={isOpen}>
     <div class="sidebar-header">
         <a href="/" onclick={closeMenu} class="logo-link">
             <div class="logo-comb">
@@ -313,12 +317,6 @@
 ></div>
 
 <style>
-    /* Disable transitions during hydration to prevent expand animation on page change */
-    nav.no-transition,
-    nav.no-transition * {
-        transition: none !important;
-    }
-
     /* Hamburger Menu Button */
     #menu-toggle {
         position: fixed;
