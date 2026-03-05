@@ -36,6 +36,10 @@ Literature is managed via a Zotero group and fetched live. To cite an item in an
 - `includePages` (optional): Boolean to include page numbers.
 - `pages` (optional): String for page numbers.
 
+### Answer Type Examples
+
+Examples for answer types (XLSForm, DDI XML, screenshots) are fetched at build time from an external [qwackback](https://github.com/CorrelAid/qwackback) API. This ensures consistency between projects that use the same example data. The API URL is configured via the `EXAMPLES_API_URL` environment variable (see `.env.example`).
+
 # Misc
 
 ## Draft structure

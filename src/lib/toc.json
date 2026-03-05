@@ -4,6 +4,7 @@
             "label": "Konzeption",
             "children": [
                 "konzeption-einleitung",
+                "organisationsdaten",
                 "studiendesign",
                 "forschungsfragen",
                 "konzepte-konstrukte",
@@ -17,7 +18,7 @@
                 "design-einleitung",
                 "operationalisierung",
                 "xlsform-standard",
-                "fragetypen",
+                "antworttypen",
                 "gute-fragen-schreiben",
                 "fragebogenaufbau",
                 "pretesting"

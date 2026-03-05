@@ -75,10 +75,16 @@ export default defineConfig({
         access: "secret",
         optional: false 
       }),
-      ZOTERO_GROUP_ID: envField.string({ 
-        context: "server", 
+      ZOTERO_GROUP_ID: envField.string({
+        context: "server",
         access: "secret",
-        optional: false 
+        optional: false
+      }),
+      EXAMPLES_API_URL: envField.string({
+        context: "server",
+        access: "secret",
+        optional: false,
+        default: "https://qwacback.correlaid.org"
       })
     }
   },

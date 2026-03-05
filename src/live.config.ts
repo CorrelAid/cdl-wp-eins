@@ -47,6 +47,7 @@ const zoteroLoader = {
               date: item.data.date || undefined,
               DOI: item.data.DOI || undefined,
               url: item.data.url || undefined,
+              extra: item.data.extra || undefined,
               zoteroKey: item.key
             }
           };
@@ -130,6 +131,7 @@ const literature = defineLiveCollection({
     date: z.string().optional(),
     DOI: z.string().optional(),
     url: z.string().optional(),
+    extra: z.string().optional(),
     zoteroKey: z.string()
   }),
   loader: zoteroLoader

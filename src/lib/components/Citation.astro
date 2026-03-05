@@ -3,29 +3,27 @@ import { getLiveCollection } from "astro:content";
 
 interface Props {
     /**
-     * Zotero key of the item to cite
+     * Zotero key(s) of the item(s) to cite
      */
-    key?: string;
+    key?: string | string[];
 
     /**
-     * DOI of the item to cite
+     * DOI(s) of the item(s) to cite
      */
-    doi?: string;
-    
+    doi?: string | string[];
+
     /**
      * Citation mode/style
      * - 'na': "Author (Year)"
      * - 'pa': "(Author, Year)"
      */
     mode?: 'na' | 'pa';
-    
 
-    
     /**
      * Whether to include page numbers (if available)
      */
     includePages?: boolean;
-    
+
     /**
      * Page numbers to cite (if includePages is true)
      */
@@ -38,128 +36,108 @@ if (!key && !doi) {
     console.warn("Citation component requires either a 'key' or a 'doi' prop.");
 }
 
+// Normalize to arrays
+const keys = key ? (Array.isArray(key) ? key : [key]) : [];
+const dois = doi ? (Array.isArray(doi) ? doi : [doi]) : [];
+
 // Get literature from live collection
 const { entries: literature, error } = await getLiveCollection("literature");
 
-// Find the specific item by key or doi
-let citedItem;
-if (key) {
-    citedItem = literature?.find(item => item.id === key);
-} else if (doi) {
-    citedItem = literature?.find(item => item.data.DOI === doi);
-}
-
-// Handle error cases
 if (error) {
     console.error("Error loading literature collection:", error);
 }
 
-if (!citedItem) {
-    console.warn(`No literature item found with key: ${key} or DOI: ${doi}`);
+// Find item by DOI (checks both DOI field and extra field)
+function findByDoi(doiValue: string) {
+    return literature?.find(item => {
+        if (item.data.DOI === doiValue) return true;
+        if (item.data.extra) {
+            const extraDoi = item.data.extra.match(/^DOI:\s*(.+)$/m);
+            if (extraDoi && extraDoi[1].trim() === doiValue) return true;
+        }
+        return false;
+    });
+}
+
+// Resolve all cited items
+interface CitedEntry {
+    item: any;
+    identifier: string;
+}
+
+const citedItems: CitedEntry[] = [];
+for (const k of keys) {
+    const found = literature?.find(item => item.id === k);
+    if (found) citedItems.push({ item: found, identifier: k });
+    else console.warn(`No literature item found with key: ${k}`);
+}
+for (const d of dois) {
+    const found = findByDoi(d);
+    if (found) citedItems.push({ item: found, identifier: d });
+    else console.warn(`No literature item found with DOI: ${d}`);
 }
 
 // Helper function to format authors for APA style
 function formatAuthors(creators: Array<{name: string, lastName?: string}>): string {
     if (!creators || creators.length === 0) return '';
-    
-    // Use lastName if available, otherwise fall back to name (for organizations or when split names aren't available)
+
     const getName = (creator: {name: string, lastName?: string}) => creator.lastName || creator.name;
-    
+
     if (creators.length === 1) {
         return getName(creators[0]);
     }
-    
+
     if (creators.length === 2) {
         return `${getName(creators[0])} & ${getName(creators[1])}`;
     }
-    
-    // For 3+ authors, use "First et al." format
+
     return `${getName(creators[0])} et al.`;
 }
 
 // Helper function to format year
 function formatYear(date: string): string {
     if (!date) return '';
-    
-    // Extract year from date string (handling formats like "2023", "2023-01-01", "07/2023", "2023-07-16")
     const yearMatch = date.match(/(\d{4})/);
     return yearMatch ? yearMatch[1] : date;
 }
 
-// Prepare citation data for template
-let citationContent = "";
-let citationClass = "citation-fallback";
-let literatureLink = `/literature#missing`;
+// Build per-item citation data
+interface CitationPart {
+    authors: string;
+    year: string;
+    link: string;
+    text: string;
+}
 
-if (!citedItem?.data) {
-    const fallbackText = error ? `[Citation error: ${error.message}]` : `[Citation not available]`;
-    citationContent = `${fallbackText}`;
-} else {
-    const { creators, date, title } = citedItem.data;
+const parts: CitationPart[] = citedItems.map(({ item }) => {
+    const { creators, date } = item.data;
     const authors = formatAuthors(creators);
     const year = formatYear(date);
-    literatureLink = `/literature#${citedItem.id}`;
-    
-    switch (mode) {
-        case 'na':
-            citationContent = `${authors} (${year})`;
-            citationClass = "na-citation";
-            break;
-        
-        case 'pa':
-            citationContent = `(${authors}, ${year})`;
-            citationClass = "pa-citation";
-            break;
-        
+    const link = `/literature#${item.id}`;
+    return { authors, year, link, text: `${authors}, ${year}` };
+});
 
-        
-        default:
-            citationContent = `(${authors}, ${year})`;
-            citationClass = "pa-citation";
-    }
-}
+// Fallback if nothing was found
+const hasCitations = parts.length > 0;
+const citationClass = !hasCitations ? "citation-fallback"
+    : mode === 'na' ? "na-citation" : "pa-citation";
 ---
 
-{
-    /* Render different citation types with appropriate linking */
-    (() => {
-        switch (mode) {
-            case 'na':
-                // Link the year in na citations
-                const naParts = citationContent.split('(');
-                const yearPart = naParts[1]?.replace(')', '');
-                return (
-                    <span class={`citation ${citationClass}`} data-citation-mode={mode}>
-                        {naParts[0]}(
-                        <a href={literatureLink} class="literature-link na-year" aria-label="View full citation">
-                            {yearPart}⤴
-                        </a>
-                        )
-                    </span>
-                );
-            
-            case 'pa':
-                // Link the entire citation in pa mode with symbol inside parentheses
-                return (
-                    <span class={`citation ${citationClass}`} data-citation-mode={mode}>
-                        <a href={literatureLink} class="literature-link" aria-label="View full citation">
-                            {citationContent.replace(')', '⤴)')}
-                        </a>
-                    </span>
-                );
-            
-
-            
-            default:
-                // Default to pa behavior for unknown modes
-                return (
-                    <span class={`citation ${citationClass}`} data-citation-mode={mode}>
-                        <a href={literatureLink} class="literature-link" aria-label="View full citation">{citationContent}</a>
-                    </span>
-                );
-        }
-    })()
-}
+{!hasCitations ? (
+    <span class={`citation ${citationClass}`}>[Citation not available]</span>
+) : mode === 'na' ? (
+    <span class={`citation ${citationClass}`} data-citation-mode={mode}>
+        {parts.map((p, i) => (
+            <>{i > 0 && '; '}{p.authors} (<a href={p.link} class="literature-link na-year" aria-label="View full citation">{p.year}⤴</a>)</>
+        ))}
+    </span>
+) : (
+    <span class={`citation ${citationClass}`} data-citation-mode={mode}>
+        ({parts.map((p, i) => (
+            <>{i > 0 && '; '}<a href={p.link} class="literature-link" aria-label="View full citation">{p.text}⤴</a></>
+        ))})
+    </span>
+)}
 
 <style>
     .citation {

@@ -1,0 +1,178 @@
+---
+tocTitle: Antworttypen
+teaser: Wann eignet sich welche Art von Frage und Antwortformat?
+---
+
+# Antworttypen
+
+Der grundlegendste Unterschied beim Umfragedesign besteht zwischen **geschlossenen Fragen**, 
+bei denen die Befragten aus vordefinierten Optionen auswählen, und **offenen Fragen**, bei 
+denen sie frei in eigenen Worten antworten. Beide dienen unterschiedlichen Erkenntniszielen 
+und sind mit spezifischen Tradeoffs verbunden.
+
+Geschlossene Fragen sind kognitiv weniger anspruchsvoll und für Befragte, insbesondere in 
+Online-Umfragen, einfacher zu beantworten, da sie lediglich einen Tastendruck oder Mausklick 
+erfordern. Allerdings können vorgegebene Antwortoptionen den Teilnehmenden implizit 
+signalisieren, welche Antworten als vernünftig oder erwünscht gelten, und dadurch die Antworten 
+in eine bestimmte Richtung lenken. Offene Fragen umgehen diesen Effekt, bringen jedoch eigene 
+Herausforderungen hinsichtlich Datenqualität, Vollständigkeit und Analyseaufwand mit sich 
+<Citation doi="10.3758/s13428-018-1066-z" mode="pa" />. 
+
+Offene Fragen sind das zentrale Instrument der qualitativen Forschungstradition in den 
+Sozialwissenschaften. In dieser Wissenssammlung wird jedoch vorrangig ein quantitativer Ansatz verfolgt; offene Fragen werden daher vor allem als Ergänzung zu geschlossenen Formaten behandelt.
+
+Eine weitere Unterscheidung betrifft den Unterschied zwischen einzelnen Fragen und 
+Fragebatterien: Werden mehrere thematisch zusammenhängende Fragen als Gruppe eingesetzt, 
+spricht man üblicherweise von **Items**. Dieser Begriff ist in der deutschsprachigen 
+Methodenliteratur etabliert und wird im Folgenden entsprechend verwendet.
+
+Für alle nachfolgend beschriebenen Fragetypen werden exemplarisch Umsetzungsmöglichkeiten 
+in xlsform und DDI Codebook, sowie Darstellungsmöglichkeiten in zwei gängigen Umfragetools 
+vorgestellt.
+
+## Geschlossene Fragetypen
+
+### 1. Single Choice
+
+Bei Single-Choice-Fragen wählt die befragte Person genau eine Option aus einer vorgegebenen, abgeschlossenen Liste aus.
+
+#### Wann sollte Single Choice verwendet werden?
+
+Single Choice eignet sich, wenn die Antwortkategorien **erschöpfend und trennscharf** formuliert werden können, d. h. alle relevanten Ausprägungen des Merkmals abdecken, ohne sich zu überschneiden (z. B. Altersgruppen, Bildungsabschluss, Beschäftigungsstatus), <Citation doi="10.4135/9781412963947.n312" mode="pa" /> 
+
+#### Layout
+
+Bei Fragen mit einer einzigen Antwortmöglichkeit sollten in den meisten Fällen vertikale Radio Buttons verwendet werden. Bei langen Listen im Web/auf dem Desktop (wie z. B. Ländern oder Berufen) ist ein Dropdown geeignet, um Platz auf dem Bildschirm zu sparen <Citation doi={["10.1177/0894439319834296", "10.4135/9781412963947.n432"]} mode="pa" />. 
+
+In Kobo Toolbox so wie in Lime Survey ist die vertikale Darstellung Standard. Über die `appearance` column kann die Darstellung über den Wert `minimal` zu einem Dropdown geändert werden. 
+
+<QuestionTypeBlock exampleId="single_choice" />
+
+
+### 2. Multiple-Choice
+
+Bei Multiple-Choice-Fragen können Befragte alle zutreffenden Optionen auswählen. Jede Option wird als eigene binäre Variable kodiert 
+(0 = nicht genannt, 1 = genannt). Strukturell entspricht eine Multiple-Choicefrage 
+einer Batterie aus ebenso vielen Ja/Nein-Fragen, wie Antwortoptionen vorhanden sind.
+
+#### Wann sollte Multiple Choice verwendet werden?
+
+Single Choice ist das methodisch robustere Antwortformat <Citation doi={["10.1093/poq/nfj007"]} mode="pa" />. Multiple Choice sollte nur verwendet werden, wenn Antwortoptionen sich **nicht** gegenseitig ausschließen (z.B. genutzte Medien, gesprochene Sprachen oder berufliche Tätigkeitsfelder).
+
+#### Layout
+
+Hier gilt das gleiche wie bei Single Choice.
+
+<QuestionTypeBlock exampleId="multiple_choice" />
+
+
+
+## Halb-Offene Antwortformate
+
+Halb-offene Antwortformate nehmen eine Zwischenposition zwischen vollständig geschlossenen und vollständig offenen Frageformaten ein <Citation doi={["10.24053/9783381119622"]} mode="pa" />. Sie stellen eine vordefinierte, geschlossene Antwortliste bereit (Single oder Multiple Choice) und ergänzen diese um ein optionales Freitextfeld — typischerweise gelabeled als „Sonstiges (bitte angeben)". Dadurch entstehen zwei verschiedene Datentypen innerhalb einer Frage: kategoriale, quantitativ auswertbare Antworten aus der geschlossenen Liste sowie Freitexteingaben, die qualitativ aufbereitet und gesondert analysiert werden müssen.
+
+Der konzeptionelle Vorteil dieses Formats — Erschöpfungsgrad ohne vollständige Offenheit — ist in der Praxis jedoch begrenzt: Befragte nutzen die „Sonstiges"-Option selten und interpretieren die vorgelegte Liste als vollständig, selbst wenn ihre tatsächliche Antwort außerhalb der Kategorien läge <Citation doi={["10.1007/978-3-319-54395-6_53"]} mode="pa" />.
+
+Das „Sonstiges"-Feld sollte stets am Ende der Antwortkategorien platziert werden, um Primacy-Effekte zu vermeiden. 
+
+Themen, die wiederholt genannt werden, deuten auf eine Lücke im Kategoriensystem hin und sollten in künftigen Erhebungen als eigenständige Kategorien aufgenommen werden <Citation doi={["10.1186/1471-2288-4-25"]} mode="pa" />.
+
+
+### 1. Single Choice mit „Sonstiges"-Antwortmöglichkeit
+
+Bei Single-Choice-Fragen ist ein „Sonstiges (bitte angeben)"-Feld nur dann gerechtfertigt, wenn das erhobene Merkmal einen offenen Wertebereich hat, der sich nicht vollständig vorspezifizieren lässt — etwa Geschlecht, Berufsbezeichnung oder Religionszugehörigkeit. Bei Merkmalen mit klar begrenztem Wertebereich (z. B. Altersgruppe, Bildungsabschluss, Beschäftigungsstatus) sollte auf das Feld verzichtet werden, da die Kategorien so formuliert werden können, dass sie erschöpfend und trennscharf sind <Citation doi={["10.4135/9781412963947.n312"]} mode="pa" />.
+
+#### Layout
+
+<QuestionTypeBlock exampleId="single_choice_other" />
+
+### 2. Multiple Choice mit „Sonstiges"-Antwortmöglichkeit
+
+Bei Multiple-Choice-Fragen ist ein „Sonstiges"-Feld häufiger gerechtfertigt, weil der Antwortraum — also die Menge aller möglichen Auswahlen — im Voraus schwerer vollständig zu antizipieren ist als bei Single-Choice-Fragen.
+
+#### Layout
+
+<QuestionTypeBlock exampleId="multiple_choice_other" />
+
+## Geschlossene, gruppierte Antwortformate
+
+### 1. Matrix / Likert-Skala (Grid)
+
+Matrix-Fragen fassen mehrere Items zusammen, die dieselbe Antwortskala und denselben 
+Einleitungstext teilen. In DDI 2.5 müssen die Antwortkategorien bei jedem Item wiederholt 
+werden.
+
+<QuestionTypeBlock exampleId="grid" />
+
+
+## Offene Antwortformate
+
+### 1. Offene Zahl (Integer)
+
+Offene numerische Fragen erfassen Zahlenwerte ohne vorgegebene Antwortkategorien — z.B. 
+Alter, Haushaltsgröße oder Anzahl. 
+
+Einfachauswahl mit vorgegebene Antwortkategorien (z.B. Intervalle) sind 
+bei numerischen Fragen problematisch, weil Befragte die mittlere Kategorie als implizite 
+Norm interpretieren und ihre Antwort entsprechend anpassen — ein Effekt, der in 
+Online-Befragungen auch außerhalb sensitiver Themen nachweisbar ist <Citation doi="10.1007/978-3-531-18939-0_51" mode="pa" />.  Weiterhin: Vage Quantoren wie „manchmal", „häufig" oder „selten" werden von verschiedenen Befragten sehr unterschiedlich interpretiert und erzeugen dadurch systematische Messfehler.<Citation doi="10.1007/978-3-319-54395-6_53" mode="pa" />.  Für numerische Fragen — etwa zur Häufigkeit eines Verhaltens — empfiehlt sich daher grundsätzlich die direkte Abfrage eines konkreten Wertes anstelle vorgegebener Kategorien. 
+
+<QuestionTypeBlock exampleId="open_number" />
+
+### 2. Offener Text
+
+Freitextfragen ermöglichen den Befragten, eigene Antworten in Textform zu formulieren — 
+z.B. für Kommentare oder offene Rückmeldungen.
+
+#### Wann eignet sich eine offene Texteingabe?
+
+Nach <Citation doi="10.1007/978-3-658-21308-4_59" mode="na" /> eignen sich die offene Texteingabe:
+
+- Wenn der Befragungsgegenstand noch nicht eingegrenzt werden kann oder neue, 
+  unerwartete Aspekte erwartet werden (explorative Fragebogenentwicklung)
+- Wenn das Spektrum möglicher Antworten zu groß für vorgegebene Kategorien ist
+- Wenn eine Lenkung des Befragten in Richtung vorgegebener Kategorien vermieden 
+  werden soll — vorgegebene Antwortoptionen riskieren, Nennungen zu erzeugen, 
+  die Präferenzen des Fragebogenentwicklers statt echte Meinungen widerspiegeln 
+- Wenn Wissen abgefragt wird — offene Fragen minimieren die Wahrscheinlichkeit, 
+  durch Raten eine richtige Antwort zu erzielen, und führen häufig zu reliableren 
+  und valideren Angaben als geschlossene Fragen
+
+
+<QuestionTypeBlock exampleId="open_text" />
+
+
+
+## Weitere Antwortformate
+
+### Endpunkt-verankerte Ratingskalen
+
+Endpunkt-verankerte Ratingskalen verwenden eine numerische Skala, bei der nur die Endpunkte (und ggf. der Mittelpunkt) verbal beschriftet sind. Im Gegensatz zu Likert-Batterien, bei denen jeder Skalenpunkt eine verbale Kategorie trägt und mehrere Items zu einem Gesamtwert aggregiert werden, sind endpunkt-verankerte Skalen typischerweise Einzelitem-Maße: Der einzelne Zahlenwert ist die interessierende Variable. Gängige Formate sind Feeling Thermometer (0–100), Cantril-Leiter (0–10), NPS-Skala (0–10), Schulnoten-Skala (1–6) und Wahrscheinlichkeitseinschätzungen (0–100%).
+
+### Semantisches Differential
+
+Semantische Differentiale präsentieren zwei gegensätzliche Adjektive (z.B. „modern – traditionell") an den Enden einer typischerweise 5- oder 7-stufigen Skala. Befragte verorten sich zwischen den Polen. Das Format wird häufig in der Marken- und Einstellungsforschung eingesetzt.
+
+### Ranking
+
+Ranking-Fragen fordern Befragte auf, eine Menge von Items in eine Reihenfolge zu bringen (z.B. nach Wichtigkeit). Sie erzwingen Differenzierung — im Gegensatz zu Ratingskalen, bei denen alle Items gleich bewertet werden können. Ranking-Daten sind jedoch ipsativ (die Ränge sind nicht unabhängig voneinander), was die anwendbaren statistischen Verfahren einschränkt. Ab etwa 5–7 Items steigt die kognitive Belastung deutlich, und die Datenqualität sinkt.
+
+### Datum / Uhrzeit
+
+Datums- und Uhrzeitfragen erfassen temporale Angaben direkt (z.B. Geburtsdatum, Zeitpunkt eines Ereignisses). In XLSForm entspricht dies den Typen `date` und `time`. Zentrale Designentscheidungen betreffen das Eingabeformat (DD.MM.YYYY vs. Datepicker) und die Mobilfreundlichkeit der gewählten Eingabemethode.
+
+## Weitere Empfehlungen für Antwortformate
+
+### „Weiß nicht" und „Keine Angabe"
+
+Eine explizite „Weiß nicht"-Option erhöht den Anteil fehlender Antworten, ohne die Reliabilität zu verbessern. Der Anstieg ist nur teilweise auf echte Meinungslosigkeit zurückzuführen — die Option wird auch als Satisficing-Strategie genutzt und kann suggerieren, dass Expertenwissen zur Beantwortung nötig sei. Ihr Einsatz ist daher kritisch zu sehen <Citation doi="10.1007/978-3-531-18939-0_51" mode="pa" />. 
+
+**„Keine Angabe" / „Möchte ich nicht beantworten"** ist konzeptionell von „Weiß nicht" zu trennen: Hier wird nicht Unfähigkeit signalisiert, sondern bewusste Antwortverweigerung. Diese Option sollte bei sensiblen Themen angeboten werden — also bei Fragen, die soziale Erwünschtheit auslösen, als intrusiv empfunden werden oder bei denen Befragte negative Konsequenzen einer Offenlegung befürchten <Citation doi="10.1037/0033-2909.133.5.859" mode="pa" />. Typische Anwendungsbereiche sind Einkommen, Gesundheit, Sexualität und politische Zugehörigkeit. Wird bei solchen Fragen stattdessen eine Antwort erzwungen (Forced Answering), steigen die Abbruchquoten — insbesondere bei hochsensiblen Items — und die Antwortqualität sinkt <Citation doi="10.2298/PSI1504311D" mode="pa" />.
+
+Bei **Multiple-Choice-Fragen** sollten "Weiß nicht" und "Keine Angabe" als exklusive Optionen implementiert werden: Sobald eine inhaltliche Option gewählt wird, ist eine gleichzeitige Angabe von „Weiß nicht" logisch widersprüchlich und sollte technisch unterbunden werden.
+
+<QuestionTypeBlock exampleId="single_choice_no_opinion" />
+
+##  Nicht empfohlene Antwortformate
+
+Schieberegler/Slider sollten zugunsten von Radio Buttons vermieden werden. Sie benötigen mehr Zeit zum Ausfüllen, führen zu mehr fehlenden Daten <Citation doi="10.1177/0894439315575477" mode="pa" /> und sind insbesondere auf Mobilgeräten problematisch <Citation doi="10.1093/poq/nfw088" mode="pa" />. Entscheidend ist, dass sie keine zuverlässigen kontinuierlichen Daten liefern, denn ein Schieberegler von 0 bis 100 täuscht Präzision nur vor. Radio Buttons sind schneller, besser zugänglich und funktionieren auf allen Geräten gleich.

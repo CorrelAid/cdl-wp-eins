@@ -1,31 +1,45 @@
 ---
 import TabsWrapper from "./TabsWrapper.astro";
 import { codeToHtml } from "shiki";
+import { EXAMPLES_API_URL } from "astro:env/server";
+
+interface XlsFormData {
+    survey: Record<string, string>[];
+    choices?: Record<string, string>[];
+    settings?: Record<string, string>;
+}
 
 interface Props {
-    xlsformData: {
-        headers: string[];
-        rows: string[][];
-    };
-    choicesData?: {
-        headers: string[];
-        rows: string[][];
-    };
-    ddiXml: string;
+    exampleId: string;
     limesurveySrc?: string;
     koboSrc?: string;
 }
 
-const { xlsformData, choicesData, ddiXml, limesurveySrc, koboSrc } = Astro.props;
+const { exampleId, limesurveySrc: limesurveySrcProp, koboSrc: koboSrcProp } = Astro.props;
+
+const response = await fetch(`${EXAMPLES_API_URL}/api/examples/${exampleId}`);
+if (!response.ok) {
+    throw new Error(`Failed to fetch example "${exampleId}": ${response.status} ${response.statusText}`);
+}
+const example = await response.json();
+
+const xlsform: XlsFormData = example.xlsform;
+const ddiXml: string | undefined = example.ddi;
+const limesurveySrc: string | undefined = limesurveySrcProp ?? example.limesurveySrc;
+const koboSrc: string | undefined = koboSrcProp ?? example.koboSrc;
 
 // Syntax highlight DDI XML at build time
-const ddiHtml = `<div class="qt-card"><div class="qt-card-body">${await codeToHtml(ddiXml.trim(), { lang: "xml", theme: "github-light" })}</div></div>`;
+const ddiHtml = ddiXml
+    ? `<div class="qt-card"><div class="qt-card-body">${await codeToHtml(ddiXml.trim(), { lang: "xml", theme: "github-light" })}</div></div>`
+    : null;
 
-// Build XLSForm spreadsheet card
-function buildSheetCard(sheetName: string, data: { headers: string[]; rows: string[][] }) {
-    const headerCells = data.headers.map(h => `<th>${h}</th>`).join("");
-    const bodyRows = data.rows.map(row =>
-        `<tr>${row.map(cell => `<td>${cell}</td>`).join("")}</tr>`
+// Build XLSForm spreadsheet card from array of objects
+function buildSheetCard(sheetName: string, rows: Record<string, string>[]) {
+    if (!rows || rows.length === 0) return "";
+    const headers = [...new Set(rows.flatMap(r => Object.keys(r)))];
+    const headerCells = headers.map(h => `<th>${h}</th>`).join("");
+    const bodyRows = rows.map(row =>
+        `<tr>${headers.map(h => `<td>${row[h] ?? ""}</td>`).join("")}</tr>`
     ).join("");
 
     return `<div class="qt-card">
@@ -41,9 +55,9 @@ function buildSheetCard(sheetName: string, data: { headers: string[]; rows: stri
 </div>`;
 }
 
-let xlsHtml = buildSheetCard("survey", xlsformData);
-if (choicesData) {
-    xlsHtml += buildSheetCard("choices", choicesData);
+let xlsHtml = buildSheetCard("survey", xlsform.survey);
+if (xlsform.choices && xlsform.choices.length > 0) {
+    xlsHtml += buildSheetCard("choices", xlsform.choices);
 }
 
 // Build image tab content
@@ -59,7 +73,7 @@ const koboHtml = koboSrc
 
 const tabs = [
     { title: "XLSForm", content: xlsHtml },
-    { title: "DDI XML", content: ddiHtml },
+    ...(ddiHtml ? [{ title: "DDI XML", content: ddiHtml }] : []),
     { title: "LimeSurvey", content: lsHtml },
     { title: "KoboToolbox", content: koboHtml },
 ];
