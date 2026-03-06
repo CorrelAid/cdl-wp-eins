@@ -1,0 +1,20 @@
+---
+import { XlsFormDisplay as XlsFormDisplaySvelte } from "@correlaid/cdl-design";
+
+interface Worksheet {
+    id?: string;
+    title: string;
+    headers: string[];
+    data: string[][];
+}
+
+interface Props {
+    worksheets?: Worksheet[];
+    survey?: Record<string, string>[];
+    choices?: Record<string, string>[];
+}
+
+const { worksheets, survey, choices } = Astro.props;
+---
+
+<XlsFormDisplaySvelte client:load worksheets={worksheets} survey={survey} choices={choices} />

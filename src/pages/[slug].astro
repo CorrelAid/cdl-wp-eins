@@ -1,8 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import Layout from "@layouts/Layout.astro";
-import SpreadsheetWithTabsWrapper from "@components/SpreadsheetWithTabsWrapper.astro";
-import TabsWrapper from "@components/TabsWrapper.astro";
+import XlsFormDisplay from "@components/XlsFormDisplay.astro";
 import QuestionTypeBlock from "@components/QuestionTypeBlock.astro";
 import Citation from "@components/Citation.astro";
 
@@ -19,5 +18,5 @@ const { Content } = await render(page);
 ---
 
 <Layout title={page.data.tocTitle} teaser={page.data.teaser}>
-    <Content components={{ Citation, SpreadsheetWithTabsWrapper, TabsWrapper, QuestionTypeBlock }} />
+    <Content components={{ Citation, XlsFormDisplay, QuestionTypeBlock }} />
 </Layout>

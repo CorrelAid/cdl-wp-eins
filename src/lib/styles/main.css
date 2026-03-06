@@ -1,6 +1,7 @@
 
 @import './gen_tokens.css';
-@import './typography.css';
+@import '@correlaid/cdl-design/fonts.css';
+@import '@correlaid/cdl-design/typography.css';
 
 :root {
     --dimension-header-height: 64px;

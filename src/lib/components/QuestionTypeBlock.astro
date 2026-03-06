@@ -1,13 +1,7 @@
 ---
-import TabsWrapper from "./TabsWrapper.astro";
+import { Tabs } from "@correlaid/cdl-design";
 import { codeToHtml } from "shiki";
 import { EXAMPLES_API_URL } from "astro:env/server";
-
-interface XlsFormData {
-    survey: Record<string, string>[];
-    choices?: Record<string, string>[];
-    settings?: Record<string, string>;
-}
 
 interface Props {
     exampleId: string;
@@ -23,17 +17,16 @@ if (!response.ok) {
 }
 const example = await response.json();
 
-const xlsform: XlsFormData = example.xlsform;
+const xlsform = example.xlsform;
 const ddiXml: string | undefined = example.ddi;
 const limesurveySrc: string | undefined = limesurveySrcProp ?? example.limesurveySrc;
 const koboSrc: string | undefined = koboSrcProp ?? example.koboSrc;
 
-// Syntax highlight DDI XML at build time
-const ddiHtml = ddiXml
-    ? `<div class="qt-card"><div class="qt-card-body">${await codeToHtml(ddiXml.trim(), { lang: "xml", theme: "github-light" })}</div></div>`
-    : null;
+// Build XLSForm HTML — stacked sheet cards
+function escapeAttr(str: string): string {
+    return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 
-// Build XLSForm spreadsheet card from array of objects
 function buildSheetCard(sheetName: string, rows: Record<string, string>[]) {
     if (!rows || rows.length === 0) return "";
     const headers = [...new Set(rows.flatMap(r => Object.keys(r)))];
@@ -42,9 +35,12 @@ function buildSheetCard(sheetName: string, rows: Record<string, string>[]) {
         `<tr>${headers.map(h => `<td>${row[h] ?? ""}</td>`).join("")}</tr>`
     ).join("");
 
+    const tsv = [headers.join("\t"), ...rows.map(row => headers.map(h => row[h] ?? "").join("\t"))].join("\n");
+
     return `<div class="qt-card">
     <div class="qt-card-header">
         <span class="qt-sheet-tab">${sheetName}</span>
+        <button class="qt-copy-btn" data-copy="${escapeAttr(tsv)}">Copy</button>
     </div>
     <div class="qt-card-body">
         <table class="qt-table">
@@ -59,6 +55,11 @@ let xlsHtml = buildSheetCard("survey", xlsform.survey);
 if (xlsform.choices && xlsform.choices.length > 0) {
     xlsHtml += buildSheetCard("choices", xlsform.choices);
 }
+
+// Build DDI HTML
+const ddiHtml = ddiXml
+    ? `<div class="qt-card"><div class="qt-card-header"><span class="qt-sheet-tab">DDI Codebook</span><button class="qt-copy-btn" data-copy="${escapeAttr(ddiXml.trim())}">Copy</button></div><div class="qt-card-body">${await codeToHtml(ddiXml.trim(), { lang: "xml", theme: "github-light" })}</div></div>`
+    : null;
 
 // Build image tab content
 const placeholderHtml = `<div class="qt-card"><div class="qt-card-body"><div class="qt-placeholder">Screenshot folgt</div></div></div>`;
@@ -79,7 +80,21 @@ const tabs = [
 ];
 ---
 
-<TabsWrapper tabs={tabs} />
+<Tabs client:load tabs={tabs} expandLabel="Mehr anzeigen" collapseLabel="Weniger anzeigen" />
+
+<script>
+    document.addEventListener("click", (e) => {
+        const btn = (e.target as HTMLElement).closest(".qt-copy-btn") as HTMLButtonElement | null;
+        if (!btn) return;
+        const text = btn.dataset.copy;
+        if (!text) return;
+        navigator.clipboard.writeText(text).then(() => {
+            const original = btn.textContent;
+            btn.textContent = "Copied!";
+            setTimeout(() => { btn.textContent = original; }, 2000);
+        });
+    });
+</script>
 
 <style is:global>
     .qt-card {
@@ -106,6 +121,22 @@ const tabs = [
         font-weight: var(--font-weight-semibold);
         font-size: 0.9rem;
         color: var(--color-text-primary);
+    }
+
+    .qt-copy-btn {
+        padding: 0;
+        background: none;
+        border: none;
+        color: var(--color-text-primary);
+        font-size: 0.75rem;
+        font-family: var(--font-family-body);
+        cursor: pointer;
+        opacity: 0.4;
+        transition: opacity 0.15s;
+    }
+
+    .qt-copy-btn:hover {
+        opacity: 1;
     }
 
     .qt-card-body {

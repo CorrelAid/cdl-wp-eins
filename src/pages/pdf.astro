@@ -4,8 +4,7 @@ import { getCollection, render } from "astro:content";
 import { getLiveCollection } from "astro:content";
 import LiteratureList from "@components/Literature.svelte";
 import Citation from "@components/Citation.astro";
-import SpreadsheetWithTabsWrapper from "@components/SpreadsheetWithTabsWrapper.astro";
-import TabsWrapper from "@components/TabsWrapper.astro";
+import XlsFormDisplay from "@components/XlsFormDisplay.astro";
 import QuestionTypeBlock from "@components/QuestionTypeBlock.astro";
 import toc from "@lib/toc.json";
 import "@styles/main.css";
@@ -183,8 +182,7 @@ const renderedChapters = await Promise.all(
                                     <chapter.Content
                                         components={{
                                             Citation,
-                                            SpreadsheetWithTabsWrapper,
-                                            TabsWrapper,
+                                            XlsFormDisplay,
                                             QuestionTypeBlock,
                                         }}
                                     />

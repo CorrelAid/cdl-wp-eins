@@ -6,16 +6,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "postinstall": "[ -d node_modules/@correlaid/cdl-design/dist/favicons ] && cp node_modules/@correlaid/cdl-design/dist/favicons/* public/ || true"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/svelte": "^7.2.5",
+    "@correlaid/cdl-design": "github:CorrelAid/cdl-design",
     "@fontsource-variable/inter": "^5.2.8",
     "@isaacs/ttlcache": "^2.1.4",
-    "@terrazzo/cli": "^0.10.5",
-    "@terrazzo/parser": "^0.10.5",
-    "@terrazzo/plugin-css": "^0.10.4",
     "astro": "^5.16.11",
     "minisearch": "^7.2.0",
     "pagedjs": "^0.4.3",
