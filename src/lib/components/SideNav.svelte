@@ -113,6 +113,8 @@
          { href: "https://qwac.correlaid.org", label: "qwac", iconPath: monitorIconPath },
         { href: "https://formulaid.correlaid.org/", label: "FormulAid", iconPath: monitorIconPath },
         { href: "https://formtransform.correlaid.org/", label: "FormTransform", iconPath: monitorIconPath },
+        { href: "https://github.com/CorrelAid/survey-bayes", label: "Statistiktutorial survey-bayes", iconPath: packageIconPath },
+        { href: "https://github.com/CorrelAid/survey2ddi", label: "Datenaufbereitung survey2ddi", iconPath: packageIconPath },
     ];
 </script>
 
