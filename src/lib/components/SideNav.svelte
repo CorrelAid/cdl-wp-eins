@@ -38,7 +38,7 @@
     let isManualOpen = $state(
         isBrowser
             ? localStorage.getItem("sidenav_manual_open") !== "false"
-            : false,
+            : true,
     );
     let isToolboxOpen = $state(
         isBrowser
@@ -104,18 +104,7 @@
     import Search from "./Search.svelte";
     import logo from "@lib/svg/logo.svg?raw";
 
-    const packageIconPath = `<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line>`;
 
-    const monitorIconPath = `<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line>`;
-
-    const toolboxItems = [
-        { href: "https://github.com/CorrelAid/xlsform2lstsv", label: "xlsform2lstsv", iconPath: packageIconPath },
-         { href: "https://qwac.correlaid.org", label: "qwac", iconPath: monitorIconPath },
-        { href: "https://formulaid.correlaid.org/", label: "FormulAid", iconPath: monitorIconPath },
-        { href: "https://formtransform.correlaid.org/", label: "FormTransform", iconPath: monitorIconPath },
-        { href: "https://github.com/CorrelAid/survey-bayes", label: "Statistiktutorial survey-bayes", iconPath: packageIconPath },
-        { href: "https://github.com/CorrelAid/survey2ddi", label: "Datenaufbereitung survey2ddi", iconPath: packageIconPath },
-    ];
 </script>
 
 
@@ -135,13 +124,13 @@
         <a href="/" onclick={closeMenu} class="logo-link">
             <div class="logo-comb">
                 <div class="logo">{@html logo}</div>
-                <span class="site-title">Werksschau I</span>
+                <span class="site-title">Umfragenwerkstatt</span>
             </div>
         </a>
         <hr />
     </div>
 
-    <a href="/" onclick={closeMenu} class="overview-link">Übersicht</a>
+    <a href="/" onclick={closeMenu} class="overview-link" class:active={isActive('')}>Übersicht</a>
 
     <div class="section">
         <button
@@ -149,7 +138,7 @@
             onclick={() => (isManualOpen = !isManualOpen)}
             aria-expanded={isManualOpen}
         >
-            Bedienungsanleitung
+            Inhaltsverzeichnis 
             <svg
                 class="chevron"
                 class:rotated={isManualOpen}
@@ -232,58 +221,7 @@
         </div>
     </div>
 
-    <div class="section">
-        <button
-            class="section-header"
-            onclick={() => (isToolboxOpen = !isToolboxOpen)}
-            aria-expanded={isToolboxOpen}
-        >
-            Werkzeugkasten
-            <svg
-                class="chevron"
-                class:rotated={isToolboxOpen}
-                width="12"
-                height="12"
-                viewBox="0 0 12 12"
-            >
-                <path
-                    d="M6 9L1.5 4.5L2.55 3.45L6 6.9L9.45 3.45L10.5 4.5L6 9Z"
-                />
-            </svg>
-        </button>
-        <div class="section-body" class:hidden={!isToolboxOpen}>
-            <div class="section-content">
-                <ul>
-                    {#each toolboxItems as item}
-                        <li>
-                            <a
-                                href={item.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="toolbox-link"
-                            >
-                                <span class="icon-group">
-                                    <svg
-                                        class="tool-icon"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        aria-hidden="true"
-                                        >{@html item.iconPath}</svg
-                                    >
-                                    {item.label}
-                                </span>
-                                {@render externalLinkIcon()}
-                            </a>
-                        </li>
-                    {/each}
-                </ul>
-            </div>
-        </div>
-    </div>
+    <a href="/tools" class:active={isActive("tools")} class="section-header-link" onclick={closeMenu}>Tools</a>
 
     {#snippet externalLinkIcon()}
         <svg
@@ -319,6 +257,9 @@
 ></div>
 
 <style>
+    /* #tools {
+        padding-top: 10px;
+    } */
     /* Hamburger Menu Button */
     #menu-toggle {
         position: fixed;
@@ -451,7 +392,7 @@
 
     .overview-link {
         display: block;
-        padding: 0.25rem 0;
+        padding: 0.25rem 0.5rem;
         margin-bottom: 0.5rem;
         font-weight: bold;
         font-size: 1.1rem;
@@ -468,6 +409,14 @@
         margin-bottom: 0.5rem;
     }
 
+    .section-header-link {
+        display: block;
+        padding: 0.25rem 0.5rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
     .section-header {
         width: 100%;
         display: flex;
@@ -475,7 +424,7 @@
         justify-content: space-between;
         background: none;
         border: none;
-        padding: 0.25rem 0;
+        padding: 0.25rem 0.5rem;
         font-weight: bold;
         font-size: 1.1rem;
         color: var(--color-text-primary);
@@ -528,6 +477,7 @@
 
     .section-content {
         margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
     }
 
     .section-content.indented {
@@ -658,35 +608,6 @@
         color: var(--color-white);
     }
 
-    .toolbox-link {
-        display: flex !important;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-    }
-
-    .icon-group {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .tool-icon {
-        width: 14px;
-        height: 14px;
-        flex-shrink: 0;
-    }
-
-    .external-icon {
-        width: 12px;
-        height: 12px;
-        opacity: 0.6;
-        flex-shrink: 0;
-    }
-
-    .toolbox-link:hover .external-icon {
-        opacity: 1;
-    }
 
     .search-container {
         margin-top: auto;

@@ -44,8 +44,8 @@ const spanningMarkers = toc.spanning.map(s => ({
 	column: s.column,
 }));
 
-// External tools stay as-is from toc.json
-const toolMarkers = toc.tools;
+// Tool markers link to anchor on the tools page
+const toolMarkers = toc.tools.map(t => ({ ...t, href: `/tools#${t.id}` }));
 
 const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
 ---
@@ -58,16 +58,15 @@ const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
 		<section>
 			<p>
 				Wilkommen auf der Dokumentationseite der Ergebnisse aus der
-				ersten Werkstattphase des <a href="https://civic-data.de"
+				ersten Werkstattbox des <a href="https://civic-data.de"
 					>Civic Data Labs</a
-				>. Werkstattphasen sind ein Format, in dem wir uns im über einen
+				>. Werkstattboxen sind ein Format, in dem wir uns im über einen
 				Zeitraum von 2-3 Monaten mit einem Thema beschäftigen, bei dem
 				wir indentifiziert haben, dass es dort in der Zivilgesellschaft
-				an Wissen und Tools fehlt. Das Ergebnis von Werkstattphasen sind
+				an Wissen und Tools fehlt. Das Ergebnis von Werkstattboxen sind
 				unter anderem strukturierte Wissenssammlungen in Form von
-				Websites, die wir als <b>Bedienungsanleitung</b> bezeichnen, aber
-				auch Open Source Code und Apps die wir als <b>Werkzeugkasten</b> auf
-				diesen Websites präsentieren. Das Thema dieser Werkstattphase sind
+				Websites, aber auch Open Source Code und Apps die wir als Tools auf
+				diesen Websites präsentieren. Das Thema dieser Werkstattbox sind
 				Online-Umfragen.
 			</p>
 			<p>
@@ -76,7 +75,7 @@ const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
 				eingesetzt werden kann. Als Civic Data Lab haben wir aus
 				Gesprächen mit zivilgesellschaftlichen Akteuren verschiedene
 				Bedarfe im Umgang mit dieser Methode identifiziert, die uns dazu
-				bewegt haben, sie in dieser Werkstattphase zu behandeln.
+				bewegt haben, sie in dieser Werkstattbox zu behandeln.
 			</p>
 		</section>
 	
@@ -89,7 +88,7 @@ const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
 				betrifft die konzeptuelle und allgemeine Einbettung von
 				Umfragen: oft wird nicht bis zur Auswertung und darüber hinaus
 				gedacht und es fehlt ein Anknüpfen an Best Practices und
-				vorhandene Standards. In dieser Werkstattphase haben wir Wissen
+				vorhandene Standards. In dieser Werkstattbox haben wir Wissen
 				zusammengestellt und begleitende Tools entwickelt, die alle
 				Phasen einer Umfrage, von der Konzeption bis zur Auswertung,
 				abbildet. Deswegen folgt diese Wissenssammlungen dem obigen

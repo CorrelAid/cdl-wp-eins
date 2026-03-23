@@ -1,10 +1,21 @@
-# CDL: Werkstattphase 1
+# CDL: Werkstattbox 1 (Umfragenwerkstatt)
 
 ## Setup
 
 1. Install [Bun](https://bun.com/)
 2. `bun install`
-3. `bun run dev` to start development server
+3. Copy `.env.example` to `.env` and fill in the values (see below)
+4. `bun run dev` to start development server
+
+## Environment Variables
+
+| Variable | Description |
+|---|---|
+| `ZOTERO_API_KEY` | API key for the Zotero account. Generate one at [zotero.org/settings/keys](https://www.zotero.org/settings/keys). |
+| `ZOTERO_GROUP_ID` | Numeric ID of the Zotero group library. Find it in the URL when viewing the group on zotero.org (e.g. `https://www.zotero.org/groups/<ID>/...`). |
+| `EXAMPLES_API_URL` | Base URL of the [qwackback](https://github.com/CorrelAid/qwackback) API that serves XLSForm examples. Set to `http://localhost:8090` for local development. |
+
+The app builds without `ZOTERO_API_KEY`/`ZOTERO_GROUP_ID` — citations will simply be empty. `EXAMPLES_API_URL` is required at build time wherever `<QuestionTypeBlock>` is used in content.
 
 ## Contribution
 
@@ -15,11 +26,11 @@
 - To include content in the page navigation, add it to `src/lib/toc.json`
 - You can check how your md looks by running `bun dev`. The page will update on every change.
 
-### Literature & Citations
+### Quellen & Citations
 
-Literature is managed via a Zotero group and fetched live. To cite an item in an MDX page:
+Quellen is managed via a Zotero group and fetched live. To cite an item in an MDX page:
 
-1. Find the Zotero key of the item (e.g., by looking at the `/literature` page) or its DOI.
+1. Find the Zotero key of the item (e.g., by looking at the `/quellen` page) or its DOI.
 2. Use the `Citation` component (available globally in MDX):
    ```mdx
    {/* Find the key in the browser url of the item, e.g. https://www.zotero.org/groups/6410519/cdl-wp/items/3SZ58NRP/item-list*/}
@@ -35,6 +46,26 @@ Literature is managed via a Zotero group and fetched live. To cite an item in an
 - `mode` (optional): `'pa'` (default, e.g., "(Author, Year)") or `'na'` (e.g., "Author (Year)").
 - `includePages` (optional): Boolean to include page numbers.
 - `pages` (optional): String for page numbers.
+
+### Tool Snippets
+
+HTML fragments in `src/content/snippets/` contain short descriptions for individual tools (e.g. FormulAid, QWAC). Each file is a `<section>` of prose that can be embedded into any page.
+
+When the site is deployed, every snippet is also served as a plain HTML file at `/snippets/<filename>`, for example:
+
+```
+https://your-domain.example/snippets/formulaid.html
+https://your-domain.example/snippets/qwac.html
+```
+
+External applications can fetch these URLs to embed up-to-date descriptions without duplicating content:
+
+```js
+const res = await fetch('https://your-domain.example/snippets/formulaid.html');
+document.querySelector('#description').innerHTML = await res.text();
+```
+
+To add a new snippet, create an `.html` file in `src/content/snippets/` — it will be served automatically.
 
 ### Answer Type Examples
 

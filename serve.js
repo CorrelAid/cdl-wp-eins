@@ -42,6 +42,16 @@ const server = Bun.serve({
       pathname += "index.html";
     }
 
+    // Serve files from src/content/snippets for /snippets/ requests
+    if (pathname.startsWith("/snippets/")) {
+      const snippetPath = `./src/content/snippets${pathname.slice("/snippets".length)}`;
+      const snippetFile = Bun.file(snippetPath);
+      if (await snippetFile.exists()) {
+        console.log(`  → Serving snippet: ${snippetPath}`);
+        return new Response(snippetFile);
+      }
+    }
+
     // Try to serve the file directly
     let filePath = `./dist${pathname}`;
     let file = Bun.file(filePath);

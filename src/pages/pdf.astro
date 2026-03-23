@@ -2,7 +2,7 @@
 import { getCollection, render } from "astro:content";
 // @ts-ignore
 import { getLiveCollection } from "astro:content";
-import LiteratureList from "@components/Literature.svelte";
+import QuellenList from "@components/Literature.svelte";
 import Citation from "@components/Citation.astro";
 import XlsFormDisplay from "@components/XlsFormDisplay.astro";
 import QuestionTypeBlock from "@components/QuestionTypeBlock.astro";
@@ -30,18 +30,18 @@ allPages.forEach(page => {
   }
 });
 
-let sortedLiterature: any[] = [];
+let sortedQuellen: any[] = [];
 try {
     // @ts-ignore
-    const { entries: literature } = await getLiveCollection("literature");
+    const { entries: quellen } = await getLiveCollection("quellen");
     
     // Filter to used items
-    const usedLiterature = literature ? literature.filter((item: any) => {
+    const usedQuellen = quellen ? quellen.filter((item: any) => {
         return usedKeys.has(item.id) || (item.data.DOI && usedDois.has(item.data.DOI));
     }) : [];
 
     // Sort by first author's last name
-    sortedLiterature = usedLiterature.sort((a: any, b: any) => {
+    sortedQuellen = usedQuellen.sort((a: any, b: any) => {
         const getSortName = (item: any) => {
             const firstCreator = item.data.creators?.[0];
             if (!firstCreator) return item.data.title || '';
@@ -56,7 +56,7 @@ try {
         return 0;
     });
 } catch (e) {
-    console.error("Failed to fetch literature for PDF", e);
+    console.error("Failed to fetch quellen for PDF", e);
 }
 
 interface Chapter {
@@ -64,19 +64,19 @@ interface Chapter {
     level: number;
     title: string;
     entry?: any;
-    isLiterature?: boolean;
+    isQuellen?: boolean;
 }
 
 function flattenToc(items: any[], level = 1): Chapter[] {
     let chapters: Chapter[] = [];
     for (const item of items) {
         if (typeof item === "string") {
-            if (item === "literature") {
+            if (item === "quellen") {
                 chapters.push({
-                    slug: "literature",
+                    slug: "quellen",
                     level,
                     title: "Literaturverzeichnis",
-                    isLiterature: true,
+                    isQuellen: true,
                 });
             } else {
                 const entry = pageMap.get(item);
@@ -161,9 +161,9 @@ const renderedChapters = await Promise.all(
             {
                 renderedChapters.map((chapter) => (
                     <div class="chapter" id={chapter.slug}>
-                        {chapter.isLiterature ? (
-                            <LiteratureList
-                                items={sortedLiterature}
+                        {chapter.isQuellen ? (
+                            <QuellenList
+                                items={sortedQuellen}
                                 client:idle
                             />
                         ) : (

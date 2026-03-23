@@ -60,7 +60,7 @@ const zoteroLoader = {
       
       return { entries };
     } catch (error) {
-      console.error('Error fetching Zotero literature:', error);
+      console.error('Error fetching Zotero quellen:', error);
       return { entries: [], error: error instanceof Error ? error : new Error('Unknown error') };
     }
   },
@@ -108,14 +108,14 @@ const zoteroLoader = {
       
       return { entry };
     } catch (error) {
-      console.error('Error fetching Zotero literature item:', error);
+      console.error('Error fetching Zotero quellen item:', error);
       return { entry: null, error: error instanceof Error ? error : new Error('Unknown error') };
     }
   }
 };
 
-// Define the Zotero literature live collection
-const literature = defineLiveCollection({
+// Define the Zotero quellen live collection
+const quellen = defineLiveCollection({
   type: 'live',
   schema: z.object({
     title: z.string().optional(),
@@ -137,4 +137,4 @@ const literature = defineLiveCollection({
   loader: zoteroLoader
 });
 
-export const collections = { literature };
+export const collections = { quellen };

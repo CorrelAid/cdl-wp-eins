@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Project Overview
-**CDL: Werkstattphase 1** is an Astro-based content site for CorrelAid's CDL (Civic Data Lab) project. It focuses on survey design, tools, and statistics. The project uses MDX for content, Svelte for interactive components, and Bun as the package manager/runtime.
+**CDL: Werkstattbox 1** is an Astro-based content site for CorrelAid's CDL (Civic Data Lab) project. It focuses on survey design, tools, and statistics. The project uses MDX for content, Svelte for interactive components, and Bun as the package manager/runtime.
 
 ## Setup Commands
 - `bun install`: Install dependencies.

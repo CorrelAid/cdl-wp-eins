@@ -54,16 +54,16 @@
                 "methodik-veroeffentlichen"
             ]
         },
-        "literature"
+        "quellen"
     ],
     "tools": [
-        { "label": "FormulAid", "type": "app", "href": "https://formulaid.correlaid.org/", "phase": 1 },
-        { "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 1 },
-        { "label": "FormTransform", "type": "app", "href": "https://formtransform.correlaid.org/", "phase": 2 },
-        { "label": "xlsform2lstsv", "type": "package", "href": "https://github.com/CorrelAid/xlsform2lstsv", "phase": 2 },
-        { "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 4 },
-        { "label": "Statistiktutorial survey-bayes", "type": "package", "href": "https://github.com/CorrelAid/survey-bayes", "phase": 3 },
-        { "label": "Datenaufbereitung survey2ddi", "type": "package", "href": "https://github.com/CorrelAid/survey2ddi", "phase": 3 }
+        { "id": "formulaid", "label": "FormulAid", "type": "app", "href": "https://formulaid.correlaid.org/", "phase": 1 },
+        { "id": "qwac", "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 1 },
+        { "id": "formtransform", "label": "FormTransform", "type": "app", "href": "https://formtransform.correlaid.org/", "phase": 2 },
+        { "id": "xlsform2lstsv", "label": "xlsform2lstsv", "type": "package", "href": "https://github.com/CorrelAid/xlsform2lstsv", "phase": 2 },
+        { "id": "qwac", "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 4 },
+        { "id": "survey-bayes", "label": "survey-bayes", "type": "package", "href": "https://github.com/CorrelAid/survey-bayes", "phase": 3 },
+        { "id": "survey2ddi", "label": "survey2ddi", "type": "package", "href": "https://github.com/CorrelAid/survey2ddi", "phase": 3 }
     ],
     "spanning": [
         { "label": "DDI Codebook", "href": "/methodik-veroeffentlichen", "startPhase": 1, "endPhase": 3, "column": 2 },

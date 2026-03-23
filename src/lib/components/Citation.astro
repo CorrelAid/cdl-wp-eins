@@ -40,16 +40,16 @@ if (!key && !doi) {
 const keys = key ? (Array.isArray(key) ? key : [key]) : [];
 const dois = doi ? (Array.isArray(doi) ? doi : [doi]) : [];
 
-// Get literature from live collection
-const { entries: literature, error } = await getLiveCollection("literature");
+// Get quellen from live collection
+const { entries: quellen, error } = await getLiveCollection("quellen");
 
 if (error) {
-    console.error("Error loading literature collection:", error);
+    console.error("Error loading quellen collection:", error);
 }
 
 // Find item by DOI (checks both DOI field and extra field)
 function findByDoi(doiValue: string) {
-    return literature?.find(item => {
+    return quellen?.find(item => {
         if (item.data.DOI === doiValue) return true;
         if (item.data.extra) {
             const extraDoi = item.data.extra.match(/^DOI:\s*(.+)$/m);
@@ -67,14 +67,14 @@ interface CitedEntry {
 
 const citedItems: CitedEntry[] = [];
 for (const k of keys) {
-    const found = literature?.find(item => item.id === k);
+    const found = quellen?.find(item => item.id === k);
     if (found) citedItems.push({ item: found, identifier: k });
-    else console.warn(`No literature item found with key: ${k}`);
+    else console.warn(`No quellen item found with key: ${k}`);
 }
 for (const d of dois) {
     const found = findByDoi(d);
     if (found) citedItems.push({ item: found, identifier: d });
-    else console.warn(`No literature item found with DOI: ${d}`);
+    else console.warn(`No quellen item found with DOI: ${d}`);
 }
 
 // Helper function to format authors for APA style
@@ -113,7 +113,7 @@ const parts: CitationPart[] = citedItems.map(({ item }) => {
     const { creators, date } = item.data;
     const authors = formatAuthors(creators);
     const year = formatYear(date);
-    const link = `/literature#${item.id}`;
+    const link = `/quellen#${item.id}`;
     return { authors, year, link, text: `${authors}, ${year}` };
 });
 
@@ -128,13 +128,13 @@ const citationClass = !hasCitations ? "citation-fallback"
 ) : mode === 'na' ? (
     <span class={`citation ${citationClass}`} data-citation-mode={mode}>
         {parts.map((p, i) => (
-            <>{i > 0 && '; '}{p.authors} (<a href={p.link} class="literature-link na-year" aria-label="View full citation">{p.year}⤴</a>)</>
+            <>{i > 0 && '; '}{p.authors} (<a href={p.link} class="quellen-link na-year" aria-label="View full citation">{p.year}⤴</a>)</>
         ))}
     </span>
 ) : (
     <span class={`citation ${citationClass}`} data-citation-mode={mode}>
         ({parts.map((p, i) => (
-            <>{i > 0 && '; '}<a href={p.link} class="literature-link" aria-label="View full citation">{p.text}⤴</a></>
+            <>{i > 0 && '; '}<a href={p.link} class="quellen-link" aria-label="View full citation">{p.text}⤴</a></>
         ))})
     </span>
 )}
@@ -148,7 +148,7 @@ const citationClass = !hasCitations ? "citation-fallback"
         display: inline;
     }
     
-    .literature-link {
+    .quellen-link {
         color: inherit;
         text-decoration: none;
         font-weight: normal;
@@ -156,7 +156,7 @@ const citationClass = !hasCitations ? "citation-fallback"
         position: relative;
     }
     
-    .literature-link:hover {
+    .quellen-link:hover {
         color: var(--color-accent);
         text-decoration: underline;
     }
@@ -172,7 +172,7 @@ const citationClass = !hasCitations ? "citation-fallback"
         transform: rotate(45deg);
     }
     
-    .literature-link:hover .link-symbol {
+    .quellen-link:hover .link-symbol {
         color: var(--color-text-primary);
         text-decoration: none;
     }
@@ -205,12 +205,12 @@ const citationClass = !hasCitations ? "citation-fallback"
     }
     
     /* Style for na year links */
-    .literature-link.na-year {
+    .quellen-link.na-year {
         color: inherit;
         font-weight: normal;
     }
     
-    .literature-link.na-year:hover {
+    .quellen-link.na-year:hover {
         color: var(--color-accent);
     }
 </style>

@@ -8,7 +8,7 @@
         creatorType?: string;
     }
 
-    interface LiteratureData {
+    interface QuellenData {
         title?: string;
         creators?: Creator[];
         publicationTitle?: string;
@@ -18,13 +18,13 @@
         zoteroKey: string;
     }
 
-    interface LiteratureItem {
+    interface QuellenItem {
         id: string;
-        data: LiteratureData;
+        data: QuellenData;
     }
 
     interface Props {
-        items?: LiteratureItem[];
+        items?: QuellenItem[];
         error?: string | null;
     }
 
@@ -33,7 +33,6 @@
     import Card from './Card.svelte';
 
     let activeId = $state<string | null>(null);
-    let copiedId = $state<string | null>(null);
 
     function formatAuthor(creator: Creator): string {
         if (creator.lastName && creator.firstName) {
@@ -71,16 +70,6 @@
     function handleAnchorClick(e: MouseEvent, id: string) {
         e.preventDefault();
         scrollToItem(id);
-        
-        const fullUrl = window.location.origin + window.location.pathname + '#' + id;
-        navigator.clipboard.writeText(fullUrl).then(() => {
-            copiedId = id;
-            setTimeout(() => {
-                if (copiedId === id) copiedId = null;
-            }, 2000);
-        }).catch(err => {
-            console.error('Failed to copy link:', err);
-        });
     }
 
     onMount(() => {
@@ -114,20 +103,20 @@
     });
 </script>
 
-<div class="literature-container">
-    <h1>Literature</h1>
+<div class="quellen-container">
+    <h1>Quellen</h1>
     {#if error}
         <div class="error-message">
-            <p>⚠️ Error loading literature: {error}</p>
+            <p>⚠️ Error loading quellen: {error}</p>
         </div>
     {:else if items.length > 0}
-        <ul class="literature-list">
+        <ul class="quellen-list">
             {#each items as item (item.id)}
-                <li class="literature-item-wrapper">
+                <li class="quellen-item-wrapper">
                     <Card 
                         id={item.id}
                         active={activeId === item.id}
-                        className="literature-card"
+                        className="quellen-card"
                     >
                         <a 
                             href={`#${item.id}`} 
@@ -135,7 +124,7 @@
                             aria-label="Link to this item"
                             onclick={(e) => handleAnchorClick(e, item.id)}
                         >
-                            {copiedId === item.id ? '📋' : '#'}
+                            #
                         </a>
                         <div class="apa-citation">
                             {#if item.data.creators && item.data.creators.length > 0}
@@ -177,12 +166,12 @@
             {/each}
         </ul>
     {:else}
-        <p class="no-results">No literature found.</p>
+        <p class="no-results">No quellen found.</p>
     {/if}
 </div>
 
 <style>
-    .literature-container {
+    .quellen-container {
         max-width: 1200px;
         margin: 0 auto;
         color: var(--color-text-secondary);
@@ -193,21 +182,21 @@
         color: var(--color-primary);
     }
 
-    .literature-list {
+    .quellen-list {
         list-style: none;
         padding: 0;
     }
 
     /* Target the Card component via global/deep selector or just rely on class passed */
-    :global(.literature-card) {
+    :global(.quellen-card) {
         padding-right: 3rem; /* Space for anchor link */
     }
 
-    :global(.literature-card:hover .anchor-link) {
+    :global(.quellen-card:hover .anchor-link) {
         opacity: 1;
     }
 
-    :global(.literature-card.active .anchor-link) {
+    :global(.quellen-card.active .anchor-link) {
         opacity: 1 !important;
         color: var(--color-surface-1);
     }
@@ -302,12 +291,12 @@
     }
 
     @media (max-width: 768px) {
-        .literature-container {
+        .quellen-container {
             padding: 1rem;
         }
         
         /* Adjust global styles if needed */
-        :global(.literature-card) {
+        :global(.quellen-card) {
              padding: 1rem;
         }
     }

@@ -1,6 +1,6 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import LiteratureList from "@components/Literature.svelte";
+import QuellenList from "@components/Literature.svelte";
 import { getLiveCollection, getCollection } from "astro:content";
 
 // Get all pages to find used citations
@@ -24,23 +24,23 @@ allPages.forEach(page => {
   }
 });
 
-// Get literature from live collection
-const { entries: literature, error } = await getLiveCollection("literature");
+// Get quellen from live collection
+const { entries: quellen, error } = await getLiveCollection("quellen");
 
-// Filter literature to only include used items
-const usedLiterature = literature ? literature.filter(item => {
+// Filter quellen to only include used items
+const usedQuellen = quellen ? quellen.filter(item => {
   return usedKeys.has(item.id) || (item.data.DOI && usedDois.has(item.data.DOI));
 }) : [];
 
 // Prepare error message for display
-const errorMessage = error ? (error.message || 'Unknown error loading literature') : null;
+const errorMessage = error ? (error.message || 'Unknown error loading quellen') : null;
 
 if (error) {
-  console.error("Error loading literature collection:", error);
+  console.error("Error loading quellen collection:", error);
 }
 
-// Sort literature alphabetically by first author's last name
-const sortedLiterature = usedLiterature.sort((a, b) => {
+// Sort quellen alphabetically by first author's last name
+const sortedQuellen = usedQuellen.sort((a, b) => {
   const getSortName = (item: any) => {
     const firstCreator = item.data.creators?.[0];
     if (!firstCreator) return item.data.title || '';
@@ -56,6 +56,6 @@ const sortedLiterature = usedLiterature.sort((a, b) => {
 });
 ---
 
-<Layout title="Literature" teaser="Browse our research literature">
-    <LiteratureList client:load items={sortedLiterature} error={errorMessage} />
+<Layout title="Quellen" teaser="Browse our research quellen">
+    <QuellenList client:load items={sortedQuellen} error={errorMessage} />
 </Layout>

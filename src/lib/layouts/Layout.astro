@@ -22,14 +22,14 @@ const pageMap = Object.fromEntries(
 function buildNavStructure(tocArray: any[]): any[] {
     return tocArray.map((item: any) => {
         if (typeof item === 'string') {
-            // Special case for literature page which is not in content collection
-            if (item === 'literature') {
+            // Special case for quellen page which is not in content collection
+            if (item === 'quellen') {
                 return {
                     slug: item,
                     page: {
                         data: {
-                            tocTitle: 'Literature',
-                            teaser: 'Browse our research literature'
+                            tocTitle: 'Quellen',
+                            teaser: 'Browse our research quellen'
                         }
                     }
                 };
@@ -70,6 +70,7 @@ function renderNavItem(item: any, level = 0): any {
 
 const navItems = navStructure.map((item: any) => renderNavItem(item)).filter((x: any) => x !== null);
 const currentPath = Astro.url.pathname;
+
 ---
 
 <html lang="en">
