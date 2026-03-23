@@ -41,7 +41,7 @@
                 "analyse-einleitung",
                 "datenbereinigung",
                 "deskriptive-auswertung",
-                "jasp-statistik"
+                "schliessende-statistik"
             ]
         },
         {
@@ -61,7 +61,9 @@
         { "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 1 },
         { "label": "FormTransform", "type": "app", "href": "https://formtransform.correlaid.org/", "phase": 2 },
         { "label": "xlsform2lstsv", "type": "package", "href": "https://github.com/CorrelAid/xlsform2lstsv", "phase": 2 },
-        { "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 4 }
+        { "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 4 },
+        { "label": "Statistiktutorial survey-bayes", "type": "package", "href": "https://github.com/CorrelAid/survey-bayes", "phase": 3 },
+        { "label": "Datenaufbereitung survey2ddi", "type": "package", "href": "https://github.com/CorrelAid/survey2ddi", "phase": 3 }
     ],
     "spanning": [
         { "label": "DDI Codebook", "href": "/methodik-veroeffentlichen", "startPhase": 1, "endPhase": 3, "column": 2 },

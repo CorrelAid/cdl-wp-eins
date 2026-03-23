@@ -1,0 +1,31 @@
+---
+tocTitle: Schließende Statistik
+teaser: Signifikanztests, Bayes-Statistik und Auswertung mit JASP.
+---
+
+# Schließende Statistik
+
+Im Gegensatz zur deskriptiven Statistik, die die vorliegende Daten beschreibt, geht es bei der schließenden Statistik darum Aussagen zu treffen, die über die beobachtete Gruppe hinaus gehen. Mal angenommen wir hatten 30 Teilnehmer an einer Umfrage. Mit schließender Statistik können wir Fragen beantworten wie: "Wie wahrscheinlich ist es, dass der Effekt den wir sehen (z.B. wer länger am Programm teilgenommen hat ist zufriedener) stabil ist und nicht durch Zufall in unserer kleinen Stichprobe an 30 Teilnehmer*innen zustande kam."
+
+Vielleicht ist euch im Statistik Kontext schonmal der Begriff p-Wert über den Weg gelaufen. Wenn dieser klein ausfällt (typischerweise \<0.05), wird in der klassischen Statistik die Nullhypothese abgelehnt. In unserem Fall würden wir bei einem p-Wert von z.B. 0.03 die Nullhypothese, dass es keinen Zusammenhang zwischen Dauer der Teilnahme und Zufriedenheit gibt, ablehnen. Eine Aussage über die Wahrscheinlichkeit der Nullhypothese oder der Alternativhypothese ist allerdings nicht möglich.[^pWert]
+
+Eine immer populärer werdende Richtung innerhalb der Statistik ist die Bayessche Statistik. Sie erlaubt im Gegensatz zur klassischen Statistik direkt Aussagen über Hypothesen zu treffen. Also Fragen zu beantworten wie: "Wie wahrscheinlich ist eine positive Korrelation zwischen der Dauer der Teilnahme und der Zufriedenheit".
+
+Wir haben für euch hier Tutorials für Coder und Nicht-Coder zur Bayesschen Statistik zusammengestellt.
+
+
+[^pWert]: Die korrekte Interpretation eines p-Werts ist: "Wie wahrscheinlich sind die gegebenen Daten oder noch extremere Daten unter der Annahme, dass die Nullhypothese wahr ist?" Wenn diese Wahrscheinlichkeit klein ist, dann wird die Nullhypothese abgelehnt. Daraus lässt sich aber nicht ableiten wie wahrscheinlich es ist, dass die Nullhypothese falsch ist.
+
+
+## JASP
+
+Einführung in die statistische Auswertung mit JASP.
+
+## Bayes-Statistik
+
+- [JASP](https://jasp-stats.org/jasp-materials/) ist eine Open Source GUI für statistische Auswertung mit einer großen Community und vielen Ressourcen. Zum Beispiel:
+- Dieses [Buch](https://gitlab.com/sebastianottmann/praktische-datenanalyse-jasp-buch) zur Einführung in JASP auf deutsch. (Gerade am entstehen)
+- OECD survey [analysis](https://www.oecd.org/content/dam/oecd/en/publications/reports/2023/04/a-bayesian-workflow-for-the-analysis-and-reporting-of-international-large-scale-surveys_63953a73/588c4a12-en.pdf) with hierarchical linear model. Not exactly great modeling, but one example. They use R-Hat and Effective Samples Size as convergence criteria. Posterior predictive p-value as check of model adequacy.
+
+
+- Look more at [Jonathan Wakefield](https://faculty.washington.edu/jonno/research.html). He supposedly specializes in hierarchical models for survey data
