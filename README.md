@@ -1,5 +1,7 @@
 # CDL: Werkstattbox 1 (Umfragenwerkstatt)
 
+[![AI-Assisted](https://img.shields.io/badge/AI--assisted-Claude%20Code-blueviolet?logo=anthropic&logoColor=white)](./AI_DISCLOSURE.md)
+
 ## Setup
 
 1. Install [Bun](https://bun.com/)
