@@ -6,6 +6,7 @@ import QuellenList from "@components/Literature.svelte";
 import Citation from "@components/Citation.astro";
 import XlsFormDisplay from "@components/XlsFormDisplay.astro";
 import QuestionTypeBlock from "@components/QuestionTypeBlock.astro";
+import Praxisbeispiel from "@components/Praxisbeispiel.astro";
 import toc from "@lib/toc.json";
 import "@styles/main.css";
 import "@styles/gen_tokens.css";
@@ -184,6 +185,7 @@ const renderedChapters = await Promise.all(
                                             Citation,
                                             XlsFormDisplay,
                                             QuestionTypeBlock,
+                                            Praxisbeispiel,
                                         }}
                                     />
                                 )}
