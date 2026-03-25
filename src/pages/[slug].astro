@@ -4,6 +4,7 @@ import Layout from "@layouts/Layout.astro";
 import XlsFormDisplay from "@components/XlsFormDisplay.astro";
 import QuestionTypeBlock from "@components/QuestionTypeBlock.astro";
 import Citation from "@components/Citation.astro";
+import Praxisbeispiel from "@components/Praxisbeispiel.astro";
 
 export async function getStaticPaths() {
     const posts = await getCollection("pages");
@@ -18,5 +19,5 @@ const { Content } = await render(page);
 ---
 
 <Layout title={page.data.tocTitle} teaser={page.data.teaser}>
-    <Content components={{ Citation, XlsFormDisplay, QuestionTypeBlock }} />
+    <Content components={{ Citation, XlsFormDisplay, QuestionTypeBlock, Praxisbeispiel }} />
 </Layout>

@@ -1,0 +1,85 @@
+---
+interface Props {
+    expandable?: boolean;
+}
+
+const { expandable = false } = Astro.props;
+---
+
+{expandable ? (
+    <details class="content-box">
+        <summary class="content-box-header">
+            <slot name="header" />
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </summary>
+        <div class="content-box-body">
+            <slot />
+        </div>
+    </details>
+) : (
+    <div class="content-box">
+        <div class="content-box-header">
+            <slot name="header" />
+        </div>
+        <div class="content-box-body">
+            <slot />
+        </div>
+    </div>
+)}
+
+<style>
+    .content-box {
+        background: var(--color-white);
+        border: 1.5px solid var(--color-secondary);
+        border-radius: var(--radius-lg);
+        font-size: 0.9rem;
+        color: var(--color-text-primary);
+        overflow: hidden;
+    }
+
+    .content-box-header {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem var(--spacing-base);
+        border-bottom: 1.5px solid var(--color-secondary);
+        color: var(--color-secondary);
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        list-style: none;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    /* remove default marker in all browsers */
+    .content-box-header::-webkit-details-marker { display: none; }
+
+    details.content-box[open] .content-box-header {
+        border-bottom: 1.5px solid var(--color-secondary);
+    }
+
+    details.content-box:not([open]) .content-box-header {
+        border-bottom: none;
+    }
+
+    .chevron {
+        margin-left: auto;
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
+    }
+
+    details[open] .chevron {
+        transform: rotate(-180deg);
+    }
+
+    .content-box-body {
+        padding: var(--spacing-base);
+    }
+
+    .content-box-body :global(p:first-child) { margin-top: 0; }
+    .content-box-body :global(p:last-child) { margin-bottom: 0; }
+</style>

@@ -1,6 +1,7 @@
 ---
 import Layout from "../../lib/layouts/Layout.astro";
 import toc from "@lib/toc.json";
+import ContentBox from "@components/ContentBox.astro";
 
 const snippets = import.meta.glob<string>(
     "/src/content/snippets/*.html",
@@ -17,30 +18,32 @@ const tools = toc.tools
     <div class="tool-list">
         {tools.map((tool) => (
             <div class="tool-entry" id={tool.id}>
-                <div class="tool-header">
-                    {tool.type === "app" ? (
-                        <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
-                    ) : (
-                        <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                        </svg>
-                    )}
-                    <a href={tool.href} target="_blank" rel="noopener noreferrer" class="tool-name">
-                        {tool.label}
-                        <svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                            <polyline points="15 3 21 3 21 9"></polyline>
-                            <line x1="10" y1="14" x2="21" y2="3"></line>
-                        </svg>
-                    </a>
-                </div>
-                {tool.snippetHtml && <div class="tool-snippet" set:html={tool.snippetHtml} />}
+                <ContentBox>
+                    <Fragment slot="header">
+                        {tool.type === "app" ? (
+                            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                            </svg>
+                        ) : (
+                            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                        )}
+                        <a href={tool.href} target="_blank" rel="noopener noreferrer" class="tool-name">
+                            {tool.label}
+                            <svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                        </a>
+                    </Fragment>
+                    {tool.snippetHtml && <div class="tool-snippet" set:html={tool.snippetHtml} />}
+                </ContentBox>
                 <a href={`#${tool.id}`} class="anchor-link" aria-label="Link to this tool">#</a>
             </div>
         ))}
@@ -106,23 +109,15 @@ const tools = toc.tools
 
     .tool-entry {
         position: relative;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        padding: 0.875rem 2.5rem 0.875rem 1rem;
-        background: var(--color-white);
-        border-radius: 8px;
-        border: 1px solid var(--color-secondary);
-        transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .tool-entry.active {
+    .tool-entry.active :global(.content-box) {
         box-shadow: inset -8px 0 0 0 var(--color-secondary);
     }
 
     .anchor-link {
         position: absolute;
-        top: 0.875rem;
+        top: 0.5rem;
         right: 0.75rem;
         opacity: 0;
         font-size: 14px;
@@ -137,17 +132,10 @@ const tools = toc.tools
         opacity: 1;
     }
 
-    .tool-header {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
     .tool-icon {
         width: 16px;
         height: 16px;
         flex-shrink: 0;
-        color: var(--color-secondary);
     }
 
     .tool-name {
@@ -178,5 +166,4 @@ const tools = toc.tools
 
     .tool-snippet :global(section) { margin: 0; }
     .tool-snippet :global(p) { margin: 0; font-size: 0.9rem; }
-
 </style>
