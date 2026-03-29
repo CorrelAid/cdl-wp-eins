@@ -9,8 +9,6 @@ nixpkgsArchive = 'd667853dbfa2808057c4cf25079ac560d7b60914'
 [phases.install]
 dependsOn = ["setup"]
 cacheDirectories = [
-  "node_modules",
-  "node_modules/.cache",
   "/root/.bun/install/cache"]
 cmds = ["bun install --frozen-lockfile"]
 
@@ -18,7 +16,6 @@ cmds = ["bun install --frozen-lockfile"]
 dependsOn = ["install"]
 cmds = ["PATH=/app/node_modules/.bin:$PATH bun run build"]
 cacheDirectories = [
-  "node_modules",
   "node_modules/.cache",
   ".astro"
 ]
