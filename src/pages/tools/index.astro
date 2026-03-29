@@ -4,14 +4,15 @@ import toc from "@lib/toc.json";
 import ContentBox from "@components/ContentBox.astro";
 
 const snippets = import.meta.glob<string>(
-    "/src/content/snippets/*.html",
+    "/src/content/snippets/*/*.html",
     { query: "?raw", import: "default", eager: true }
 );
 
+const lang = "de"; // Default to German
 const seen = new Set<string>();
 const tools = toc.tools
     .filter((t) => { if (seen.has(t.id)) return false; seen.add(t.id); return true; })
-    .map((t) => ({ ...t, snippetHtml: snippets[`/src/content/snippets/${t.id}.html`] ?? "" }));
+    .map((t) => ({ ...t, snippetHtml: snippets[`/src/content/snippets/${t.id}/${lang}.html`] ?? "" }));
 ---
 
 <Layout title="Tools" teaser="Open-Source-Tools für verschiedene Phasen einer Umfrage.">

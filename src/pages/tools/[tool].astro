@@ -19,11 +19,12 @@ export function getStaticPaths() {
 const { tool } = Astro.props;
 
 const snippets = import.meta.glob<{ default: string }>(
-    "/src/content/snippets/*.html",
+    "/src/content/snippets/*/*.html",
     { query: "?raw", import: "default", eager: true }
 );
 
-const snippetKey = `/src/content/snippets/${tool.id}.html`;
+const lang = "de"; // Default to German
+const snippetKey = `/src/content/snippets/${tool.id}/${lang}.html`;
 const snippetHtml: string = snippets[snippetKey] ?? "";
 ---
 
