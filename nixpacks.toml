@@ -16,8 +16,7 @@ cmds = ["bun install --frozen-lockfile"]
 
 [phases.build]
 dependsOn = ["install"]
-cmds = ["bun run build"]
-paths = ["/app/node_modules/.bin"]
+cmds = ["PATH=/app/node_modules/.bin:$PATH bun run build"]
 cacheDirectories = [
   "node_modules",
   "node_modules/.cache",
