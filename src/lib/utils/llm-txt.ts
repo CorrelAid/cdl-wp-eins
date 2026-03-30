@@ -292,16 +292,16 @@ export async function buildLlmTxt(format: ExampleFormat, maxPhases?: number): Pr
         pageContents.push(processed);
     }
 
-    const intro = `# Wissensplattform Eins — llm.txt
+    const intro = `# Civic Data Lab Umfragenwerkstatt — llm.txt
 
-> This file contains the full text content of "Wissensplattform Eins" (Knowledge Platform One),
+> This file contains the full text content of the "Civic Data Lab Umfragenwerkstatt",
 > a guide for survey methodology and tools developed by CorrelAid's Civic Data Labs.
 > It covers the complete survey lifecycle: conception, questionnaire design, data collection,
 > data preparation & analysis, and translating results into action.
 > The content is primarily in German.
 > ${FORMAT_LABELS[format]}
 >
-> Source: https://wissensplattform.correlaid.org
+> Source: https://umfragen.civic-data.de/
 
 ## Table of Contents
 
