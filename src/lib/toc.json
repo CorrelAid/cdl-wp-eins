@@ -41,7 +41,8 @@
                 "analyse-einleitung",
                 "datenbereinigung",
                 "deskriptive-auswertung",
-                "schliessende-statistik"
+                "schliessende-statistik",
+                "jasp"
             ]
         },
         {
@@ -57,6 +58,7 @@
         "quellen"
     ],
     "tools": [
+        { "id": "datenschutzvorlagen", "label": "Datenschutzvorlagen", "type": "document", "href": "/datenschutz", "phase": 0 },
         { "id": "formulaid", "label": "FormulAid", "type": "app", "href": "https://formulaid.correlaid.org/", "phase": 1 },
         { "id": "qwac", "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 1 },
         { "id": "formtransform", "label": "FormTransform", "type": "app", "href": "https://formtransform.correlaid.org/", "phase": 2 },

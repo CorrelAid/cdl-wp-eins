@@ -44,7 +44,7 @@ const spanningMarkers = toc.spanning.map(s => ({
 	column: s.column,
 }));
 
-// Tool markers link to anchor on the tools page
+// Tool markers always link to anchor on the tools page
 const toolMarkers = toc.tools.map(t => ({ ...t, href: `/tools#${t.id}` }));
 
 const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
