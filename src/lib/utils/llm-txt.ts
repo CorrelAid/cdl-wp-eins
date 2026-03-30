@@ -4,7 +4,7 @@ import { getLiveCollection } from 'astro:content';
 import { EXAMPLES_API_URL } from 'astro:env/server';
 import toc from '@lib/toc.json';
 
-export type ExampleFormat = 'all' | 'xlsform' | 'ddi';
+export type ExampleFormat = 'none' | 'xlsform' | 'ddi';
 
 // --- Citation resolution ---
 
@@ -160,8 +160,8 @@ async function processContent(body: string, quellen: ZoteroItem[], format: Examp
         }
     );
 
-    // Replace XlsFormDisplay with inline data (only for xlsform/all)
-    if (format !== 'ddi') {
+    // Replace XlsFormDisplay with inline data (only for xlsform format)
+    if (format === 'xlsform') {
         content = content.replace(
             /<XlsFormDisplay\s+worksheets=\{(\[[\s\S]*?\])}\s*\/>/g,
             (_match, wsContent: string) => renderInlineXlsForm(wsContent)
@@ -173,20 +173,24 @@ async function processContent(body: string, quellen: ZoteroItem[], format: Examp
         );
     }
 
-    // Collect QuestionTypeBlock example IDs and fetch them
-    const exampleMatches = [...content.matchAll(/<QuestionTypeBlock\s+exampleId="([^"]+)"\s*\/>/g)];
-    const exampleResults = new Map<string, string>();
+    // Collect QuestionTypeBlock example IDs and fetch them (skip for 'none')
+    if (format === 'none') {
+        content = content.replace(/<QuestionTypeBlock\s+exampleId="([^"]+)"\s*\/>/g, '');
+    } else {
+        const exampleMatches = [...content.matchAll(/<QuestionTypeBlock\s+exampleId="([^"]+)"\s*\/>/g)];
+        const exampleResults = new Map<string, string>();
 
-    await Promise.all(
-        [...new Set(exampleMatches.map(m => m[1]))].map(async id => {
-            exampleResults.set(id, await fetchExample(id, format));
-        })
-    );
+        await Promise.all(
+            [...new Set(exampleMatches.map(m => m[1]))].map(async id => {
+                exampleResults.set(id, await fetchExample(id, format));
+            })
+        );
 
-    content = content.replace(
-        /<QuestionTypeBlock\s+exampleId="([^"]+)"\s*\/>/g,
-        (_match, id: string) => exampleResults.get(id) || `[Example "${id}" unavailable]`
-    );
+        content = content.replace(
+            /<QuestionTypeBlock\s+exampleId="([^"]+)"\s*\/>/g,
+            (_match, id: string) => exampleResults.get(id) || `[Example "${id}" unavailable]`
+        );
+    }
 
     // Clean up any remaining JSX expressions
     content = content.replace(/\{[^}]*\}/g, '');
@@ -220,15 +224,30 @@ function getOrderedSlugs(): string[] {
 }
 
 const FORMAT_LABELS: Record<ExampleFormat, string> = {
-    all: 'Examples include both XLSForm tables and DDI Codebook XML.',
+    none: 'No examples included.',
     xlsform: 'Examples include XLSForm tables only (DDI Codebook excluded).',
     ddi: 'Examples include DDI Codebook XML only (XLSForm excluded).',
 };
 
-export async function buildLlmTxt(format: ExampleFormat): Promise<Response> {
+function getSlugsForPhases(maxPhases: number): string[] {
+    const slugs: string[] = [];
+    let phaseIndex = 0;
+    for (const item of toc.sections) {
+        if (typeof item === 'string') continue; // skip 'quellen' etc.
+        const section = item as TocSection;
+        phaseIndex++;
+        if (phaseIndex > maxPhases) break;
+        for (const child of section.children) {
+            slugs.push(child);
+        }
+    }
+    return slugs;
+}
+
+export async function buildLlmTxt(format: ExampleFormat, maxPhases?: number): Promise<Response> {
     const pages = await getCollection('pages');
     const pageMap = new Map(pages.map(p => [p.id, p]));
-    const orderedSlugs = getOrderedSlugs();
+    const orderedSlugs = maxPhases !== undefined ? getSlugsForPhases(maxPhases) : getOrderedSlugs();
 
     // Load Zotero references
     let quellen: ZoteroItem[] = [];
@@ -244,12 +263,14 @@ export async function buildLlmTxt(format: ExampleFormat): Promise<Response> {
     let sectionIndex = 0;
     for (const item of toc.sections) {
         if (typeof item === 'string') {
+            if (maxPhases !== undefined) continue;
             const page = pageMap.get(item);
             if (page) {
                 tocLines.push(`- ${page.data.tocTitle}`);
             }
         } else {
             sectionIndex++;
+            if (maxPhases !== undefined && sectionIndex > maxPhases) break;
             const section = item as TocSection;
             tocLines.push(`\n${sectionIndex}. ${section.label}`);
             for (const child of section.children) {

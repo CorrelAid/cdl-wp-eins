@@ -69,6 +69,19 @@ document.querySelector('#description').innerHTML = await res.text();
 
 To add a new snippet, create an `.html` file in `src/content/snippets/` — it will be served automatically.
 
+### LLM.txt
+
+The site exposes machine-readable plain-text versions of its content for LLM consumption at the following routes:
+
+| Route | Description |
+|---|---|
+| `/llm.txt` | Full content, no examples |
+| `/llm-xlsform.txt` | Full content with XLSForm table examples |
+| `/llm-ddi.txt` | Full content with DDI Codebook XML examples |
+| `/llm-phases12-xlsform.txt` | First two phases (Konzeption + Fragebogendesign) with XLSForm examples only |
+
+Each file includes a table of contents, resolved citations, and rendered prose. Examples are fetched from the `EXAMPLES_API_URL` at build time (same as `<QuestionTypeBlock>` — variants without examples do not require this).
+
 ### Answer Type Examples
 
 Examples for answer types (XLSForm, DDI XML, screenshots) are fetched at build time from an external [qwackback](https://github.com/CorrelAid/qwackback) API. This ensures consistency between projects that use the same example data. The API URL is configured via the `EXAMPLES_API_URL` environment variable (see `.env.example`).
