@@ -9,30 +9,32 @@ import toc from "@lib/toc.json";
 const allPages = await getCollection("pages");
 const pageMap = Object.fromEntries(allPages.map(page => [page.id, page]));
 
-// Build phases from toc sections
-const phases = toc.sections
-	.filter((s): s is { label: string; children: string[] } => typeof s === 'object')
-	.map(section => ({
-		id: section.children[0].replace(/-einleitung$/, ''),
-		label: section.label,
-		href: '/' + section.children[0],
-	}));
+type TocSection = { label: string; children: string[]; excludeFromGraphic?: string[]; showInGraphic?: boolean };
 
-// Build knowledge markers from toc sections (skip intro pages + excluded slugs)
-const knowledgeMarkers = toc.sections
-	.filter((s): s is { label: string; children: string[]; excludeFromGraphic?: string[] } => typeof s === 'object')
-	.flatMap((section, phaseIndex) => {
-		const exclude = section.excludeFromGraphic || [];
-		return section.children
-			.slice(1) // skip intro page
-			.filter(slug => !exclude.includes(slug))
-			.map(slug => ({
-				label: pageMap[slug]?.data.tocTitle || slug,
-				type: 'knowledge' as const,
-				href: '/' + slug,
-				phase: phaseIndex,
-			}));
-	});
+// Build phases from toc sections (exclude sections with showInGraphic: false)
+const graphicSections = (toc.sections as any[]).filter(
+	(s): s is TocSection => typeof s === 'object' && s.showInGraphic !== false
+);
+
+const phases = graphicSections.map((section: TocSection) => ({
+	id: section.children[0].replace(/-einleitung$/, ''),
+	label: section.label,
+	href: '/' + section.children[0],
+}));
+
+// Build knowledge markers from toc sections (skip intro pages + excluded slugs + non-graphic sections)
+const knowledgeMarkers = graphicSections.flatMap((section: TocSection, phaseIndex: number) => {
+	const exclude = section.excludeFromGraphic || [];
+	return section.children
+		.slice(1) // skip intro page
+		.filter((slug: string) => !exclude.includes(slug))
+		.map((slug: string) => ({
+			label: pageMap[slug]?.data.tocTitle || slug,
+			type: 'knowledge' as const,
+			href: '/' + slug,
+			phase: phaseIndex,
+		}));
+});
 
 // Spanning markers (compute grid rows from phase indices)
 const spanningMarkers = toc.spanning.map(s => ({
