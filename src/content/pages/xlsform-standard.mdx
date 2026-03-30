@@ -3,78 +3,1600 @@ tocTitle: XLSForm Standard
 teaser: Der Standard für digitale Formulare.
 ---
 
-XLSForm is a standard for creating forms using Excel spreadsheets. It's widely used in survey and data collection tools.
+# XLSForm-Dokumentation
 
-## Key Concepts
+> Hinweis: Diese Seite wurde (abgesehen von einigen Beispielen) maschinell aus dem Englischen übersetzt. Die Originalversion findet ihr unter [xlsform.org/en/](https://xlsform.org/en/).
 
-- **Excel-based form design**: Create forms using familiar spreadsheet software
-- **Standardized structure**: Uses specific worksheet names and column formats
-- **Interoperable**: Works with tools like ODK, KoboToolbox, SurveyCTO
+## Was ist ein XLSForm?
 
-## Basic Structure
+XLSForm ist ein Formularstandard, der entwickelt wurde, um die Erstellung von Formularen in Excel zu vereinfachen. Die Erstellung erfolgt in einem für Menschen lesbaren Format unter Verwendung eines vertrauten Tools, das fast jeder kennt – Excel. XLSForms bieten einen praktischen Standard für den Austausch und die Zusammenarbeit bei der Formularerstellung. Der Einstieg ist einfach, ermöglicht aber die Erstellung komplexer Formulare durch Personen, die mit der unten beschriebenen Syntax vertraut sind.
+
+Das XLSForm wird anschließend in ein [ODK XForm](https://getodk.github.io/xforms-spec/) konvertiert, einen gängigen offenen Formularstandard, der es Ihnen ermöglicht, ein Formular mit komplexen Funktionen, wie z. B. Sprunglogik, auf einheitliche Weise über eine Reihe von Web- und mobilen Datenerfassungsplattformen hinweg zu erstellen.
+
+### Grundlegendes Format
+
+Jede Excel-Arbeitsmappe enthält in der Regel zwei Arbeitsblätter: **„Umfrage"** und **„Auswahlmöglichkeiten"**. Ein drittes, optionales Arbeitsblatt mit dem Namen **„Einstellungen"**, kann Ihrem Formular zusätzliche Angaben hinzufügen und wird [im Folgenden](#einstellungs-arbeitsblatt) beschrieben.
+
+#### Das Arbeitsblatt „Umfrage"
+
+Dieses Arbeitsblatt gibt Ihrem Formular die Gesamtstruktur vor und enthält den Großteil des Formularinhalts. Es enthält die vollständige Liste der Fragen sowie Informationen darüber, wie diese im Formular angezeigt werden sollen. Jede Zeile steht in der Regel für eine Frage; es gibt jedoch bestimmte weitere Funktionen, die im Folgenden beschrieben werden und die Sie dem Formular hinzufügen können, um die Benutzerfreundlichkeit zu verbessern.
+
+#### Das Arbeitsblatt „Auswahlmöglichkeiten"
+
+Dieses Arbeitsblatt dient dazu, die Antwortmöglichkeiten für Multiple-Choice-Fragen festzulegen. Jede Zeile steht für eine Antwortmöglichkeit. Antwortmöglichkeiten mit demselben **Listennamen** werden als Teil einer zusammengehörigen Auswahlgruppe betrachtet und erscheinen gemeinsam in einer Frage. Auf diese Weise kann eine Auswahlgruppe auch für mehrere Fragen wiederverwendet werden (z. B. Ja/Nein-Fragen).
+
+#### Einrichten Ihrer Arbeitsblätter
+
+Beide Arbeitsblätter enthalten eine Reihe von Pflichtspalten, die vorhanden sein müssen, damit das Formular funktioniert. Darüber hinaus verfügt jedes Arbeitsblatt über eine Reihe von optionalen Spalten, die eine weitere Steuerung des Verhaltens der einzelnen Einträge im Formular ermöglichen, jedoch nicht zwingend erforderlich sind. Jeder Eintrag muss Werte für jede der Pflichtspalten enthalten, die optionalen Spalten können jedoch leer gelassen werden.
+
+- Das **Umfrage**-Arbeitsblatt verfügt über 3 obligatorische Spalten: **Typ**, **Name** und **Bezeichnung**.
+  - Die Spalte **„Typ"** gibt den Typ des Eintrags an, den Sie für die Frage erwarten.
+  - Die Spalte **„Name"** gibt den eindeutigen Variablennamen für diese Eingabe an. Keine zwei Eingaben dürfen denselben Namen haben. Namen müssen mit einem Buchstaben oder einem Unterstrich beginnen. Namen dürfen nur Buchstaben, Ziffern, Bindestriche, Unterstriche und Punkte enthalten. Bei Namen wird zwischen Groß- und Kleinschreibung unterschieden.
+  - Die Spalte **„label"** enthält den tatsächlichen Text, den Sie für die Frage im Formular sehen. Alternativ können [Spalten für die Übersetzung der Beschriftungen](#unterstützung-mehrerer-sprachen) verwendet werden.
 
 <XlsFormDisplay worksheets={[
   {
     id: 'survey',
-    title: 'Survey Worksheet',
-    headers: ['type', 'name', 'label', 'hint', 'required', 'constraint'],
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung'],
     data: [
-      ['text', 'respondent_name', 'What is your name?', 'Enter full name', 'yes', ''],
-      ['integer', 'age', 'What is your age?', 'Enter age in years', 'yes', '. > 0'],
-      ['select_one gender', 'gender', 'What is your gender?', '', 'yes', ''],
-      ['select_multiple languages', 'languages', 'Which languages do you speak?', 'Select all that apply', 'no', '']
-    ]
-  },
-  {
-    id: 'choices',
-    title: 'Choices Worksheet',
-    headers: ['list_name', 'name', 'label'],
-    data: [
-      ['gender', 'male', 'Male'],
-      ['gender', 'female', 'Female'],
-      ['gender', 'other', 'Other'],
-      ['gender', 'prefer_not_to_say', 'Prefer not to say'],
-      ['languages', 'english', 'English'],
-      ['languages', 'spanish', 'Spanish'],
-      ['languages', 'french', 'French'],
-      ['languages', 'german', 'German']
-    ]
-  },
-  {
-    id: 'settings',
-    title: 'Settings Worksheet',
-    headers: ['parameter', 'value'],
-    data: [
-      ['form_title', 'Demographic Survey'],
-      ['form_id', 'demo_survey'],
-      ['version', '1.0'],
-      ['submission_url', 'https://example.com/submit']
+      ['heute', 'heute', ''],
+      ['select_one Bildungsabschluss', 'Bildungsabschluss', 'Höchster Bildungsabschluss?'],
+      ['Ganzzahl', 'Alter', 'Alter des Befragten?']
     ]
   }
 ]} />
 
-## Common Question Types
+- Das Arbeitsblatt **„Auswahlmöglichkeiten"** enthält ebenfalls drei Pflichtspalten: **Listenname**, **Name** und **Bezeichnung**.
+  - In der Spalte **„Listenname"** können Sie eine Reihe miteinander verbundener Antwortmöglichkeiten gruppieren, d. h. Antwortmöglichkeiten, die unter einer Frage gemeinsam angezeigt werden sollen.
+  - Die Spalte **„Name"** gibt den eindeutigen Variablennamen für diese Antwortoption an.
+  - Die Spalte **„Bezeichnung"** zeigt die Antwortoption genau so an, wie sie im Formular erscheinen soll. Alternativ können [Spalten für die Übersetzung der Bezeichnungen](#unterstützung-mehrerer-sprachen) verwendet werden.
 
-- `text`: Free text response
-- `integer`: Whole numbers
-- `decimal`: Decimal numbers
-- `select_one`: Single choice from list
-- `select_multiple`: Multiple choices from list
-- `date`: Date picker
-- `geopoint`: GPS coordinates
+<XlsFormDisplay worksheets={[
+  {
+    id: 'choices',
+    title: 'Auswahlmöglichkeiten',
+    headers: ['list_name', 'name', 'label'],
+    data: [
+      ['Bildungsabschluss', 'kein_abschluss', 'Kein Abschluss'],
+      ['Bildungsabschluss', 'hauptschule', 'Hauptschulabschluss'],
+      ['Bildungsabschluss', 'realschule', 'Mittlere Reife'],
+      ['Bildungsabschluss', 'abitur', 'Abitur'],
+      ['Bildungsabschluss', 'studium', 'Hochschulabschluss']
+    ]
+  }
+]} />
 
-## Benefits
+Die Spalten, die Sie Ihrer Excel-Arbeitsmappe hinzufügen, können in beliebiger Reihenfolge erscheinen, unabhängig davon, ob sie obligatorisch oder optional sind. Optionale Spalten können vollständig weggelassen werden. Zeilen oder Spalten können zur besseren Lesbarkeit leer gelassen werden, jedoch werden Daten nach 20 aufeinanderfolgenden leeren Spalten oder Zeilen auf einem Blatt nicht verarbeitet. Die gesamte Formatierung der .xlsx-Datei wird ignoriert, sodass Sie Trennlinien, Schattierungen und andere Schriftformatierungen verwenden können, um das Formular übersichtlicher zu gestalten.
 
-- **No coding required**: Design forms using Excel
-- **Reusable**: Same form works across multiple platforms
-- **Version control**: Easy to track changes
-- **Collaboration**: Multiple people can work on the same form
+Beim Erstellen von Formularen in Excel ist zu beachten, dass die verwendete Syntax präzise sein muss. Wenn Sie beispielsweise **„Choices"** oder **„choice"** anstelle von **„choices"** eingeben, funktioniert das Formular nicht.
 
-## Tools that Support XLSForm
+## Fragetypen
 
-- ODK Collect
-- KoboToolbox
-- SurveyCTO
-- Ona
-- CommCare
-- Many others...
+XLSForm unterstützt eine Reihe von Fragetypen. Dies sind nur einige der Optionen, die Sie in die Spalte **„type"** im **Umfrage**-Arbeitsblatt Ihres XLSForm eingeben können:
+
+| Fragetyp | Antwort-Eingabe |
+|---|---|
+| Ganzzahl | Eingabe einer ganzen Zahl. |
+| Dezimal | Eingabe einer Dezimalzahl. |
+| Bereich | [Bereichseingabe](#bereich) (einschließlich Bewertung) |
+| Text | Freitextantwort. |
+| select_one [Optionen] | Multiple-Choice-Frage; es kann nur eine Antwort ausgewählt werden. |
+| select_multiple [Optionen] | Multiple-Choice-Frage; es können mehrere Antworten ausgewählt werden. |
+| select_one_from_file [Datei] | [Multiple-Choice-Frage aus einer Datei](#mehrfachauswahl-aus-datei); es kann nur eine Antwort ausgewählt werden. |
+| select_multiple_from_file [Datei] | [Multiple-Choice-Frage aus Datei](#mehrfachauswahl-aus-datei); es können mehrere Antworten ausgewählt werden. |
+| rank [Optionen] | Rangfrage; eine Liste ordnen. |
+| note | Zeigt eine Notiz auf dem Bildschirm an, benötigt keine Eingabe. Abkürzung für type=text mit readonly=true. |
+| geopoint | Eine [einzelne GPS-Koordinate](#erfassung-des-gps-standorts) erfassen. |
+| geotrace | Zeichnet eine [Linie aus zwei oder mehr GPS-Koordinaten](#erfassung-des-gps-standorts) auf. |
+| geoshape | Ein [Polygon aus mehreren GPS-Koordinaten](#erfassung-des-gps-standorts) aufzeichnen; der letzte Punkt ist derselbe wie der erste Punkt. |
+| date | Datumsangabe. |
+| time | Zeitangabe. |
+| dateTime | Akzeptiert eine Datums- und eine Zeitangabe. |
+| Bild | Machen Sie ein Foto oder laden Sie eine [Bilddatei](#bild) hoch. |
+| Audio | Machen Sie eine Audioaufnahme oder laden Sie eine Audiodatei hoch. |
+| Hintergrund-Audio | Während des Ausfüllens des Formulars wird im Hintergrund Audio aufgenommen. |
+| Video | Nehmen Sie ein Video auf oder laden Sie eine Videodatei hoch. |
+| Datei | Allgemeine Dateieingabe (txt, pdf, xls, xlsx, doc, docx, rtf, zip) |
+| Barcode | Scannen Sie einen Barcode. Dazu muss die Barcode-Scanner-App installiert sein. |
+| berechnen | Eine Berechnung durchführen; siehe den Abschnitt [„Berechnung"](#berechnung) weiter unten. |
+| Bestätigen | Bestätigungsaufforderung, die den Wert auf „OK" setzt, wenn sie ausgewählt wird. |
+| verborgen | Ein Feld ohne zugehöriges UI-Element, das zum Speichern einer Konstante verwendet werden kann |
+| xml-extern | Fügt einen Verweis auf eine [externe XML-Datendatei](#externe-xml-daten) hinzu |
+
+Eine vollständige Liste der Fragetypen und der Elemente, die diese in der [Vorlage und im Verweis](https://xlsform.org/en/ref-table/) anpassen können, finden Sie hier.
+
+### Erfassung des GPS-Standorts
+
+Eine Frage vom Typ `Geopunkt` erfasst den aktuellen Standort eines Geräts. Um den Namen und den GPS-Standort zu erfassen Koordinaten eines Geschäfts zu erfassen, würden Sie Folgendes in Ihr Formular schreiben:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'survey',
+    headers: ['type', 'name', 'Bezeichnung'],
+    data: [
+      ['text', 'store_name', 'Wie heißt dieses Geschäft?'],
+      ['Geopunkt', 'store_gps', 'Erfasse die GPS-Koordinaten dieses Geschäfts.']
+    ]
+  }
+]} />
+
+Um eine Linie oder eine Form aus GPS-Koordinaten zu erfassen, kannst du eine der folgenden Methoden verwenden:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Vermessung',
+    headers: ['type', 'name', 'Bezeichnung', 'Hinweis'],
+    data: [
+      ['geotrace', 'Pipe', 'Pipeline', 'Bitte gehe die Pipeline entlang und notiere die Koordinaten jedes Eckpunkts'],
+      ['geoshape', 'Grenze', 'Grenze', 'Bitte gehen Sie entlang der Grenze und notieren Sie die Koordinaten jedes Eckpunkt']
+    ]
+  }
+]} />
+
+Weitere Informationen zum Geopoint-Widget finden Sie in der [ODK-Dokumentation](https://docs.getodk.org/form-question-types/#geopoint-widget).
+
+#### Festlegen einer Zielgenauigkeit für die Standorterfassung
+
+Bei `Geopunkt` Fragen erfasst ODK Collect automatisch die GPS-Daten, sobald eine Genauigkeit von 5 Metern oder besser erreicht wird. Sie können dieses Standardverhalten ändern, indem Sie einen Wert für den Parameter **„capture-accuracy"** angeben. Sie können auch einen Parameter **„warning-accuracy"** hinzufügen (Standardwert ist 100 Meter). Wenn die Genauigkeit diesem Wert entspricht oder schlechter ist, wird der Dialog rot und es wird eine Warnmeldung angezeigt, dass die Genauigkeit inakzeptabel ist.
+
+Beispiel: Um Punkte automatisch mit einer Genauigkeit von 10 m oder besser zu erfassen und gleichzeitig zu warnen, wenn die Genauigkeit schlechter als 10 m ist:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Geben Sie', 'name', 'label', 'Parameter'],
+    data: [
+      ['geopoint', 'store_gps', 'Erfasse die GPS-Koordinaten dieses Geschäfts.', 'Erfassungsgenauigkeit=10 Warnungsgenauigkeit=10']
+    ]
+  }
+]} />
+
+### Mehrfachauswahl
+
+XLSForm unterstützt sowohl „select_one"-Fragen (nur eine Antwort auswählen) als auch „select_multiple"-Fragen (mehrere Antworten auswählen). Sie können die Antwortmöglichkeiten für Multiple-Choice-Fragen direkt im Formular festlegen oder, bei sehr langen Auswahllisten oder solchen, die durch einen externen Prozess aktualisiert werden müssen, [in angehängten Dateien](#mehrfachauswahl-aus-datei).
+
+Um Auswahlmöglichkeiten in Ihrem Formular zu definieren, müssen Sie Ihrer Excel-Arbeitsmappe ein Arbeitsblatt **mit den Auswahlmöglichkeiten** hinzufügen. Hier ist ein Beispiel für eine „select_one"-Frage:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung'],
+    data: [
+      ['select_one ja_nein', 'mag_Pizza', 'Magst du Pizza?']
+    ]
+  },
+  {
+    id: 'choices',
+    title: 'Auswahlmöglichkeiten',
+    headers: ['Liste Name', 'name', 'Bezeichnung'],
+    data: [
+      ['ja_nein', 'ja', 'Ja'],
+      ['ja_nein', 'nein', 'Nein']
+    ]
+  }
+]} />
+
+Beachten Sie, dass das Feld **„yes_no"** im Arbeitsblatt **„survey"** mit dem Feld **„yes_no"** in der Spalte **„List Name"** des Arbeitsblatts **„choices"** übereinstimmen muss. Dadurch wird sichergestellt, dass das Formular die richtige Liste mit Antwortmöglichkeiten für eine bestimmte Frage anzeigt. Wir können auch Multiple-Choice-Fragen hinzufügen, bei denen mehrere Antworten ausgewählt werden können, und zwar so:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung'],
+    data: [
+      ['select_multiple pizza_toppings', 'favorite_toppings', 'Was sind deine Lieblingsbeläge für Pizza?']
+    ]
+  },
+  {
+    id: 'choices',
+    title: 'Auswahlmöglichkeiten',
+    headers: ['Liste Name', 'Name', 'Bezeichnung'],
+    data: [
+      ['Pizzabeläge', 'Käse', 'Käse'],
+      ['Pizzabeläge', 'Peperoni', 'Peperoni'],
+      ['Pizzabeläge', 'Wurst', 'Wurst']
+    ]
+  }
+]} />
+
+Klicken Sie auf den Link, um den vollständigen [Pizza-Fragebogen](https://docs.google.com/spreadsheets/d/1y9LcFUaJ_MDRpqbzHVxkD_k6YzSQCllqh3Excy4iffg/edit?usp=sharing) anzusehen.
+
+#### Auswahlbezeichnungen
+
+Die `Name` Spalte des Auswahlblatts definiert die Werte, die gespeichert werden, wenn die jeweilige Auswahl während der Datenerfassung ausgewählt wird. Antwortnamen für **„select_multiple"-Fragen** dürfen keine Leerzeichen enthalten, da Leerzeichen als Trennzeichen verwendet werden, wenn eine Antwort mit mehreren ausgewählten Antworten gespeichert wird. Antwortnamen für „select_one"-Fragen dürfen Leerzeichen enthalten. Wir empfehlen jedoch, diese zu vermeiden, um die Analyse zu vereinfachen. Außerdem ermöglicht dies die Umwandlung der Frage in eine **„select_multiple"-Frage** in einer zukünftigen Formularversion.
+
+Im Allgemeinen sollten die Namen der Auswahlmöglichkeiten innerhalb einer Auswahlliste eindeutig sein. Wenn zwei Auswahlmöglichkeiten derselben Liste denselben Namen haben, lassen sie sich bei der Auswertung nicht voneinander unterscheiden. Bei doppelten Namen der Auswahlmöglichkeiten wird eine Fehlermeldung angezeigt, und Ihr Formular wird nicht konvertiert. In manchen Fällen kann es jedoch sinnvoll sein, doppelte Namen für Auswahlmöglichkeiten zu verwenden. Ein Beispiel hierfür wäre die Verwendung einer [kaskadierenden Auswahl](#kaskadierende-auswahl), bei der die gleichnamigen Auswahlmöglichkeiten durch eine vorangestellte Frage voneinander unterschieden werden. Wenn Sie doppelte Auswahlnamen verwenden müssen, können Sie die Fehler bei der Verwendung der `choice_duplicates` Einstellung:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'settings',
+    title: 'Einstellungen',
+    headers: ['allow_choice_duplicates'],
+    data: [
+      ['yes']
+    ]
+  }
+]} />
+
+#### Kaskadierende Auswahl
+
+Wenn Sie möchten, dass die Antworten auf eine Frage die in nachfolgenden Fragen verfügbaren Optionen filtern, verwenden Sie eine kaskadierende Auswahl. Wenn Sie beispielsweise fragen möchten, in welcher Stadt der Befragte lebt, könnten Sie, anstatt aus allen Städten der Welt auszuwählen, zunächst nach dem Land fragen. Anschließend könnten Sie die Liste der Bundesländer so filtern, dass nur diejenigen im ausgewählten Land angezeigt werden, die Liste der Bezirke so filtern, dass nur diejenigen im ausgewählten Bundesland angezeigt werden, und schließlich die Liste der Städte so filtern, dass nur diejenigen in diesem Bezirk angezeigt werden.
+
+Um Auswahlfelder zu verketten oder kaskadieren, müssen Sie in Ihrem Umfrage-Arbeitsblatt eine Spalte **„choice_filter"** anlegen. Der Ausdruck in dieser Spalte wird verwendet, um die Liste der Auswahlmöglichkeiten für das entsprechende Auswahlfeld einzugrenzen. Alle Auswahlmöglichkeiten, für die der Ausdruck **wahr** ist, werden einbezogen. Sehen Sie sich [hier](https://xlsform.org/assets/xlsx/cascading_select.xlsx) ein Beispiel für ein XLSForm an.
+
+#### Werte in einer Auswahlliste nachschlagen
+
+Sie können dem Auswahlblatt zusätzliche Spalten hinzufügen und dann mithilfe der [Instanzfunktion](#werte-in-auswahllisten-oder-angehängten-dateien-nachschlagen) Werte für diese Spalten nachschlagen.
+
+#### „Anderes angeben"
+
+> **Warnung:** Wir empfehlen generell, [die Relevanz](#relevant) zu verwenden, um Ihre eigene „Sonstiges"-Option festzulegen. Die in diesem Abschnitt beschriebene Abkürzung funktioniert nur bei Auswahlfeldern ohne Übersetzungen oder choice_filters. Sie verwendet Englisch für die Option „Sonstiges", die nicht angepasst werden kann.
+
+Bei Multiple-Choice-Fragen bieten Umfragen oft die Möglichkeit, **„Sonstiges"** anzukreuzen, wenn die gewünschte Antwortoption nicht aufgeführt ist. In diesem Fall werden die Befragten in der Regel gebeten, die sonstige Option näher zu beschreiben. XLSForm bietet hierfür eine Abkürzung: Fügen Sie im Umfrage-Arbeitsblatt hinter dem Namen der Antwortauswahlliste **„or_other"** ein. Das Arbeitsblatt mit den Antwortoptionen bleibt unverändert. Siehe unten:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung'],
+    data: [
+      ['select_multiple pizza_toppings or_other', 'Lieblingsbelag', 'Was sind deine Lieblings-Pizzabeläge?']
+    ]
+  }
+]} />
+
+### Wählen Sie auf der Karte aus
+
+Um Auswahlmöglichkeiten auf einer Karte anzuzeigen, fügen Sie einer „select_one"-Frage das Darstellungsattribut **„Karte"** oder **„Schnellkarte"** hinzu. Dem Auswahlblatt muss außerdem eine Geometriespalte für den in den „select_one"-Fragen angegebenen „list_name" hinzugefügt werden. Die Geometrie muss im [ODK-Format](https://docs.getodk.org/form-question-types/#location-widgets) angegeben werden. Diese Funktion ist derzeit nur in ODK Collect verfügbar. Siehe unten:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'choices',
+    title: 'Auswahl',
+    headers: ['Listenname', 'name', 'Bezeichnung', 'Geometrie'],
+    data: [
+      ['Standort', 'Shofco', 'Shofco', '36.7965483 -1.3182517 0 0'],
+      ['Standort', 'gemkam', 'Gemkam Medical Clinic', '36.7967088 -1.3170903 0 0'],
+      ['Standort', 'silanga', 'Silanga-Apotheke', '36.7955008 -1.3167834 0 0'],
+      ['Standort', 'undugu', 'Undugu-Klinik', '36.7990986 -1.3179328 0 0']
+    ]
+  }
+]} />
+
+### Mehrfachauswahl aus Datei
+
+Wenn Sie die Antwortmöglichkeiten für eine Multiple-Choice-Frage in einer separaten Datei bereitstellen möchten, verwenden Sie den Fragetyp **„select_one_from_file"** oder **„select_multiple_from_file"**. Die Verwendung separater Dateien kann die Verwaltung längerer Antwortlisten vereinfachen und die Wiederverwendung von Antwortlisten in verschiedenen Umfragen erleichtern. Es werden drei Dateiformate unterstützt: CSV-, XML- und GeoJSON-Dateien. Siehe Anwendungsbeispiele unten:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'Auswahlfilter'],
+    data: [
+      ['select_multiple_from_file country.csv', 'liv', 'In welchen Ländern haben Sie gelebt?', ''],
+      ['select_one_from_file countries.xml', 'cou', 'In welchem Land lebst du jetzt?', ''],
+      ['Wähle eine Option aus der Datei cities.xml', 'cit', 'Was ist die nächstgelegene Stadt?', 'country=${cou}'],
+      ['Wähle eine aus der Datei households.csv', 'hh', 'Wählen Sie die Haushaltsnummer aus', '']
+    ]
+  }
+]} />
+
+Die Dateien müssen ein bestimmtes Format aufweisen. Eine CSV-Datei muss Spalten enthalten, die den Wert und die Bezeichnung der Optionen. Wenn Sie die Spaltennamen `Name` und `die Bezeichnung` verwenden, diese werden automatisch verwendet. Sie können auch Folgendes [die zu verwendenden Spalten angeben](#legen-sie-benutzerdefinierte-spalten-für-bezeichnung-und-wert-fest).
+
+Eine XML-Datei muss die folgende Struktur aufweisen:
+
+```xml
+<root>
+    <item>
+        <name/>
+        <label/>
+        ...
+    </item>
+</root>
+```
+
+Ein GeoJSON erfordert, dass jedes Feature über eine ID und eine Titel-Eigenschaft verfügt. Das GeoJSON muss durch eine einzige FeatureCollection auf oberster Ebene definiert sein. Weitere Informationen finden Sie in [der ODK-Dokumentation](https://docs.getodk.org/form-datasets/#selects-from-geojson).
+
+CSV-, XML- und GeoJSON-Dateien können zusätzliche Spalten, XML-Knoten oder Merkmale und benutzerdefinierte Eigenschaften enthalten, solange die oben genannten grundlegenden Anforderungen erfüllt sind.
+
+Dieser Fragetyp ist im Allgemeinen die bevorzugte Methode zum Erstellen von Auswahlfragen aus externen Daten, da er am vielseitigsten ist und anwendungsübergreifend funktioniert. Allerdings können Auswahlen aus Dateien mit Zehntausenden von Optionen die Reaktionsgeschwindigkeit des Formulars beeinträchtigen. Wenn Sie lange Auswahllisten haben, prüfen Sie, ob Ihr Formular auf dem Gerät mit der geringsten Leistung, das Ihr Datenerfassungsteam verwenden wird, ausreichend reaktionsschnell ist. Wenn es zu langsam ist, sollten Sie die Verwendung von [dynamischen Auswahlen aus vorgeladenen Daten](#dynamische-auswahl-aus-vorab-geladenen-daten) in Betracht ziehen, sofern Ihre Datenerfassungsanwendung dies unterstützt.
+
+#### Legen Sie benutzerdefinierte Spalten für Bezeichnung und Wert fest
+
+Wenn die CSV-, XML- oder GeoJSON-Dateien unterschiedliche Namen für den `Auswahlnamen` und `die Bezeichnung` verwenden, fügen Sie dem Umfrageformular eine Spalte mit dem Namen `parameters` hinzu und geben Sie die benutzerdefinierten Namen mit den Parametern `value` und `label` an. Siehe Anwendungsbeispiele unten:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'parameters'],
+    data: [
+      ['select_multiple_from_file country.csv', 'liv', 'In welchen Ländern haben Sie gelebt?', 'Wert=ccode'],
+      ['select_one_from_file countries.xml', 'cou', 'In welchem Land lebst du derzeit?', 'label=cname'],
+      ['Wähle eine Datei aus: households.csv', 'hh', 'Wähle Hausnummer', 'Wert=Hausnummer Bezeichnung=Hausname']
+    ]
+  }
+]} />
+
+### Rang
+
+Mit dem Rang-Widget können die Befragten eine Liste von Optionen ordnen. Die Antwort wird als geordnete, durch Leerzeichen getrennte Liste von Optionswerten, wobei alle Optionen immer enthalten sind. Die Syntax ist der von Multiple-Choice-Fragen sehr ähnlich.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung'],
+    data: [
+      ['Rang pizza_toppings', 'Beläge', 'Bestelle Pizza-Beläge mit deinem Lieblingsbelag']
+    ]
+  },
+  {
+    id: 'choices',
+    title: 'Auswahl',
+    headers: ['Liste Name', 'Name', 'Bezeichnung'],
+    data: [
+      ['Pizzabeläge', 'Käse', 'Käse'],
+      ['Pizzabeläge', 'Peperoni', 'Peperoni'],
+      ['Pizzabeläge', 'Wurst', 'Wurst']
+    ]
+  }
+]} />
+
+Um Verzerrungen zu vermeiden, wird oft empfohlen, die [Zufallsfunktion](#auswahlmöglichkeiten-randomisieren) in Verbindung mit diesem Widget zu verwenden.
+
+### Bereich
+
+Um die Eingabe von ganzen Zahlen oder Dezimalzahlen auf einen bestimmten Bereich zu beschränken, können Sie die Bereichsfrage verwenden. Diese Frage kann mit drei optionalen, durch Leerzeichen getrennten Parametern verwendet werden: **Start**, **Ende** und **Schritt** in einer Parameterspalte. Die Standardwerte sind jeweils 1, 10 und 1.
+
+Das folgende Beispiel erstellt eine Frage, die Eingaben von 0 bis 17 mit einem Schritt von 1 zulässt. Die Verwendung eines Dezimalschritts führt dazu, dass Dezimalwerte erfasst werden.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Parameter'],
+    data: [
+      ['Bereich', 'Betrag', 'Wie alt ist das Kind?', 'start=0 end=17 step=1']
+    ]
+  }
+]} />
+
+Um eine Bereichsfrage als **Bewertungs-Widget** mit Sternen anzuzeigen, können Sie das Bewertungs-Layout wie unten gezeigt hinzufügen:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Darstellung', 'Parameter'],
+    data: [
+      ['Bereich', 'Bewertung', 'Welche Bewertung gibst du?', 'Bewertung', 'start=1 end=5 step=1']
+    ]
+  }
+]} />
+
+### Bild
+
+Um eine Bilddatei hochzuladen, kann der Bild-Frage-Typ verwendet werden. Um sicherzustellen, dass die Bilder nicht zu groß sind, können Sie optional den Parameter **„max-pixels"** festlegen, der das hochgeladene Bild automatisch verkleinert, sodass die längste Seite des Bildes dem angegebenen Pixelwert entspricht.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Parameter'],
+    data: [
+      ['Bild', 'Bild', 'Bild hochladen', 'max-pixels=1000']
+    ]
+  }
+]} />
+
+### Audioaufnahmequalität
+
+Bestimmte Clients verwenden einen **Qualitätswert** in der Parameterspalte, um die Audioaufnahmequalität für die Fragetypen **„Audio"** oder **„Hintergrund-Audio"** zu konfigurieren. Beide Fragetypen akzeptieren die Qualitätswerte „Nur Sprache", „Niedrig" und `extern` und `normal`. **Der Typ „Audio" akzeptiert zusätzlich die** Qualität „used for recording".
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Parameter'],
+    data: [
+      ['Audio', 'tiergeräusch', 'Qualität=normal']
+    ]
+  }
+]} />
+
+### Metadaten
+
+XLSForm bietet eine Reihe von Datentypoptionen für die Metadatenerfassung:
+
+| Metadatentyp | Bedeutung |
+|---|---|
+| start | Startdatum und -zeit der Umfrage. |
+| end | Enddatum und -zeit der Umfrage. |
+| heute | Tag der Umfrage. |
+| Geräte-ID | Eindeutige Client-Kennung. Kann vom Benutzer zurückgesetzt werden. |
+| Telefonnummer | Telefonnummer (falls vorhanden). |
+| Benutzername | Konfigurierter Benutzername (falls vorhanden). |
+| E-Mail | Konfigurierte E-Mail-Adresse (falls vorhanden). |
+| Audit | Verhalten des Enumerators während der Dateneingabe protokollieren |
+
+Beachten Sie, dass einige Metadatenfelder nur für Formulare auf Mobiltelefonen gelten.
+
+Wenn Sie beispielsweise alle diese Arten von Metadaten erfassen möchten, fügen Sie Folgendes in Ihr Formular ein (in der Regel am Anfang, es kann jedoch an einer beliebigen Stelle im Formular stehen):
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Parameter'],
+    data: [
+      ['start', 'Start', '', ''],
+      ['Ende', 'Ende', '', ''],
+      ['heute', 'heute', '', ''],
+      ['Geräte-ID', 'Geräte-ID', '', ''],
+      ['Telefonnummer', 'Telefonnummer', '', ''],
+      ['Benutzername', 'Benutzername', '', ''],
+      ['E-Mail', 'E-Mail', '', ''],
+      ['Prüfung', 'Audit', '', '[optional, siehe unten]']
+    ]
+  }
+]} />
+
+Beachten Sie, dass den Metadaten-Fragearten keine Beschriftungen zugeordnet sind. Das liegt daran, dass das Telefon diese Variablen automatisch erfasst. Diese Fragen werden nicht auf dem Bildschirm des Telefons angezeigt, aber Sie sehen sie, wenn Sie Ihre übermittelten Umfragedaten einsehen. Das [Tutorial XLSForm](https://docs.google.com/spreadsheets/d/1OPBXLH8XAVPfyOjoC4-gn2bhZ4hOm2gCtIEyszw0NRo/edit?usp=sharing) zeigt, wie Metadaten in einem Formular verwendet werden.
+
+#### Überwachen des Verhaltens der Interviewer und der Standortverfolgung
+
+*Hinweis: Derzeit ist diese Funktion nur in Collect verfügbar, nicht jedoch in Enketo-Webformularen.*
+
+Die Audit-Metafrage ermöglicht es ODK Collect, zu protokollieren, wie die Nutzer während der Dateneingabe durch ein Formular navigieren. Dies kann beispielsweise dazu verwendet werden, um zu messen, wie viel Zeit ein Interviewer für das Ausfüllen einer Frage benötigt hat, welche Antworten später bearbeitet wurden oder wann das Formular gespeichert wurde.
+
+Optional kann die Audit-Metafrage so konfiguriert werden, dass sie auch den Standort des Erhebungsbeauftragten während des gesamten Interviews aufzeichnet. Dies kann für die Qualitätskontrolle oder zur Erfassung der genauen Wege zwischen den einzelnen Befragten nützlich sein. Fügen Sie dazu Ihrem Formular eine Spalte namens **„parameters"** hinzu und geben Sie drei erforderliche Parameter ein: **location-priority**, **location-min-interval** und **location-max-age**.
+
+Das folgende Beispiel würde alle 180 Sekunden den genauen GPS-Standort erfassen und Koordinaten verwerfen, die vor mehr als 300 Sekunden erfasst wurden:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Erhebung',
+    headers: ['Typ', 'name', 'Bezeichnung', 'parameters'],
+    data: [
+      ['audit', 'Prüfung', '', 'Standort-Priorität=hohe-Genauigkeit Standort-Min-Intervall=180 Standort-Max-Alter=300']
+    ]
+  }
+]} />
+
+Auf [dieser Seite](https://docs.getodk.org/form-audit-log/) in der ODK Collect-Dokumentation finden Sie alle Details zur Audit-Metafrage, zu den verfügbaren Parametern für die Standortverfolgung und zum Format der Protokolldatei **„audit.csv"**, die bei jeder Übermittlung erstellt wird.
+
+## Hinweise
+
+### Allgemeine Hinweise
+
+Manchmal möchten Sie einer Frage in Ihrem Formular einen kleinen Hinweis hinzufügen, der dem Benutzer erklärt, wie er die Frage beantworten soll, aber Sie möchten nicht, dass der Hinweis Teil der Frage selbst ist. In XLSForms ist es ganz einfach, Fragen mit Hinweisen zu versehen. Fügen Sie einfach eine Hinweisspalte hinzu und geben Sie Ihre Hinweismeldung ein. Ein Beispiel finden Sie unten.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Hinweis'],
+    data: [
+      ['text', 'Name', 'Wie heißt dieses Geschäft?', 'Schau auf das Schild, falls das Geschäft ein Schild hat.'],
+      ['Geopunkt', 'Geopunkt', 'Erfasse die GPS-Koordinaten dieses Ladens.', '']
+    ]
+  }
+]} />
+
+Das [Tutorial XLSForm](https://docs.google.com/spreadsheets/d/1OPBXLH8XAVPfyOjoC4-gn2bhZ4hOm2gCtIEyszw0NRo/edit?usp=sharing) enthält weitere Beispiele für Fragen mit Hinweisen.
+
+### Hinweise
+
+Es gibt eine besondere Art von Hinweis, die normalerweise nicht im Formular angezeigt wird. Sie wird nur in speziellen Ansichten angezeigt. Ein Beispiel wäre die Darstellung dieser Hinweise auf Ausdrucken oder während einer Schulung für Erheber. Diese Hinweise werden als „*Guidance Hints*" bezeichnet und können in der Spalte **„guidance_hint"** hinzugefügt werden. Ein Beispiel finden Sie weiter unten.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'guidance_hint', 'relevant'],
+    data: [
+      ['Ganzzahl', 'Alter', 'Alter?', '', ''],
+      ['Text', 'Name', 'Name?', 'Dies wird nur bei einem Alter > 18 angezeigt.', '${Alter} > 18']
+    ]
+  }
+]} />
+
+## Formeln
+
+Formeln werden in den Spalten [„Einschränkung"](#einschränkungen), [„Relevant"](#relevant), [„Berechnung"](#berechnung) und [„Auslöser"](#trigger) sowie optional auch in den Spalten [„Standard"](#standard) und [„Erforderlich"](#erforderlich) verwendet. Mit Formeln können Sie Ihren Formularen zusätzliche Funktionen und Maßnahmen zur Datenqualität hinzufügen.
+
+Formeln bestehen aus Funktionen und Operatoren (+, *, div usw.). Eine gut dokumentierte vollständige Liste der Operatoren und Funktionen finden Sie in der [ODK-Dokumentation](https://docs.getodk.org/form-operators-functions/). Für technisch Interessierte ist die zugrunde liegende XForms-Spezifikation das eigentliche Quelldokument für die unterstützten [Funktionen](https://getodk.github.io/xforms-spec/#xpath-functions).
+
+### Werte in Auswahllisten oder angehängten Dateien nachschlagen
+
+Sie können Werte aus Listen abrufen, die im Auswahlblatt, in angehängten CSV-Dateien, in angehängten GeoJSON-Dateien und angehängten XML-Dateien abfragen, indem Sie die Instanzfunktion verwenden. Sie verwenden dabei folgende allgemeine Struktur:
+
+`instance('list_name')/root/item[Filterausdruck]/gewünschte_Eigenschaft`
+
+Die Instanzfunktion benötigt den Namen der Liste, in der Sie nach einem Wert suchen möchten. Bei Listen, die im Auswahlblatt angegeben sind, ist dies der `list_name`. Bei angehängten Dateien verwenden Sie den Dateinamen ohne die Erweiterung. Zum Beispiel:
+
+- Um Werte in einer im Auswahlblatt definierten Obstliste nachzuschlagen, verwende `instance('fruits')`
+- Um Werte in einer participants.csv-Datei nachzuschlagen, verwenden Sie `instance('participants')`
+- Um Werte in einer „places.geojson"-Datei nachzuschlagen, verwenden Sie `instance('places')`
+
+Der nächste Teil des Ausdrucks lautet `/root/item[Filterausdruck]`. `/root/item` bedeutet, dass jedes Element in die Liste, und der angegebene Filterausdruck wird verwendet, um Elemente einzubeziehen, für die der Ausdruck `wahr` und Elemente auszuschließen, für die der Ausdruck `falsch` ist. Es handelt sich um denselben Ausdruck, der auch in der Spalte [„choice_filter"](#kaskadierende-auswahl) verwendet wird. Die gängigste Art von Filterausdruck sucht nach einer exakten Übereinstimmung in der `name` Spalte eines Elements:
+
+- Um das Element in participants.csv mit dem Namen eines gescannten Barcodes abzurufen:
+  `instance('participants')/root/item[name=${barcode_id}]`
+- Um das Element in participants.csv mit dem Namen eines Werts, der aus einer Auswahl stammt, abzurufen:
+  `instance('participants')/root/item[name=${participant}]`
+
+Der letzte Teil des Ausdrucks ist ein Eigenschafts- oder Spaltenname, auf den zugegriffen wird, um die Elemente abzurufen, die dem Filterausdruck entsprechen:
+
+- Um das Alter eines Teilnehmers abzurufen, dessen Ausweis gescannt wurde:
+  `instance('participants')/root/item[name=${barcode_id}]/age`
+- Um den Vornamen eines aus einer Liste ausgewählten Teilnehmers abzurufen:
+  `instance('participants')/root/item[name=${participant}]/fname`
+
+Dies ist in der Regel die bevorzugte Methode zum Abrufen von Werten aus angehängten Dateien, da sie am vielseitigsten ist und anwendungsübergreifend funktioniert. Das Abrufen von Werten aus Dateien mit mehreren Zehntausend Optionen kann jedoch die Reaktionsgeschwindigkeit des Formulars beeinträchtigen. Wenn Sie lange Auswahllisten haben, prüfen Sie, ob Ihr Formular auf dem Gerät mit der geringsten Leistung, das Ihr Datenerfassungsteam verwenden wird, ausreichend reaktionsschnell ist. Sollte es zu langsam sein, ziehen Sie die Verwendung von [`pulldata()`](#so-rufen-sie-daten-aus-einer-csv-datei-ab) in Betracht, sofern Ihre Datenerfassungsanwendung dies unterstützt.
+
+> Diese Ausdrücke verwenden eine Teilmenge von [XPath 1.0](https://developer.mozilla.org/en-US/docs/Web/XPath). Der Filterausdruck in eckigen Klammern kann ein beliebiger Ausdruck sein, der zu „wahr" oder „falsch" ausgewertet wird, einschließlich der Verwendung von Funktionen.
+
+### Externe CSV-Daten
+
+Wenn Sie eine CSV-Datei an Ihr Formular anhängen möchten, um darin Werte nachzuschlagen, haben Sie mehrere Möglichkeiten. Wenn Sie eine Auswahl aus den Werten dieser CSV erstellen müssen, können Sie [`select_one_from_file`](#mehrfachauswahl-aus-datei) verwenden. Dadurch wird die CSV an Ihr Formular angehängt und Sie können darin Werte nachschlagen, wie oben beschrieben.
+
+Wenn Sie keine Auswahl aus den Werten in Ihrer CSV-Datei erstellen müssen, können Sie den Typ **„csv-external"** verwenden und den Namen der Datei ohne Dateiendung angeben:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['type', 'name', 'Bezeichnung', 'Berechnung'],
+    data: [
+      ['csv-external', 'Teilnehmer', '', ''],
+      ['Barcode', 'ID', 'ID scannen', ''],
+      ['berechnen', 'Vorname', '', "instance('participants')/root/item[participant_id=${id}]/fname"]
+    ]
+  }
+]} />
+
+Das obige Beispielformular fügt die `participants.csv` Liste an das Formular an. Anschließend wird nach einem Barcode-Scan gefragt und verwendet den gescannten Wert, um den Teilnehmer mit der passenden ID in der `participant_id` Spalte. Der Wert in Die `Vorname` Spalte wird in der `Vorname` berechnen.
+
+### Externe XML-Daten
+
+Für Benutzer, die komplexe Abfragen auf externe Daten ohne Einschränkungen durchführen müssen, kann eine externe XML-Datendatei mit dem Fragetyp **xml-external** hinzugefügt werden. Der Wert in der Spalte **„name"** kann verwendet werden, um in jeder Formel (z. B. für eine Berechnung, eine Einschränkung, eine Relevanzprüfung oder einen Auswahlfilter) mithilfe der Funktion **instance('name')** auf diese Daten zu verweisen. Eine Datei mit demselben Namen und der Erweiterung **.xml** sollte zusammen mit dem Formular hochgeladen werden. Unten finden Sie ein Beispiel, bei dem eine Datei namens houses.xml zusammen mit dem Formular hochgeladen werden muss.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Berechnung'],
+    data: [
+      ['xml-extern', 'Häuser', '', ''],
+      ['Ganzzahl', 'Zimmer', 'Wie viele Zimmer?', ''],
+      ['berechnen', 'Zählen', '', "count(instance('Häuser')/Haus[Zimmer = current()/../Zimmer ])"]
+    ]
+  }
+]} />
+
+Beachten Sie, dass XML-Dateien eine beliebige Struktur haben können, daher folgt `/root/item`. `instance` Aufrufe zum Abrufen von Werten aus einer XML-Datei sind möglicherweise nicht.
+
+## Einschränkungen
+
+Eine Möglichkeit, die Datenqualität sicherzustellen, besteht darin, den Datenfeldern in Ihrem Formular Einschränkungen hinzuzufügen. Wenn Sie beispielsweise nach dem Alter einer Person fragen, möchten Sie unmögliche Antworten wie -22 oder 200 vermeiden. Das Hinzufügen von Datenbeschränkungen in Ihrem Formular ist ganz einfach. Fügen Sie einfach eine neue Spalte namens **„Einschränkung"** hinzu und geben die Formel ein, die die Grenzen für die Antwort festlegt. Im folgenden Beispiel muss die Antwort für das Alter der Person kleiner oder gleich 150 sein. Beachten Sie, wie das `.` in der Formel auf die Fragevariable verweist.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'Einschränkung'],
+    data: [
+      ['Ganzzahl', 'Alter', 'Wie alt bist du?', '. <= 150']
+    ]
+  }
+]} />
+
+In diesem Beispiel besagt die Formel `. <= 150`, dass der eingegebene Wert `.` Die Antwort auf die Frage muss kleiner oder gleich 150 sein. Wenn der Benutzer 151 oder mehr als Antwort eingibt, darf er nicht zur nächsten Frage übergehen oder das Formular absenden.
+
+Weitere nützliche Ausdrücke für die Spalte **„Einschränkung"** finden Sie [hier](https://docs.getodk.org/form-logic/). Schauen Sie unter dem Abschnitt **„Operatoren"** nach.
+
+### Einschränkungsmeldung
+
+Wenn Sie Ihrer Einschränkung eine Meldung hinzufügen möchten, die dem Benutzer erklärt, warum die Antwort nicht akzeptiert wird, können Sie Ihrem Formular eine Spalte **„constraint_message"** hinzufügen. Siehe das folgende Beispiel.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Einschränkung', 'constraint_message'],
+    data: [
+      ['Ganzzahl', 'Alter des Befragten', 'Alter des Befragten', '. >=18', 'Der Befragte muss mindestens 18 Jahre alt sein, um an der Umfrage teilzunehmen.']
+    ]
+  }
+]} />
+
+Wenn der Benutzer in diesem Beispiel ein Alter unter 18 Jahren eingibt, wird die Fehlermeldung in der Spalte **„constraint_message"** angezeigt. Weitere Beispiele zu Einschränkungen sind in [diesem XLSForm](https://docs.google.com/spreadsheets/d/1g12xGrOsnNYezG6WtTfeusxzypRT1JHeUC2uNbe03sc/edit?usp=sharing) dargestellt.
+
+## Relevant
+
+Eine großartige Funktion von XLSForm ist die Möglichkeit, eine Frage zu überspringen oder eine zusätzliche Frage anzuzeigen, je nach Antwort auf eine vorherige Frage. Nachfolgend finden Sie ein Beispiel dafür, wie dies durch Hinzufügen einer Spalte **„relevant"** für eine „select_one"-Frage umgesetzt werden kann, wobei wir unser vorheriges Beispiel mit den Pizzabelägen verwenden:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'label', 'relevant'],
+    data: [
+      ['select_one ja_nein', 'mag_Pizza', 'Magst du Pizza?', ''],
+      ['Mehrfachauswahl Pizzabeläge oder_anderes', 'Lieblingsbelag', 'Lieblingsbelag', "${likes_pizza} = 'ja'"]
+    ]
+  }
+]} />
+
+In diesem Beispiel wird der Befragte gefragt: „Magst du Pizza?" Wenn die Antwort **„Ja"** lautet, erscheint unten die Frage nach dem Pizzabelag Frage darunter. Beachten Sie die `${ }` Klammern um die Variable **likes_pizza**. Diese sind erforderlich, damit die auf die Variable aus der vorherigen Frage verweisen kann.
+
+Die Festlegung der Relevanz basierend auf dem Wert einer select_multiple-Frage unterscheidet sich geringfügig von **dem** Beispiel im obigen Beispiel:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'relevant'],
+    data: [
+      ['select_one ja_nein', 'mag_Pizza', 'Magst du Pizza?', ''],
+      ["Wähle mehrere Beläge aus oder andere", 'Lieblingsbelag', 'Lieblingsbeläge', "${likes_pizza} = 'ja'|text|favorite_topping|Käse|Was ist deine Lieblingskäsesorte? |selected(${favorite_topping}, 'cheese')"]
+    ]
+  },
+  {
+    id: 'choices',
+    title: 'Auswahlmöglichkeiten',
+    headers: ['Liste Name', 'name', 'Bezeichnung'],
+    data: [
+      ['Pizzabeläge', 'Käse', 'Käse'],
+      ['Pizzabeläge', 'Peperoni', 'Peperoni'],
+      ['Pizzabeläge', 'Wurst', 'Wurst']
+    ]
+  }
+]} />
+
+Da bei der Frage nach dem Pizzabelag mehrere Antworten möglich sind, müssen wir die Funktion `selected(${favorite_topping}, 'Käse')` verwenden, da die Frage nach dem Käse jedes Mal erscheinen soll, wenn der Benutzer **Käse** als eine der Antworten auswählt (unabhängig davon, ob weitere Antworten ausgewählt werden).
+
+Im Abschnitt [„Sonstiges angeben"](#anderes-angeben) wird erwähnt, dass die Funktion „relevance" verwendet werden kann, um bei Multiple-Choice-Fragen eine Freitext-Option „Sonstiges" anzugeben. Die Vorteile dieser Vorgehensweise gegenüber der Verwendung der Abkürzung **„or_other"** bestehen darin, dass Sie die Kontrolle über den Namen der Auswahlmöglichkeit haben, den Text festlegen können, den der Benutzer sieht, und dass dies auch bei mehrsprachigen Formularen funktioniert. Hier ist ein Beispiel:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'relevant'],
+    data: [
+      ['select_multiple pizza_toppings', 'Lieblingsbeläge', 'Was sind deine Lieblings-Pizzabeläge?', ''],
+      ['Text', 'Lieblingsbeläge_Sonstiges', 'Welche anderen Beläge magst du?', "selected(${favorite_toppings}, 'other')"]
+    ]
+  },
+  {
+    id: 'choices',
+    title: 'Auswahlmöglichkeiten',
+    headers: ['Listenname', 'name', 'Bezeichnung'],
+    data: [
+      ['Pizzabeläge', 'Käse', 'Käse'],
+      ['Pizzabeläge', 'Peperoni', 'Peperoni'],
+      ['Pizzabeläge', 'Wurst', 'Wurst'],
+      ['Pizzabeläge', 'Sonstiges', 'Sonstiges']
+    ]
+  }
+]} />
+
+Beachten Sie, dass Sie **„Sonstiges"** als Antwortmöglichkeit in das Arbeitsblatt **„Antwortmöglichkeiten"** aufnehmen müssen.
+
+## Berechnung
+
+Ihre Umfrage kann Berechnungen anhand der Werte aus den vorhergehenden Fragen durchführen. In den meisten Fällen ist die Verwendung einer Frage vom Typ **„Berechnung"** angemessen. In der folgenden Umfrage haben wir beispielsweise das Trinkgeld für eine Mahlzeit berechnet und es dem Benutzer angezeigt:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'Berechnung'],
+    data: [
+      ['Dezimal', 'Betrag', 'Wie viel hat das Essen gekostet?', ''],
+      ['berechnen', 'Trinkgeld', '', '${Betrag} * 0,18'],
+      ['Anmerkung', 'Anzeigen', '18 % Trinkgeld für Ihre Mahlzeit beträgt: ${tip}', '']
+    ]
+  }
+]} />
+
+Beachten Sie, dass das **${tip}** in der letzten Zeile beim Anzeigen und Ausfüllen des Formulars durch den tatsächlichen Trinkgeldbetrag ersetzt wird.
+
+Der Berechnungstyp dient zur Berechnung **von Text**, Berechnungen können jedoch auch zu jedem anderen Fragetyp hinzugefügt werden. Nicht-Text-Typen können für die Datenanalyse nützlich sein, z. B. wenn ein Datum oder eine Datums- und Zeitangabe berechnet wird. **Wenn keine Beschriftung und kein Hinweis angegeben sind, wird die Berechnung ausgeblendet.** Siehe das folgende Beispiel, das dem vorherigen Formular entspricht:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Hinweis', 'Berechnung'],
+    data: [
+      ['Dezimal', 'Betrag', 'Wie viel hat das Essen gekostet?', '', ''],
+      ['Text', 'Trinkgeld', '', '', '${Betrag} * 0,18'],
+      ['Anmerkung', 'Anzeige', '18 % Trinkgeld für Ihre Mahlzeit beträgt: ${tip}', '', '']
+    ]
+  }
+]} />
+
+Und dies ist ein Beispiel dafür, wann aufgrund von Anforderungen an die Datenanalyse ein Nicht-Text-Typ benötigt wird:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Hinweis', 'Berechnung'],
+    data: [
+      ['Datum', 'Tag', '', '', 'heute()']
+    ]
+  }
+]} />
+
+**Beachten Sie, dass die Verwendung von Berechnungstypen, die kein Text sind, keinen Einfluss auf die Verwendung des Berechnungsergebnisses innerhalb des Formulars selbst hat.** Dies ist ein häufiges Missverständnis.
+
+Wenn eine Beschriftung oder ein Hinweis angegeben wird, wird die Frage im Formular angezeigt und der berechnete Wert erscheint im Eingabefeld oder Widget. Dies wird im Allgemeinen nur für **schreibgeschützte** Fragen empfohlen, um eine Neuberechnung (und damit das Löschen) eines vom Benutzer eingegebenen Werts zu vermeiden. Siehe das folgende Beispiel:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'readonly', 'Berechnung'],
+    data: [
+      ['Dezimal', 'Betrag', 'Wie viel hat das Essen gekostet?', '', ''],
+      ['Anmerkung', 'Anzeige', '18 % Trinkgeld für Ihr Essen betragen:', '', '${Betrag} * 0,18'],
+      ['Datum', 'heute', 'Das heutige Datum ist:', 'true', 'today()']
+    ]
+  }
+]} />
+
+Beachten Sie den Unterschied zum ersten Formular in diesem Abschnitt: Der berechnete Trinkgeldbetrag wird hier anders angezeigt. Im ersten Beispiel wurde er in der Beschriftung angezeigt, im letzten Beispiel hingegen in einem schreibgeschützten Eingabefeld.
+
+## Trigger
+
+Eine Trigger-Spalte kann verwendet werden, um eine Berechnung nur **dann** auszuführen, **wenn sich eine andere sichtbare Frage im Formular ändert**. Das bedeutet, dass die Frage, die als Trigger dient, **eine Beschriftung oder einen Hinweis haben muss** (ansonsten wird sie ausgeblendet). Hier ein einfaches, aber sehr nützliches Beispiel:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Berechnung', 'Trigger'],
+    data: [
+      ['Ganzzahl', 'Temp', 'Geben Sie die aktuelle Temperatur ein', '', ''],
+      ['DatumZeit', 'temp_ts', '', 'now()', '${temp}']
+    ]
+  }
+]} />
+
+Dies berechnet einen Zeitstempel unmittelbar nachdem ein Befragter eine Temperatur eingegeben hat. Wenn der Benutzer zurückgeht und die Temperatur ändert, wird der Zeitstempel neu berechnet.
+
+Alle regulären [Berechnungsfunktionen](#berechnung) gelten auch für diese speziellen, durch Wertänderungen ausgelösten Berechnungen. So können Sie z. B. eine Beschriftung oder einen Hinweis verwenden, um dem Benutzer die Berechnungsfrage im Formular anzuzeigen.
+
+Mehrere Fragen können denselben Auslöser haben. Sehen Sie sich dieses Beispiel an, in dem zwei Berechnungen durch die Temperaturfrage ausgelöst werden (eine ist ausgeblendet, die andere wird angezeigt):
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'Berechnung', 'Auslöser', 'schreibgeschützt'],
+    data: [
+      ['Ganzzahl', 'temp', 'Temperatur in Celsius eingeben', '', '', ''],
+      ['Datum/Uhrzeit', 'temp_ts', '', 'now()', '${temp}', ''],
+      ['text', 'temp_F', 'Temperatur in Fahrenheit', '32 + 1,8 * ${temp}', '${temp}', 'true'],
+      ['berechnen', 'temp_K', '', '273,15 + ${temp}', '${temp}', '']
+    ]
+  }
+]} />
+
+Im obigen Formular wird dem Benutzer die Frage „temp_F" angezeigt und die Frage „temp_K" ausgeblendet, genau wie es der Fall wäre, wenn der Trigger nicht verwendet würde.
+
+Ein wichtiger und leistungsstarker Unterschied zu regulären Berechnungen besteht darin, dass **der Berechnungswert bei Verwendung eines Triggers auch leer sein kann**, was dazu dient, einen Wert aus dem Formular zu löschen. Siehe das folgende Beispiel:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Berechnung', 'Trigger'],
+    data: [
+      ['Text', 'Name', 'Wie heißt die älteste Person hier?', '', ''],
+      ['Ganzzahl', 'Alter', 'Wie alt ist diese Person?', '', 'S{name}']
+    ]
+  }
+]} />
+
+Wenn der Befragte, der dieses Formular verwendet, den Namen und das Alter von Person A eingegeben hat und anschließend feststellt, dass es eine ältere Person B gibt, wird das Feld „Alter" gelöscht, sobald der Name von Person B eingegeben wurde.
+
+## Erforderlich
+
+Es ist ganz einfach, bestimmte Fragen in Ihrem Formular als Pflichtfelder zu kennzeichnen. Wenn Sie sie als Pflichtfelder kennzeichnen, kann der Benutzer nicht zur nächsten Frage übergehen oder das Formular absenden, ohne eine Antwort auf diese Frage eingegeben zu haben.
+
+Um Fragen als Pflichtfelder zu kennzeichnen, fügen Sie Ihrem Umfrage-Arbeitsblatt eine Spalte **„Pflichtfeld"** hinzu. Markieren Sie die Fragen in dieser Spalte als Pflichtfelder, indem Sie **„Ja"** eintragen. Siehe das folgende Beispiel:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'Einschränkung', 'erforderlich'],
+    data: [
+      ['Ganzzahl', 'Alter', 'Wie alt bist du?', '. <= 150', 'ja']
+    ]
+  }
+]} />
+
+### Erforderliche Meldung
+
+Wenn du die Meldung anpassen möchtest, die Benutzern angezeigt wird, wenn sie eine Pflichtfrage leer lassen, kannst du deinem Formular eine Spalte **„required_message"** hinzufügen. Siehe das Beispiel unten.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'required', 'required_message'],
+    data: [
+      ['Ganzzahl', 'Alter des Befragten', 'Alter des Befragten', 'ja', 'Entschuldigung, diese Antwort ist erforderlich.']
+    ]
+  }
+]} />
+
+## Auswahlmöglichkeiten randomisieren
+
+Bei allen Fragetypen, bei denen eine **Liste mit Antwortmöglichkeiten** angezeigt wird, kann die Reihenfolge der dem Benutzer angezeigten Antwortmöglichkeiten mithilfe der Spalte **„Parameter"** zufällig angeordnet werden. Siehe unten:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['type', 'parameters', 'name', 'Bezeichnung'],
+    data: [
+      ['select_one toppings', 'randomize=true', 'oben', 'Favorit?']
+    ]
+  }
+]} />
+
+Für eine reproduzierbare Zufallsauswahl kann ein **Startwert** wie unten gezeigt explizit angegeben werden. Weitere Informationen zum verwendeten Zufallsalgorithmus finden Sie [hier](https://getodk.github.io/xforms-spec/#fn:randomize).
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Parameter', 'name', 'Bezeichnung', 'Berechnung'],
+    data: [
+      ['berechnen', '', 'sd', '', 'einmal(decimal-date-time(now()))'],
+      ['select_one Beläge', 'randomize=true, seed=${sd}', 'top', 'Favorit?', '']
+    ]
+  }
+]} />
+
+Beachten Sie, dass `once()` verwendet wird, um eine erneute Zufallsauswahl zu verhindern, beispielsweise wenn ein Entwurf zur Bearbeitung geladen wird.
+
+## Gruppierung von Fragen
+
+Um eine Gruppe von Fragen in Ihrem Formular zu erstellen, verwenden Sie die Syntax **begin_group…end_group**.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung'],
+    data: [
+      ['begin group', 'Befragter', 'Befragter'],
+      ['Text', 'Name', 'Geben Sie den Namen des Befragten ein'],
+      ['Text', 'Position', 'Geben Sie die Position des Befragten innerhalb der Schule ein.'],
+      ['Gruppe beenden', '', '']
+    ]
+  }
+]} />
+
+Dies ist eine gute Möglichkeit, verwandte Fragen für den Datenexport und die Analyse zu gruppieren. Beachten Sie, dass **„Endgruppe"** keinen Namen oder keine Bezeichnung benötigt, da sie im Formular ausgeblendet ist.
+
+In Ihrem Formular können Sie die Darstellung als Feldliste für eine Gruppe verwenden, um mehrere Fragen auf demselben Bildschirm anzuzeigen.
+
+### Gruppen innerhalb von Gruppen verschachteln
+
+Fragengruppen können ineinander verschachtelt werden:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung'],
+    data: [
+      ['Gruppe beginnen', 'Krankenhaus', 'Krankenhaus'],
+      ['Text', 'Name', 'Wie heißt dieses Krankenhaus?'],
+      ['Gruppe beginnen', 'hiv_medication', 'HIV-Medikamente'],
+      ['Wähle eine Option aus Ja_Nein', 'have_hiv_medication', 'Verfügt dieses Krankenhaus über HIV-Medikamente?'],
+      ['Gruppe beenden', '', ''],
+      ['Gruppe beenden', '', '']
+    ]
+  }
+]} />
+
+Sie müssen immer zuerst die zuletzt erstellte Gruppe beenden. Die erste **Endgruppe**, die Sie sehen, schließt beispielsweise die Gruppe „HIV-Medikamente", und die zweite schließt die Gruppe „Anfangskrankenhaus". Wenn Sie mit Gruppen arbeiten und beim Hochladen Ihres Formulars immer wieder Fehlermeldungen erhalten, überprüfen Sie bitte, ob Sie für jede **Startgruppe** eine **Endgruppe** haben.
+
+### Überspringen
+
+Eine praktische Funktion von XLSForm ist die Möglichkeit, eine Gruppe von Fragen zu überspringen, indem man die Gruppenfunktion mit der [entsprechenden](#relevant) Syntax kombiniert. Wenn Sie eine Gruppe von Fragen auf einmal überspringen möchten, setzen Sie das entsprechende Attribut wie folgt an den Anfang einer Gruppe:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['type', 'name', 'label', 'relevant'],
+    data: [
+      ['integer', 'Alter', 'Wie alt bist du?', ''],
+      ['Gruppe beginnen', 'Kind', 'Kind', '${age} <= 5'],
+      ['Ganzzahl', 'MUAC', 'Erfassen Sie den Oberarmumfang dieses Kindes.', ''],
+      ['select_one ja_nein', 'mrdt', 'Ist der Schnelltest des Kindes positiv?', ''],
+      ['end group', '', '', '']
+    ]
+  }
+]} />
+
+Im obigen Beispiel werden die beiden Fragen zur Untergruppe (**muac** und **mrdt**) nur angezeigt, wenn das **Alter** des Kindes aus der ersten Frage fünf Jahre oder weniger beträgt.
+
+## Wiederholungen
+
+Ein Benutzer kann Fragen mithilfe der Konstrukte **„begin repeat"** und **„end repeat"** wiederholen:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung'],
+    data: [
+      ['Wiederholung beginnen', 'child_repeat', ''],
+      ['Text', 'Name', 'Name des Kindes'],
+      ['Dezimal', 'Geburtsgewicht', 'Geburtsgewicht des Kindes'],
+      ['select_one ja_nein', 'Fruehgeburt', 'War es eine Frühgeburt?'],
+      ['Ende Wiederholung', '', '']
+    ]
+  },
+  {
+    id: 'choices',
+    title: 'Auswahlmöglichkeiten',
+    headers: ['Liste Name', 'Name', 'Bezeichnung'],
+    data: [
+      ['ja_nein', 'ja', 'Ja'],
+      ['ja_nein', 'nein', 'Nein']
+    ]
+  }
+]} />
+
+Im obigen Beispiel sind die Felder **„Name"**, **„Geburtsgewicht"** und **„Frühgeburt"** in einer Wiederholung zusammengefasst, und der Benutzer kann dieselben Informationen zu mehreren Kindern erfassen, indem er im Formular die Option zum Hinzufügen einer weiteren Wiederholung auswählt.
+
+Die Beschriftungsspalte ist für **den Beginn einer Wiederholung** optional. Durch die Zuweisung einer Beschriftung zu einer Wiederholung wird diese als Titel zum Block der Wiederholungsfragen im Formular hinzugefügt. Eine aussagekräftige Beschriftung hilft den Interviewern und Teilnehmern, sich wie vorgesehen im Formular zurechtzufinden. Wir empfehlen generell die Verwendung eines Substantivs oder einer Substantivgruppe im Singular, wie z. B. „Beobachtung" oder „Haushaltsmitglied".
+
+Diese Interaktion kann für Benutzer beim ersten Mal verwirrend sein. Wenn die Interviewer die Anzahl der Wiederholungen im Voraus kennen, sollten Sie die Verwendung einer [dynamisch definierten Wiederholungsanzahl](#dynamische-wiederholungsanzahl) in Betracht ziehen.
+
+Wenn eine Wiederholung im Inhaltsverzeichnis angezeigt wird, entspricht die Bezeichnung, die für jede Wiederholung verwendet wird, der Bezeichnung der ersten Gruppe innerhalb dieser Wiederholung. Im folgenden Beispiel gilt: Wenn eine Wiederholung mit den Werten „Preity" für „first_name" und „Zinta" für „last_name" und 71 für „age" ausgefüllt ist, wird diese Wiederholung als „Preity Zinta – 71" zusammengefasst:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung'],
+    data: [
+      ['Wiederholung beginnen', 'person_repeat', ''],
+      ['begin group', 'Person', '${Vorname} ${Nachname} - ${Alter}'],
+      ['Text', 'Vorname', 'Vorname'],
+      ['text', 'Nachname', 'Nachname'],
+      ['Ganzzahl', 'Alter', 'Alter'],
+      ['Ende der Gruppe', '', ''],
+      ['Ende Wiederholung', '', '']
+    ]
+  }
+]} />
+
+Das XLSForm-Formular [„Delivery Outcome"](https://docs.google.com/spreadsheets/d/1_gCJml_FzJ4qiLU-yc67x1iu_GL-hfU3H8-HvINsIoE/edit?usp=sharing) ist ein weiteres Beispiel für eine Wiederholung.
+
+### Feste Wiederholungsanzahl
+
+Anstatt eine unbegrenzte Anzahl von Wiederholungen zuzulassen, kann der Formular-Designer mithilfe der Spalte **„repeat_count"** eine genaue Anzahl von Wiederholungen festlegen:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'repeat_count'],
+    data: [
+      ['Wiederholung beginnen', 'Unterwiederholung', '', '3'],
+      ['text', 'name', 'Name des Kindes', ''],
+      ['Dezimal', 'Geburtsgewicht', 'Geburtsgewicht des Kindes', ''],
+      ['Wiederholung beenden', '', '', '']
+    ]
+  }
+]} />
+
+Im obigen Beispiel werden genau **3** untergeordnete Wiederholungen erstellt.
+
+### Dynamische Wiederholungsanzahl
+
+Die Wiederholungsanzahl kann auf einen Ausdruck gesetzt werden, der sich auf andere Felder im Formular bezieht. Im folgenden Beispiel bestimmt die Zahl, die der Benutzer für das Feld **„num_hh_members"** eingibt, die Anzahl der hinzugefügten „hh_member"-Wiederholungen:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Wiederholungsanzahl'],
+    data: [
+      ['Ganzzahl', 'Anzahl_Haushaltsmitglieder', 'Anzahl der Haushaltsmitglieder?', ''],
+      ['begin repeat', 'hh_member', '', '${num_hh_members}'],
+      ['text', 'name', 'Name', ''],
+      ['Ganzzahl', 'Alter', 'Alter', ''],
+      ['Ende Wiederholung', '', '', '']
+    ]
+  }
+]} />
+
+### Wiederholungen nur unter bestimmten Bedingungen hinzufügen
+
+Wie [bei Gruppen](#überspringen) können alle Fragen in einer Wiederholung basierend auf einer bestimmten Bedingung übersprungen werden. Im folgenden Beispiel erhält die Person, die das Formular ausfüllt, nur dann die Möglichkeit, Kinder hinzuzufügen, wenn sie zuvor angibt, dass Kinder hinzuzufügen sind:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'relevant'],
+    data: [
+      ['select_one yes_no', 'hat_Kind', 'Leben hier Kinder?', ''],
+      ["Wiederholung beginnen", 'child_repeat', '', "${has_child} = 'ja'"],
+      ['text', 'name', 'Name des Kindes', ''],
+      ['Dezimal', 'Geburtsgewicht', 'Geburtsgewicht des Kindes', ''],
+      ['Wiederholung beenden', '', '', '']
+    ]
+  },
+  {
+    id: 'choices',
+    title: 'Auswahlmöglichkeiten',
+    headers: ['list_name', 'Name', 'Bezeichnung'],
+    data: [
+      ['ja_nein', 'ja', 'Ja'],
+      ['ja_nein', 'nein', 'Nein']
+    ]
+  }
+]} />
+
+### Darstellung von null Wiederholungen
+
+Standardmäßig werden dem Ausfüllenden zunächst die Fragen für eine Wiederholung angezeigt, bevor er die Möglichkeit erhält, weitere hinzuzufügen. Um 0 Wiederholungen darzustellen, gibt es drei Möglichkeiten:
+
+- Weisen Sie die Personen, die das Formular ausfüllen, an, die erste hinzugefügte Wiederholung zu löschen
+- Wenn die genaue Anzahl der Wiederholungen im Voraus bekannt ist, [verwenden Sie eine dynamische Wiederholungsanzahl](#dynamische-wiederholungsanzahl)
+- Wenn die genaue Anzahl der Wiederholungen nicht im Voraus bekannt ist, [verwenden Sie „relevant"](#wiederholungen-nur-unter-bestimmten-bedingungen-hinzufügen), um den Benutzer nur dann zur Eingabe von Wiederholungen aufzufordern, wenn welche hinzugefügt werden sollen
+
+## Unterstützung mehrerer Sprachen
+
+Es ist ganz einfach, ein Formular um mehrere Sprachen zu erweitern. Sie müssen lediglich Ihre **Beschriftungen** wie folgt benennen: **label::language1 (Code)**, **label::language2 (Code)** usw., und schon sind Ihre Formulare in mehreren Sprachen verfügbar. Siehe das folgende Beispiel. Wählen Sie im Pulldown-Menü der Datenerfassungsanwendung (dieses befindet sich möglicherweise unter der Menütaste) eine andere Formularsprache aus. Für das untenstehende Formular werden Englisch und Spanisch als mögliche Optionen angezeigt.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'label::English (en)', 'label::Español (es)', 'Einschränkung'],
+    data: [
+      ['Ganzzahl', 'Alter', 'Wie alt bist du?', 'Wie alt bist du?', '. <= 150']
+    ]
+  }
+]} />
+
+Du kannst auch verschiedene Sprachspalten für Hinweise und Mediendateien hinzufügen, indem du die `::language (Code)` Syntax verwendest. Siehe auch die [XLSForm-Referenz](https://xlsform.org/en/ref-table/), die eine Liste aller Spaltenüberschriften enthält, bei denen eine Sprachänderung vorgenommen werden kann.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['hint::Englisch (en)', 'hint::Niederländisch (nl)', 'image::Englisch (en)', 'image::Niederländisch (nl)'],
+    data: [
+      ['ein Hinweis', 'ein Hinweis', 'old_person_cartoon.png', 'ouwe_strip.png']
+    ]
+  }
+]} />
+
+Die Sprache des Formulars und die Sprache der Benutzeroberfläche können von der Anwendung separat festgelegt werden und stimmen möglicherweise nicht überein. Um (in Zukunft) eine Übereinstimmung beider Sprachen zu erleichtern, wird empfohlen – wenn auch optional –, einen zweistelligen Sprachcode hinter dem Sprachnamen anzufügen. Die offiziellen zweistelligen Sprachcodes, sogenannte *Subtags*, sind [hier](http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry) veröffentlicht (durchsuchen Sie die Seite mit Strg-F oder Cmd-F).
+
+Wenn Ihr Formular mehrere Sprachen definiert und Sie eine Sprache für die Datenerfassung festlegen möchten, legen Sie eine explizite Standardsprache fest. Dies geschieht im Einstellungsblatt des XLSForms, indem Sie die Sprache in der Spalte **„default_language"** angeben. Im folgenden Beispiel ist die Standardsprache Französisch.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'settings',
+    title: 'Einstellungen',
+    headers: ['form_id', 'version', 'default_language'],
+    data: [
+      ['test_form', '101', 'Französisch (fr)']
+    ]
+  }
+]} />
+
+## Medien
+
+Sie können Fragen in Ihr Formular einfügen, die Bilder anzeigen oder Video- bzw. Audiodateien abspielen. Wenn Sie den ODK-Mobilclient für die Formularübermittlung verwenden, müssen Sie die Mediendateien, die Sie einfügen möchten, in den Ordner **„/odk/forms/formname-media"** auf Ihrem Smartphone und verweisen Sie dann in Ihrem Formular auf den genauen Dateinamen in der Spalte **„media"** in Ihrem Formular. Unten finden Sie ein Beispiel dafür, wie das funktioniert.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Bild', 'Video'],
+    data: [
+      ['Anmerkung', 'Medienbeispiel', 'Medienbeispiel', 'Beispiel.jpg', 'Beispiel.mp4']
+    ]
+  }
+]} />
+
+Sehen Sie sich das [XLSForm-Beispiel „Birds"](https://docs.google.com/spreadsheets/d/1Rxft3H3xl3M9bLFGR2XhXzt1ucyFmd0qFmOQ6FaqJw4/edit?usp=sharing) an, das die Verwendung von Mediendateien veranschaulicht. Sie können auch auf den Link klicken, um das [Webformular „Birds"](https://enketo.ona.io/x/#Ynv3) anzuzeigen.
+
+Medien sind genauso übersetzbar wie Beschriftungen und Hinweise, wie im Abschnitt [„Sprachen"](#unterstützung-mehrerer-sprachen) erläutert.
+
+## Standard
+
+Das Hinzufügen eines Standardfelds bedeutet, dass eine Frage beim ersten Anzeigen für den Benutzer bereits mit einer Antwort vorbelegt ist. Dies kann Zeit sparen, wenn es sich um eine häufig ausgewählte Antwort handelt, oder dem Benutzer zeigen, welche Art von Antwort erwartet wird. Siehe das Beispiel unten.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'Standard'],
+    data: [
+      ['Datum', 'Umfragedatum', 'Erhebungsdatum?', '15.06.2010'],
+      ['Dezimal', 'Gewicht', 'Gewicht des Befragten? (in kg)', '51,3']
+    ]
+  }
+]} />
+
+Der Befragte kann die Antwort ganz einfach ändern, indem er auf das Antwortfeld tippt und eine andere Antwort eingibt.
+
+Sie können auch eine Standardberechnung hinzufügen, die nur einmal berechnet wird, wenn das Formular geladen wird oder – falls sich die Frage innerhalb einer [Wiederholung](#wiederholungen) befindet – wenn die Wiederholung hinzugefügt wird.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'Standard'],
+    data: [
+      ['Datum', 'd', 'Geben Sie das Datum ein, an dem das Ereignis stattfand?', 'today()']
+    ]
+  }
+]} />
+
+## Schreibgeschützt
+
+Das Hinzufügen eines schreibgeschützten Feldes bedeutet, dass eine Frage nicht bearbeitet werden kann. Schreibgeschützte Felder können mit Standardfeldern kombiniert werden, um dem Benutzer Informationen anzuzeigen.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'read_only', 'Standard'],
+    data: [
+      ['Ganzzahl', 'num', 'Bitte geben Sie die Patientennummer ein:', 'ja', '5']
+    ]
+  }
+]} />
+
+## Darstellung
+
+In der Spalte **„Darstellung"** können Sie das Erscheinungsbild der Fragen in Ihrem Formular ändern. Die folgende Tabelle listet die möglichen Darstellungsattribute auf und zeigt, wie die Frage im Formular angezeigt wird.
+
+| Darstellungsattribut | Fragetyp | Beschreibung |
+|---|---|---|
+| Mehrzeilig | Text | Am besten für Web-Clients geeignet, macht das Textfeld mehrzeilig. |
+| minimal | select_one, select_multiple | Die Antwortmöglichkeiten werden in einem Pulldown-Menü angezeigt. |
+| quick | select_one | Dieses Attribut ist nur für mobile Clients relevant und springt automatisch zur nächsten Frage, sobald eine Antwort ausgewählt wurde. |
+| no-calendar | date | Nur für mobile Geräte; wird verwendet, um den Kalender auszublenden. |
+| Monat-Jahr | Datum | Wählen Sie für das Datum nur einen Monat und ein Jahr aus. |
+| Jahr | Datum | Wählen Sie nur ein Jahr für das Datum aus. |
+| horizontal-compact | select_one, select_multiple | Nur für Web-Clients: Hier werden die Antwortmöglichkeiten horizontal angezeigt. |
+| horizontal | select_one, select_multiple | Nur für Web-Clients: Hier werden die Antwortmöglichkeiten horizontal, jedoch in Spalten angezeigt. |
+| likert | select_one | Am besten für Web-Clients geeignet; die Antwortmöglichkeiten werden als Likert-Skala dargestellt. |
+| compact | select_one, select_multiple | Zeigt Antwortoptionen nebeneinander mit minimalem Abstand und ohne Optionsfelder oder Kontrollkästchen an. Besonders nützlich bei Bildauswahlmöglichkeiten. |
+| quickcompact | select_one | Wie oben, springt jedoch automatisch zur nächsten Frage (nur bei mobilen Clients). |
+| field-list | groups | Die gesamte Gruppe von Fragen wird auf einem Bildschirm angezeigt (nur für mobile Clients). |
+| label | select_one, select_multiple | Zeigt die Bezeichnungen der Antwortoptionen an (und nicht die Eingabefelder). |
+| list-nolabel | select_one, select_multiple | Wird in Verbindung mit dem oben genannten label-Attribut verwendet und zeigt die Antwortfelder ohne Beschriftungen an (achten Sie darauf, die Felder **label** und **list-nolabel** in eine Gruppe mit dem Attribut **field-list** einzufügen, wenn Sie einen mobilen Client verwenden). |
+| table-list | groups | Eine einfachere Möglichkeit, das gleiche Erscheinungsbild wie oben zu erzielen: Wenden Sie dieses Attribut auf die gesamte Fragengruppe an (kann das Formular etwas verlangsamen). |
+| signature | image | Ermöglicht es Ihnen, Ihre Unterschrift in das Formular einzufügen (nur für mobile Clients). |
+| Zeichnen | Bild | Ermöglicht es Ihnen, mit dem Finger eine Zeichnung auf dem Bildschirm des Mobilgeräts zu erstellen. |
+| Karte, Schnellkarte | select_one, select_one_from_file | Ermöglicht es einem Benutzer, eine Auswahl aus vielen Objekten auf einer Karte zu treffen |
+
+Ein XLSForm mit allen Darstellungsattributen in dieser Tabelle ist [hier](https://docs.google.com/spreadsheets/d/1af_Sl8A_L8_EULbhRLHVl8OclCfco09Hq2tqb9CslwQ) verfügbar.
+
+## Einstellungs-Arbeitsblatt
+
+Das Einstellungs-Arbeitsblatt ist optional, es wird jedoch dringend empfohlen, zumindest **„form_title"**, **„form_id"** und **„version"** anzugeben. Mit weiteren Einstellungen können Sie Ihr Formular noch individueller anpassen, beispielsweise durch Festlegen eines allgemeinen Stilthemas oder durch Verschlüsseln Ihrer Datensätze.
+
+Nachfolgend finden Sie ein Beispiel für ein Einstellungsblatt:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'settings',
+    title: 'Einstellungen',
+    headers: ['form_title', 'form_id', 'version', 'instance_name', 'Standard_Sprache', 'öffentlicher_Schlüssel'],
+    data: [
+      ['Beispiel', 'ex_id', '2017021501', "concat(${Vorname}, ' ', ${Nachname})", 'Englisch (en)', 'IIBIjANBg...']
+    ]
+  }
+]} />
+
+Die verfügbaren Spaltenüberschriften für die Einstellungen sind:
+
+- **form_title**: Der Titel des Formulars, der den Benutzern angezeigt wird. Der Formulartitel wird aus **form_id** übernommen, wenn **form_title** leer ist oder fehlt.
+- **form_id**: Der Name, der zur eindeutigen Identifizierung des Formulars auf dem Server verwendet wird. Die Formular-ID wird aus dem Namen der XLS-Datei übernommen, wenn **form_id** leer ist oder fehlt.
+- **version**: Zeichenfolge, die diese Version angibt. Eine gängige Konvention ist die Verwendung von Zeichenfolgen im Format „yyyymmddrr". Beispielsweise steht 2017021501 für die erste Überarbeitung vom 15. Februar 2017.
+- **instance_name**: Ausdruck, der Formularfelder verwendet, um jede Formularübermittlung zu identifizieren. [Weitere Informationen](#geben-sie-den-namen-der-formularübermittlung-an).
+- **default_language**: In lokalisierten Formularen legt dies fest, welche Sprache als Standard verwendet werden soll. Es sollte dasselbe Format wie beim [Hinzufügen von Übersetzungen](#unterstützung-mehrerer-sprachen) verwendet werden, einschließlich des Sprachcodes.
+- **public_key**: Bei Formularen mit Verschlüsselung wird hier der öffentliche Schlüssel eingefügt. [Weitere Informationen](#verschlüsselte-formulare).
+- **submission_url**: Diese URL kann verwendet werden, um den Standard-Server zu überschreiben, an die abgeschlossene Datensätze übermittelt werden sollen. [Mehr erfahren](#geben-sie-einen-alternativen-server-an).
+- **style**: Geben Sie für Webformulare den Formularstil an. [Weitere Informationen](#formulare-mit-mehreren-webseiten).
+- **name**: Name des XForms-Stammknotens. Dies ist selten erforderlich, [mehr erfahren](#geben-sie-den-namen-des-xforms-stammknotens-an).
+- **clean_text_values**: Diese Spalte kann verwendet werden, wenn `ja` oder `nein` um zu steuern, ob Leerzeichen im das Umfrageformular ausgeblendet ist (Standardwert ist „ja").
+
+### Verschlüsselte Formulare
+
+Verschlüsselte Formulare bieten einen Mechanismus, um *endgültige* Datensätze jederzeit vertraulich zu halten. Dies gilt sowohl für die Zeit, *nachdem ein Datensatz als endgültig markiert wurde* und auf dem Gerät sowie auf dem Server gespeichert ist, als auch während der Übertragung, selbst wenn für die Kommunikation HTTP verwendet wird. Verschlüsselte Datensätze einschließlich ihrer hochgeladenen Dateien, wie beispielsweise Fotos, sind für jeden, der nicht im Besitz des privaten Schlüssels ist, vollständig unzugänglich.
+
+Um XLS-Formulare zu verschlüsseln, fügen Sie die Spalte **„public_key"** in das Einstellungs-Arbeitsblatt ein und fügen Sie den Base64-kodierten öffentlichen RSA-Schlüssel als Wert ein.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'settings',
+    title: 'Einstellungen',
+    headers: ['form_id', 'public_key'],
+    data: [
+      ['mysurvey', 'IIBIjANBgklawWEserewrwesgdreewrwe32serfserfewrwerewtwe r23sgfrqjwerk3423432...']
+    ]
+  }
+]} />
+
+Weitere Informationen zu verschlüsselten Formularen und zur Generierung der RSA-Schlüssel finden Sie in der [ODK-Dokumentation](https://docs.getodk.org/encrypted-forms/) und in [diesem Beispielformular](https://docs.google.com/spreadsheets/d/1O2VW5dNxXeyr-V_GB3spS6QPX4rtqtt7ijqP_uZLU3I/edit?usp=sharing).
+
+### Geben Sie einen alternativen Server an
+
+In der Spalte **„submission_url"** des **Einstellungs**-Arbeitsblatt **angeben**. Achten Sie darauf, die vollständige URL anzugeben, an die die Antworten gesendet werden sollen, *einschließlich des Pfads*.
+
+Wenn diese Spalte weggelassen oder leer gelassen wird, werden die Übermittlungen an das Standardziel des Anbieters gesendet, den Sie für Ihre Umfragen verwenden.
+
+### Geben Sie den Namen der Formularübermittlung an
+
+Im Einstellungsblatt können Sie für jede Formularübermittlung einen eindeutigen Namen festlegen, indem Sie Felder verwenden, die der Benutzer während der Umfrage ausgefüllt hat. Fügen Sie im Einstellungsblatt eine Spalte mit **dem Namen „instance_name"** hinzu. Geben Sie den Ausdruck ein, der den eindeutigen Namen der Formularinstanz anhand der Felder aus dem Umfrageblatt definiert.
+
+Sehen Sie sich [dieses Beispiel für ein XLSForm](https://docs.google.com/a/ona.io/spreadsheets/d/1Bapi05GYITV6D0THvs9RaOSEjqb1-FWIhfjSTXtvl8I/edit#gid=1932003628) an, das den Instanznamen als Zusammensetzung aus dem Vor- und Nachnamen des Benutzers und der UUID der Formularübermittlung berechnet.
+
+### Geben Sie den Namen des XForms-Stammknotens an
+
+In einigen seltenen Fällen kann es hilfreich sein, einen [Namen](https://getodk.github.io/xforms-spec/#primary-instance) für den [Stammknoten](https://getodk.github.io/xforms-spec/#primary-instance) der generierten XForm explizit anzugeben. Dies kann beispielsweise erforderlich sein, wenn ein Formular aktualisiert wird, das mit einem älteren Formularkonverter konvertiert wurde, der einen anderen Namen als `data` für den Stammknoten verwendet hat. Im Einstellungs-Arbeitsblatt können Sie einen Bezeichner für den Namen des XForms-Stammknotens festlegen, indem Sie eine Spalte mit **dem Namen „name"** hinzufügen. Standardmäßig lautet der Name des XForms-Stammknotens `data`.
+
+### Formulare mit mehreren Webseiten
+
+Webformulare können mithilfe des Stils „Theme **Pages**" auf mehrere Seiten aufgeteilt werden.
+
+Ein Beispiel für ein Formular, das auf mehrere Seiten aufgeteilt ist, finden Sie im Webformular [„Widgets auf Seiten"](https://enketo.ona.io/x/#YjeC). Erstellen Sie auf der Registerkarte **„Einstellungen"** eine Spalte mit dem Namen **„Stil"** und legen Sie diese wie folgt auf **„Seiten"** fest:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'settings',
+    title: 'Einstellungen',
+    headers: ['form_title', 'form_id', 'style'],
+    data: [
+      ['Beispieltitel', 'Beispiel-ID', 'Seiten']
+    ]
+  }
+]} />
+
+Gruppieren Sie auf der Registerkarte **„Umfrage"** die Fragen, die auf jeder Seite erscheinen sollen, und legen Sie dann die Darstellung der Gruppe auf **„Feldliste"** fest. Siehe das folgende Beispiel.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'Darstellung'],
+    data: [
+      ['Typ', 'Name', 'Bezeichnung', 'Erscheinungsbild'],
+      ['Gruppe beginnen', 'Gruppe1', '', 'Feldliste'],
+      ['Text', 'Name', 'Name des Befragten', ''],
+      ['Ganzzahl', 'Alter', 'Alter des Befragten', ''],
+      ['Text', 'Adresse', 'Adresse des Befragten', ''],
+      ['Endgruppe', '', '', '']
+    ]
+  }
+]} />
+
+Weitere Informationen zum Erstellen mehrseitiger Webformulare finden Sie in diesem [Blogbeitrag](http://blog.enketo.org/pages/). Den Quellcode für XLSForm finden Sie [hier](https://docs.google.com/spreadsheets/d/1yZqG2Xt0I4duVxPqx-Sny0t86OiKtjHuBKXTRzCht6E/edit?usp=sharing).
+
+### Formulare im Raster-Design
+
+Der Grid-Stil ermöglicht es Ihrem Formular, das Aussehen traditioneller Papierfragebögen nachzuahmen, indem mehrere Fragen in einer Zeile zusammengefasst werden. Dieser Stil eignet sich am besten für größere Bildschirme (z. B. Computer oder Tablets). Außerdem lässt er sich gut ausdrucken!
+
+Bitte klicken Sie auf den Link, um ein Beispiel für ein [Webformular im Grid-Design](https://enketo.ona.io/x/#Yn4R) zu sehen.
+
+Um ein Formular im Raster-Stil zu erstellen, geben Sie auf der Registerkarte **„Einstellungen"** in der Spalte **„Stil"** wie folgt **„theme-grid"** ein:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'settings',
+    title: 'Einstellungen',
+    headers: ['form_title', 'form_id', 'style'],
+    data: [
+      ['Beispieltitel', 'Beispiel-ID', 'Theme-Raster']
+    ]
+  }
+]} />
+
+Gruppieren Sie auf der Registerkarte **„Umfrage"** die Fragen, die in den einzelnen Abschnitten erscheinen sollen, und legen Sie dann die Darstellung für jedes Feld entsprechend der gewünschten Breite fest (die Standardbreite ist 4). Siehe das folgende Beispiel.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Darstellung'],
+    data: [
+      ['Gruppe beginnen', 'Gruppe1', '', ''],
+      ['Text', 'Name', 'Name des Befragten', 'w3'],
+      ['Ganzzahl', 'Alter', 'Alter des Befragten', 'w1'],
+      ['Text', 'Adresse', 'Adresse des Befragten', 'w4'],
+      ['Endgruppe', '', '', '']
+    ]
+  }
+]} />
+
+Weitere Informationen zum Erstellen von Grid-Formularen finden Sie in diesem [Blogbeitrag](http://blog.enketo.org/gorgeous-grid/). Das XLSForm-Beispiel für das Grid-Theme finden Sie [hier](https://docs.google.com/spreadsheets/d/1Z4gHZQTr5FibRK-Aj198WlNdMZghEBZlyWhmPZXjzJQ/edit?usp=sharing).
+
+## Gestaltung von Eingabeaufforderungen
+
+Die Markdown-Unterstützung in XLSForm ermöglicht in ODK Collect 1.4.9 und Enketo eine stärkere Hervorhebung durch Fett- und Kursivschrift, unterschiedlich große Überschriften, verschiedene Schriftarten und Farben sowie anklickbare Weblinks.
+
+- *Heben Sie* Wörter *hervor*, indem Sie sie in `_` oder `*` einschließen
+- Wörter **stark hervorheben**, indem man sie in `__` oder `**` einschließt
+- einen Link hinzufügen, `[Name des Links](URL)`
+- Füge Überschriften in verschiedenen Größen ein, indem du dem Überschriftentext ein # (größte) bis ###### (kleinste) voranstellst
+- Gestalte den Text hinsichtlich Farbe oder Schriftart mit span-Tags (z. B. `<span style="color:#f58a1f">orange</span>`, `<span style="color:red; font-family:cursive">rot und kursiv</span>`)
+- Fügen Sie mit Strg-Eingabetaste oder Strg-Alt-Eingabetaste einen Zeilenumbruch an der gewünschten Stelle ein (bei manchen Tabellenkalkulationsprogrammen kann die Tastenkombination abweichen)
+- Fügen Sie Ihre Lieblings-Emojis hinzu!
+- Verwenden Sie Hochstellung mit dem Tag `<sup>` (z. B. wird aus `100 m<sup>2</sup>` 100 m²)
+- Verwenden Sie den Tag `<sub>` für den Index (z. B. wird `H<sub>2</sub>O` zu H₂O)
+- Verwenden Sie das `\` Zeichen vor #, *, _ und \, um zu verhindern, dass spezielle Formatierungseffekte durch diese Zeichen
+
+## Erweiterte Nutzung und Erweiterbarkeit
+
+Mit XLSForm lassen sich XForms mit benutzerdefinierten oder experimentellen Funktionen erstellen. Dies eignet sich hervorragend für benutzerdefinierte Anwendungen mit einer spezifischen Funktion, die für die breitere Community nicht geeignet ist.
+
+Das Erhebungsformular unterstützt drei Spaltenpräfixe (**instance::**, **bind::**, **body::**), die der XForms-Ausgabe Attribute hinzufügen, entweder im *primären Instanz-*, *Bind-* oder *Formularsteuerelement*. Weitere Informationen zu XForms finden Sie in der [ODK-XForms-Spezifikation](https://getodk.github.io/xforms-spec/). Im folgenden Beispiel wird dem primären Instanzknoten einer Frage ein benutzerdefiniertes „hxl"-Attribut hinzugefügt.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['type', 'name', 'label', 'instance::hxl'],
+    data: [
+      ['integer', 'Bevölkerung', 'Wie viele Personen sind anwesend?', '#Bevölkerung']
+    ]
+  }
+]} />
+
+Das Einstellungsblatt bietet die Möglichkeit, über die Spalte **„Namensräume"** zusätzliche benutzerdefinierte Namensräume (durch Leerzeichen getrennt) und Namensraumpräfixe zu definieren. Sie können diese Namespaces dann im Umfrageblatt verwenden, um beispielsweise ein benutzerdefiniertes Attribut mit [dem Namespace Ihrer Organisation](https://github.com/getodk/xforms-spec#specification-changes) korrekt zu definieren. Beachten Sie, dass das Spaltennamenpräfix *zwei* Doppelpunkte enthält (z. B. `bind::`), während der Namespace-Präfix *einen* Doppelpunkt enthält (z. B. `esri:`). Im folgenden Beispiel werden zwei zusätzliche Namespaces hinzugefügt und zum Hinzufügen benutzerdefinierter Attribute verwendet:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'settings',
+    title: 'Einstellungen',
+    headers: ['title', 'Namespaces'],
+    data: [
+      ['Mein Formular', 'esri="http://esri.com/xforms" enk="http://enketo.org/xforms"']
+    ]
+  },
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'bind::esri:fieldLength', 'bind::enk:for'],
+    data: [
+      ['Text', 'Beschreibung', 'Beschreibung', '50', ''],
+      ['text', 'desc_comment', 'Kommentare', '', 'S{a}']
+    ]
+  }
+]} />
+
+Das Einstellungsblatt unterstützt ein 1-spaltiges Präfix (**attribute::**), das der XForm-Ausgabe im Hauptinstanzelement (standardmäßig `data` genannt) Attribute hinzufügt. Das folgende Beispiel würde in der XForm-Ausgabe beispielsweise wie folgt erscheinen: `<data id="my_form" xyz="1234"/>`.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'settings',
+    title: 'Einstellungen',
+    headers: ['title', 'attribute::xyz'],
+    data: [
+      ['Mein Formular', '1234']
+    ]
+  }
+]} />
+
+Wie bei den oben genannten Umfragespalten kann die Einstellung **„attribute::"** mit der Einstellung **„namespaces"** kombiniert werden, um ein Attribut mit Namensraum hinzuzufügen. Das folgende Beispiel würde beispielsweise in der XForm-Ausgabe wie folgt erscheinen: `<data id="my_form" abc:xyz="1234"/>`.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'settings',
+    title: 'Einstellungen',
+    headers: ['title', 'attribute::abc:xyz'],
+    data: [
+      ['Mein Formular', '1234']
+    ]
+  }
+]} />
+
+## Tools, die XLSForms unterstützen
+
+- [Ona](https://ona.io)
+- [Enketo](https://enketo.org)
+- [ODK](https://getodk.org)
+- [KoBoToolBox](https://kobotoolbox.org)
+- [CommCare](https://commcarehq.org)
+- [SurveyCTO](https://www.surveycto.com)
+- [Secure Data Kit (SDK)](http://www.securedatakit.com)
+- [Survey123 für ArcGIS](https://survey123.arcgis.com)
+- [Community Health Toolkit](https://communityhealthtoolkit.org)
+- [CyberTracker](https://cybertrackerwiki.org/xlsform)
+
+## Anhang – Laden großer CSV-Dateien
+
+> **Warnung:** In diesem Abschnitt werden weniger allgemeine Alternativen zu [`select_one_from_file`](#mehrfachauswahl-aus-datei) und der [Instanzfunktion](#werte-in-auswahllisten-oder-angehängten-dateien-nachschlagen) beschrieben. Diese sind in einigen Tools, die das Ausfüllen von XLSForms ermöglichen, möglicherweise leistungsfähiger, funktionieren jedoch in anderen möglicherweise nicht.
+
+### Vorladen von Daten
+
+Das Vorladen von Daten erfolgt, wenn man in einem Umfrageformular auf bereits vorhandene Daten verweisen möchte. Sie können in Ihrem Umfrageformular (der Umfrage, die Sie gerade erstellen) auf Daten aus einem bestimmten Umfrageformular oder aus einer beliebigen anderen Quelle verweisen. Wenn Sie beispielsweise bereits über Daten aus einer Haushaltsbefragung verfügen und Folgedaten über die Haushaltsmitglieder erfassen möchten, können Sie in Ihrem Umfrageformular auf die Daten der Haushaltsbefragung verweisen.
+
+So verweisen Sie in einem Umfrageformular auf bereits vorhandene Daten:
+
+- Laden Sie beim Hochladen Ihrer Formulardefinition eine oder mehrere CSV-Dateien als Begleitdateien hoch (genauso, wie Sie Begleitdateien für Medien hochladen, wie im Abschnitt [„Medien"](#medien) beschrieben). Die erste Zeile jeder CSV-Datei sollte eine Kopfzeile enthalten, die kurze,
+- eindeutige Namen für jede Spalte
+- die folgenden Zeilen, die die Daten selbst enthalten sollten
+
+Jede CSV-Datei sollte mindestens eine Spalte enthalten, anhand derer jede Zeile eindeutig identifiziert werden kann. Diese Spalten werden zum Zeitpunkt der Umfrage verwendet, um nachzuschlagen, welche Zeilendaten in die Umfrage übernommen werden sollen. Fügen Sie bei den Spalten, die zum Nachschlagen von Zeilen verwendet werden sollen, in der ersten Zeile **„_key"** an das Ende des Spaltennamens an. Alle Spalten, deren Namen auf **„_key"** enden, werden für schnellere Abfragen auf Ihren Umfragegeräten indiziert.
+
+| name_key | name |
+|---|---|
+| mango | Mango |
+| orange | Orange |
+
+### So rufen Sie Daten aus einer CSV-Datei ab
+
+> **Warnung:** Wenn Sie `select_one_from_file` verwenden, um Auswahloptionen aus einer Datei anzuzeigen, sollten Sie generell die `instance`-Funktion verwenden, um Werte in dieser Datei nachzuschlagen, anstatt `pulldata`.
+
+Sie können Daten aus einer CSV-Datei abrufen, indem Sie während der Umfrage eine oder mehrere CSV-Dateien in Ihr Formular einbinden. Für jedes Datenfeld, das Sie in Ihre Umfrage einbinden möchten:
+
+- **F**ügen Sie Ihrer Umfrage ein **Berechnungsfeld** hinzu.
+- Geben Sie diesem Feld einen **Namen**
+- Rufen Sie dann in der Berechnungsspalte die Funktion `pulldata()` auf und geben Sie an, welches Feld aus welcher Zeile welcher CSV-Datei abgerufen werden soll.
+
+Ein Beispiel finden Sie unten:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'name', 'Bezeichnung', 'Berechnung'],
+    data: [
+      ['berechnen', 'Obst', '', "pulldata('Obst', 'Name', 'name_key', 'Mango')"],
+      ['Anmerkung', 'note_fruit', 'Die Frucht ${fruit} wurde aus der CSV-Datei abgerufen.', '']
+    ]
+  }
+]} />
+
+Sobald Sie mit der Funktion **pulldata()** CSV-Daten in ein Umfragefeld geladen haben, können Sie in späteren Relevanzbedingungen, Einschränkungen und Beschriftungen auf dieses Feld verweisen, genau wie Sie auf jedes andere Feld verweisen würden, das vom Benutzer ausgefüllt wurde.
+
+Klicken Sie auf den Link, um ein Beispiel für ein [vorbelegtes Formular](https://docs.google.com/spreadsheets/d/1evieF8RW8CMlhbhksgfikXAYvK6uXh3DS5c50ejTSEw/edit?usp=sharing) zu sehen. Die mit dem Formular verwendete CSV-Datei finden Sie [hier](https://docs.google.com/spreadsheets/d/1gprb7ocTYlT_seOBFY5CuoxyodcXwWOuVxmp38OX1dE/edit?usp=sharing).
+
+### Wichtige Hinweise zur Verwendung vorbelegter Daten
+
+- Speichern Sie die CSV-Datei im **UTF-8-Format**, wenn die vorab geladenen Daten nicht-englische Schriftarten oder Sonderzeichen enthalten. Dadurch kann Ihr Android-Gerät den Text korrekt darstellen.
+- Aus einer CSV-Datei geladene Datenfelder werden als Textzeichenfolgen behandelt; verwende daher die Funktionen **int()** oder **number()**, um ein vorab geladenes Feld in numerische Form zu konvertieren.
+- Wenn die CSV-Datei sensible Daten enthält, die Sie möglicherweise nicht auf den Server hochladen möchten, laden Sie eine leere CSV-Datei als Teil Ihres Formulars hoch und ersetzen Sie diese anschließend durch die eigentliche CSV-Datei, indem Sie die Datei manuell auf jedes Ihrer Geräte kopieren.
+
+### Dynamische Auswahl aus vorab geladenen Daten
+
+> **Warnung:** Verwenden Sie [`select_one_from_file`](#mehrfachauswahl-aus-datei), es sei denn, Sie benötigen mehr als 50.000 Optionen oder erfassen Daten auf alten oder leistungsschwachen Geräten. Dieser Ansatz wird von Enketo-Webformularen nicht unterstützt.
+
+Sobald Ihr Formular über eine oder mehrere vorab geladene CSV-Dateien verfügt, können Sie die Auswahllisten für **„select_one"**- und „select_multiple"-Felder dynamisch aus diesen CSV-Dateien abrufen. Mehrfachauswahlfelder mit dynamischen Auswahllisten folgen derselben allgemeinen Syntax wie reguläre, statische „select_one"- und „select_multiple"-Felder, wie zuvor im Abschnitt [„Mehrfachauswahl"](#mehrfachauswahl) erläutert.
+
+Führen Sie Folgendes aus:
+
+- Geben Sie **„select_one listname"** oder **„select_multiple listname"** in der Spalte „type" an (wobei **„listname"** der Name Ihrer Auswahlliste ist)
+- Geben Sie etwaige spezielle **Darstellungsstile** in der Spalte „appearance" an
+- Fügen Sie eine oder mehrere Zeilen für Ihren listname in das Arbeitsblatt „choices" ein.
+
+Nachfolgend finden Sie ein Beispiel für das **Umfrageformular**:
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'survey',
+    title: 'Umfrage',
+    headers: ['Typ', 'Name', 'Bezeichnung', 'Aussehen'],
+    data: [
+      ["Wähle eine Option aus Früchte", 'Früchte', 'Wähle eine Frucht aus', "search('Obst')"]
+    ]
+  }
+]} />
+
+Es gibt drei Unterschiede, wenn die Auswahlliste aus einer Ihrer vorab geladenen CSV-Dateien abgerufen werden soll:
+
+- In der Spalte „Darstellung":
+  - Fügen Sie einen **search()-Ausdruck** ein, der angibt, welche CSV-Zeilen in die Auswahlliste aufgenommen werden sollen.
+  - Wenn für das Feld ein vom Standard abweichender Darstellungsstil verwendet werden soll. Der vom Standard abweichende Darstellungsstil wird zuerst in die Spalte eingegeben, gefolgt von einem **Leerzeichen** und anschließend dem **Ausdruck „search()"**. [z. B. „quick search()"]
+- Im Arbeitsblatt „Auswahlmöglichkeiten":
+  - sollte eine Zeile angeben, welche CSV-Spalten für die Bezeichnung und den ausgewählten Wert verwendet werden sollen. Wie folgt:
+    - Spalte **„list_name"**: Geben Sie den Namen Ihrer Auswahlliste wie gewohnt an.
+    - Spalte **„name"**: Geben Sie den Namen der CSV-Spalte an, die zur eindeutigen Identifizierung der ausgewählten Optionen verwendet werden soll.
+    - Bezeichnungsspalte: Geben Sie den Namen der CSV-Spalte an, die zur Beschriftung der Auswahlmöglichkeiten verwendet werden soll.
+
+    **Hinweis:** Wenn Sie mehrere Spalten in die Beschriftungen aufnehmen möchten, geben Sie eine durch Kommas getrennte Liste aller einzubeziehenden Spalten an. Die Namensspalte wird dynamisch anhand des dort angegebenen Spaltennamens ausgefüllt, und die Beschriftungsspalte wird dynamisch anhand der dort angegebenen Spaltennamen ausgefüllt.
+
+  - In der Zeile „Auswahlmöglichkeiten" Ihres Arbeitsblatts können Sie in der Spalte „Bild" auch einen Spaltennamen aus einer CSV-Datei angeben. In diesem Fall wird der zu verwendende Bilddateiname aus der angegebenen CSV-Spalte übernommen.
+
+    **Hinweis:** Wenn Sie auf diese Weise auf Bilddateien verweisen, müssen Sie diese Bilddateien immer als Mediendateianhänge hochladen, wenn Sie Ihr Formular auf den Server hochladen.
+
+<XlsFormDisplay worksheets={[
+  {
+    id: 'choices',
+    title: 'Auswahlmöglichkeiten',
+    headers: ['Listenname', 'Name', 'Bezeichnung'],
+    data: [
+      ['Obst', 'Namensschlüssel', 'Name']
+    ]
+  }
+]} />
+
+Klicken Sie auf den Link, um ein Beispiel für ein [Such- und Auswahlformular](https://docs.google.com/spreadsheets/d/1Y0vW0cjl1nbkZczXRmcTC71Pso8dRbouPSYWGBdvBWU/edit?usp=sharing) anzuzeigen. Die mit dem Formular verwendete CSV-Datei finden Sie [hier](https://docs.google.com/spreadsheets/d/1gprb7ocTYlT_seOBFY5CuoxyodcXwWOuVxmp38OX1dE/edit?usp=sharing).
+
+Für den **Ausdruck search()** gibt es eine Reihe von Optionen, um anzugeben, welche CSV-Zeilen in die Auswahlliste aufgenommen werden sollen:
+
+1. **search(csvName)**: Der Suchausdruck mit einem einzigen Parameter umfasst alle eindeutigen Zeilen als Auswahlmöglichkeiten (z. B. „search('hhplotdata')"). Alle Zeilen in der angegebenen CSV-Datei werden als Auswahlmöglichkeiten berücksichtigt, aber nur eindeutige Zeilen – also solche mit eindeutigen Auswahldaten – werden dem Benutzer angezeigt. Mit anderen Worten: Duplikate werden automatisch aus der dem Benutzer angezeigten Liste herausgefiltert.
+
+2. **search(csvName, „contains", columnsToSearch, searchText)**: Dieser Suchausdruck umfasst alle eindeutigen Zeilen, die den angegebenen Text in der/den angegebenen Spalte(n) enthalten (z. B. „search('hhplotdata', 'contains', 'respondentname', ${nametofind})"). Der dritte Parameter gibt entweder einen einzelnen Spaltennamen für die Suche oder eine durch Kommas getrennte Liste von Spaltennamen an. Es werden alle Zeilen einbezogen, die in einer der angegebenen Spalten Übereinstimmungen aufweisen.
+
+3. **search(csvName, „startswith", columnsToSearch, searchText)**: Dieser Suchausdruck umfasst alle eindeutigen Zeilen, die in der/den angegebenen Spalte(n) mit dem angegebenen Text beginnen (z. B. „search('hhplotdata', 'startswith', 'respondentname', ${nameprefix})"). Der dritte Parameter gibt entweder einen einzelnen Spaltennamen für die Suche oder eine durch Kommas getrennte Liste von Spaltennamen für die Suche an. Es werden alle Zeilen berücksichtigt, die in einer der angegebenen Spalten Übereinstimmungen enthalten.
+
+4. **search(csvName, „endswith", columnsToSearch, searchText)**: Dieser Suchausdruck umfasst alle eindeutigen Zeilen, die in der/den angegebenen Spalte(n) mit dem angegebenen Text enden (z. B. „search('hhplotdata', 'endswith', 'respondentname', ${namesuffix})"). Der dritte Parameter gibt entweder einen einzelnen Spaltennamen für die Suche oder eine durch Kommas getrennte Liste von Spaltennamen für die Suche an. Zeilen mit Übereinstimmungen in einer der angegebenen Spalten werden einbezogen.
+
+5. **search(csvName, „matches", columnsToSearch, searchText)**: Dieser Suchausdruck umfasst alle eindeutigen Zeilen, die den angegebenen Text in der/den angegebenen Spalte(n) exakt enthalten (z. B. „search('hhplotdata', 'matches', 'respondentname', ${nametofind})"). Der dritte Parameter gibt entweder einen einzelnen Spaltennamen für die Suche oder eine durch Kommas getrennte Liste von Spaltennamen an. Zeilen mit exakten Übereinstimmungen in einer der angegebenen Spalten werden einbezogen.
+
+6. **search(csvName, searchType, columnsToSearch, searchText, columnToFilter, filterText)**: Schließlich kann jeder der vier oben genannten Suchtypen weiter gefiltert werden, um nur eine Teilmenge der CSV-Daten einzubeziehen. Fügen Sie einfach zwei zusätzliche Parameter zu einem der oben genannten Suchtypen hinzu, wobei der erste zusätzliche Parameter der zu filternde Spaltenname und der zweite zusätzliche Parameter der genaue zu filternde Wert ist. Unabhängig davon, welche Suche in den ersten vier Parametern angegeben ist, werden nur Zeilen berücksichtigt, die den Wert des sechsten Parameters in der durch den fünften Parameter benannten Spalte genau enthalten (z. B. „search('hhplotdata', 'contains', 'respondentname', ${nametofind}, 'villageid', ${villageid})", um alle übereinstimmenden Namen innerhalb eines bestimmten Dorfes aufzulisten).
+
+Zusätzliche Hinweise zur Verwendung:
+
+1. Die Auswahlmöglichkeiten werden standardmäßig in der Reihenfolge sortiert, in der sie in Ihrer CSV-Datei erscheinen. Wenn Sie eine andere Reihenfolge festlegen möchten, fügen Sie in Ihrer CSV-Datei eine numerische Spalte mit dem Namen „sortby" ein; die Auswahlmöglichkeiten werden dann numerisch entsprechend der „sortby"-Spalte sortiert (sofern vorhanden).
+
+2. Sie können zusätzlich zu den dynamischen Optionen, die aus Ihrer CSV-Datei geladen werden, eine oder mehrere statische Auswahloptionen einfügen. Fügen Sie die statischen Optionen einfach wie gewohnt in das Arbeitsblatt „choices" ein. Diese können vor und/oder nach der Zeile erscheinen, die die Spalten angibt, die für Ihre dynamischen Optionen verwendet werden sollen. Die einzige Einschränkung besteht darin, dass die Werte, die Sie für Ihre statischen Optionen in der Spalte „name" angeben, numerisch sein müssen.
+
+### Datenbankgestützte „schnelle externe Itemsets"
+
+> **Warnung:** Wir empfehlen generell die Verwendung von [`select_one_from_file`](#mehrfachauswahl-aus-datei), es sei denn, Sie benötigen mehr als 50.000 Zeilen oder sehr alte Geräte. Dieser Ansatz wird von Enketo-Webformularen nicht unterstützt.
+
+Das Aktivieren externer Auswahlfelder ist unkompliziert.
+
+- Verwenden Sie statt **„select_one"** für den Prompt-Typ **„select_one_external"**.
+- Anstelle des „choices"-Blattes fügen Sie externe Auswahlmöglichkeiten in das **„external_choices"**-Blatt ein.
+
+Ein Beispiel für die Verwendung von normalen und externen Auswahlmöglichkeiten finden Sie im Formular [„select_one_external"](https://docs.google.com/spreadsheets/d/12qZL34kuHSZGWDv0BBJ1qf7dSmml-d2VnMWH0Vtg-O4/edit?usp=sharing).
+
+Wenn ein XLSForm mit externen Auswahlmöglichkeiten in ein XForm konvertiert wird, werden zwei Dateien erstellt: das **XForm** (z. B. form-filename.xml) mit allen normalen Auswahlmöglichkeiten und eine Datei **„itemsets.csv"** mit den externen Auswahlmöglichkeiten.
+
+Die Datei **itemsets.csv** kann als Mediendatei auf jeden ODK-kompatiblen Server (z. B. ODK Aggregate) hochgeladen werden. Sie wird wie jede andere Mediendatei auf jeden ODK-kompatiblen Client (z. B. ODK Collect) heruntergeladen und im Ordner [Formular-Dateiname]-media gespeichert. Clients wie ODK Collect laden Mediendateien von der SD-Karte, sodass Ihr Formular mit einer großen Anzahl von Auswahlmöglichkeiten nun sehr schnell geladen wird.
+
+## Weitere Ressourcen
+
+Wenn Sie sich eingehender mit XForms befassen und über die Informationen zu XLSForms auf dieser Website hinausgehen möchten, finden Sie hier einige Ressourcen:
+
+- [XForms, wie sie vom ODK-Ökosystem unterstützt werden](https://getodk.github.io/xforms-spec/)
+- [ODK-Richtlinien zum Formular-Design](https://docs.getodk.org/form-design-intro/)
+- [Übersicht über das Formular-Design in Ona](https://help.ona.io/knowledge-base/guide-creating-surveys/)
+- [KoBoToolbox-Hilfezentrum für Formularentwurf](https://support.kobotoolbox.org/getting_started_xlsform.html)
+
+## Über diese Website
+
+XLSForm.org ist ein von der Community getragenes Projekt, dessen Ziel es ist, eine gemeinsame Referenz für den XLSForm-Standard zu schaffen.
+
+Wenn Sie zu dieser Dokumentation beitragen oder sie verbessern möchten, besuchen Sie bitte [das GitHub-Repo](https://github.com/XLSForm/xlsform.github.io) unseres Projekts.
+
+## Geschichte
+
+XLSForm wurde ursprünglich von Andrew Marder und Alex Dorey vom [Sustainable Engineering Lab der Columbia University](http://sel.columbia.edu) entwickelt. Als XLSForms von der ODK-Community übernommen wurden, arbeitete SEL mit dem ODK-Team zusammen, um die aktuelle Spezifikation zu entwickeln. [PyXForm](https://github.com/XLSForm/pyxform), die Bibliothek zur Konvertierung von XLSForms in XForms, ist ein Open-Source-Projekt, das von Mitgliedern von ODK, Ona, SurveyCTO und KoBoToolbox unterstützt wird.
