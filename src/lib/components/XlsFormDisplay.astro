@@ -17,4 +17,12 @@ interface Props {
 const { worksheets, survey, choices } = Astro.props;
 ---
 
-<XlsFormDisplaySvelte client:load worksheets={worksheets} survey={survey} choices={choices} />
+<div class="xlsform-display-wrapper">
+    <XlsFormDisplaySvelte client:load worksheets={worksheets} survey={survey} choices={choices} />
+</div>
+
+<style>
+    .xlsform-display-wrapper {
+        margin-block: var(--spacing-lg);
+    }
+</style>
