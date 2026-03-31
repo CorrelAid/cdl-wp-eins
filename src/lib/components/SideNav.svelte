@@ -223,8 +223,6 @@
 
     <a href="/tools" class:active={isActive("tools")} class="section-header-link" onclick={closeMenu}>Tools</a>
 
-    <a href="/llm.txt" class="llm-link" target="_blank" rel="noopener noreferrer">llm.txt</a>
-
     {#snippet externalLinkIcon()}
         <svg
             class="external-icon"
@@ -608,20 +606,6 @@
         font-weight: 700;
         background-color: var(--color-primary);
         color: var(--color-white);
-    }
-
-
-    .llm-link {
-        display: block;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.8rem;
-        font-family: var(--font-family-mono);
-        opacity: 0.5;
-        margin-bottom: 0.25rem;
-    }
-
-    .llm-link:hover {
-        opacity: 1;
     }
 
     .search-container {
