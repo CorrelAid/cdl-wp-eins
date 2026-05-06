@@ -7,39 +7,46 @@ import { getCollection } from "astro:content";
 import toc from "@lib/toc.json";
 
 const allPages = await getCollection("pages");
-const pageMap = Object.fromEntries(allPages.map(page => [page.id, page]));
+const pageMap = Object.fromEntries(allPages.map((page) => [page.id, page]));
 
-type TocSection = { label: string; children: string[]; excludeFromGraphic?: string[]; showInGraphic?: boolean };
+type TocSection = {
+	label: string;
+	children: string[];
+	excludeFromGraphic?: string[];
+	showInGraphic?: boolean;
+};
 
 // Build phases from toc sections (exclude sections with showInGraphic: false)
 const graphicSections = (toc.sections as any[]).filter(
-	(s): s is TocSection => typeof s === 'object' && s.showInGraphic !== false
+	(s): s is TocSection => typeof s === "object" && s.showInGraphic !== false,
 );
 
 const phases = graphicSections.map((section: TocSection) => ({
-	id: section.children[0].replace(/-einleitung$/, ''),
+	id: section.children[0].replace(/-einleitung$/, ""),
 	label: section.label,
-	href: '/' + section.children[0],
+	href: "/" + section.children[0],
 }));
 
 // Build knowledge markers from toc sections (skip intro pages + excluded slugs + non-graphic sections)
-const knowledgeMarkers = graphicSections.flatMap((section: TocSection, phaseIndex: number) => {
-	const exclude = section.excludeFromGraphic || [];
-	return section.children
-		.slice(1) // skip intro page
-		.filter((slug: string) => !exclude.includes(slug))
-		.map((slug: string) => ({
-			label: pageMap[slug]?.data.tocTitle || slug,
-			type: 'knowledge' as const,
-			href: '/' + slug,
-			phase: phaseIndex,
-		}));
-});
+const knowledgeMarkers = graphicSections.flatMap(
+	(section: TocSection, phaseIndex: number) => {
+		const exclude = section.excludeFromGraphic || [];
+		return section.children
+			.slice(1) // skip intro page
+			.filter((slug: string) => !exclude.includes(slug))
+			.map((slug: string) => ({
+				label: pageMap[slug]?.data.tocTitle || slug,
+				type: "knowledge" as const,
+				href: "/" + slug,
+				phase: phaseIndex,
+			}));
+	},
+);
 
 // Spanning markers (compute grid rows from phase indices)
-const spanningMarkers = toc.spanning.map(s => ({
+const spanningMarkers = toc.spanning.map((s) => ({
 	label: s.label,
-	type: 'knowledge' as const,
+	type: "knowledge" as const,
 	href: s.href,
 	startRow: s.startPhase * 2 + 1,
 	endRow: s.endPhase * 2 + 2,
@@ -47,7 +54,10 @@ const spanningMarkers = toc.spanning.map(s => ({
 }));
 
 // Tool markers always link to anchor on the tools page
-const toolMarkers = toc.tools.map(t => ({ ...t, href: `/tools#${t.id}` }));
+// Flatten tools with multiple phases into individual markers for the graphic
+const toolMarkers = (toc.tools as any[]).flatMap((t) =>
+	t.phases.map((p: number) => ({ ...t, phase: p, href: `/tools#${t.id}` })),
+);
 
 const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
 ---
@@ -59,159 +69,151 @@ const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
 		</div>
 		<section>
 			<p>
-
-			
-				<h1>Unterstützungsangebote für die Umsetzung Eurer Umfrage</h1>
+				<h1>Civic Data Lab Umfragenwerkstatt</h1>
+				<h2>Unterstützungsangebote für die Umsetzung Eurer Umfrage</h2>
 
 				<div class="intro">
 					<p>
-					Ihr seid Euch unsicher, wie Ihr die Fragen für Eure bevorstehende Umfrage gut ausformulieren sollt?
-					Habt bereits Daten erhoben, aber bei der Auswertung der Ergebnisse stockt es?
-					Oder seid einfach nur auf der Suche nach einer guten Vorlage für die Datenschutzinformationen?
-					– Dann seid Ihr hier genau richtig!
+						Ihr seid Euch unsicher, wie Ihr die Fragen für Eure
+						bevorstehende Umfrage gut ausformulieren sollt? Habt
+						bereits Daten erhoben, aber bei der Auswertung der
+						Ergebnisse stockt es? Oder seid einfach nur auf der
+						Suche nach einer guten Vorlage für die
+						Datenschutzinformationen? – Dann seid Ihr hier genau
+						richtig!
 					</p>
 					<p>
-					<strong>In unserer Ressourcensammlung stellen wir Euch Unterstützungsangebote für die einzelnen Phasen von Umfragen
-					– angefangen bei der Konzeption bis zum Entscheiden und Handeln – bereit.</strong>
+						<strong
+							>In unserer Ressourcensammlung bieten wir
+							Unterstützung für die einzelnen Phasen von
+							Umfragen: Empfehlungen, Wissen und Anleitungen, sowie Open-Source-Tools für die praktische Umsetzung.</strong
+						>
 					</p>
 				</div>
 
 				<h2>Wieso ist das relevant?</h2>
 				<p>
-					Für viele zivilgesellschaftliche Organisationen sind Umfragen eine wichtige Datenquelle oder dienen ganz allgemein dazu,
-					Erkenntnisse und Wissen zu gewinnen. Sei es, um mehr über die <a href="https://civic-data.de/machen/ki_im_ehrenamt_auswertung_einer_umfrage/">konkreten Bedarfe der Zielgruppe</a> oder des
-					<a href="https://civic-data.de/machen/jaehrliche-erhebung-tensing/">eigenen Netzwerks</a> zu erfahren, um so zukünftige Angebote besser planen und kommunizieren zu können.
-					Oder darum, die Wirkung der eigenen Arbeit besser zu verstehen und zu erfassen: Umfragen sind ein vielseitig einsetzbares Werkzeug.
+					Für viele zivilgesellschaftliche Organisationen sind Umfragen
+					eine wichtige Datenquelle: um mehr über die <a
+						href="https://civic-data.de/machen/ki_im_ehrenamt_auswertung_einer_umfrage/"
+						>konkreten Bedarfe der Zielgruppe</a
+					> oder des <a
+						href="https://civic-data.de/machen/jaehrliche-erhebung-tensing/"
+						>eigenen Netzwerks</a
+					> zu erfahren, oder um die Wirkung der eigenen Arbeit zu erfassen.
 				</p>
 				<p>
-					Um jedoch ihre volle Wirkung entfalten zu können, ist es wichtig, einige Regeln zu beachten.
-					Denn es gibt „typische Fehler", die wir in unserer Arbeit häufiger beobachten und die die erhobenen Daten
-					im ungünstigsten Fall „unbrauchbar" machen oder die Auswertung erheblich erschweren können.
+					Dabei beobachten wir typische Fehler: Umfragen werden nicht in
+					all ihren Phasen gedacht, Erkenntnisse aus der Umfrageforschung
+					bleiben ungenutzt, und nach der Erhebung ist unklar, welche
+					Handlungen folgen sollen. Im ungünstigsten Fall werden die Daten
+					dadurch unbrauchbar oder die Auswertung erheblich erschwert.
+					Unser Unterstützungsangebot setzt hier an.
+				</p>
+			</p>
+
+			<h2>Unser Ansatz</h2>
+				<p>
+					Wir setzen auf offene Formate wie <a href="/xlsform-standard">XLSForm</a> und <a href="/methodik-veroeffentlichen">DDI-Codebook</a> und verbinden sie durch eigene Open-Source-Tools.
 				</p>
 				<p>
-					An dieser Stelle setzt unser Unterstützungsangebot an.
-					<strong>Mit den folgenden Ressourcen möchten wir Euch die Umsetzung von Umfragen erleichtern!</strong>
+					Wir unterscheiden zwei Formatebenen: Die <strong>Metadatenebene</strong> beschreibt die Umfrage selbst (Fragebogenstruktur, Variablen). Die <strong>Ergebnisebene</strong> kommt nach der Erhebung hinzu und enthält die eigentlichen Antwortdaten. <a href="/xlsform-standard">XLSForm</a> eignet sich für die Erstellung der Umfrage; <a href="/methodik-veroeffentlichen">DDI-Codebook</a> dokumentiert sie langfristig und maschinenlesbar, inklusive Referenzen auf die zugehörigen Ergebnisdateien. Beide dieser Formate befinden sich auf der Metadatenebene.
 				</p>
-
-				<h2>Hilfsmittel für Eure Umfragen</h2>
-
-				<div class="section-card">
-					<h3>Zum Erstellen Eurer Umfrage</h3>
-					<ul>
-					<li>
-						Unsere <strong><a href="https://qwac.correlaid.org/">Fragendatenbank qwac</a></strong> beinhaltet eine <strong>umfassende Sammlung an
-						standardisierten Fragen</strong>, die Ihr für Eure Umfrage nutzen könnt.
-					</li>
-					<li>
-						Solltet Ihr hier keine passende Frage finden, hilft Euch unser <strong>Skill</strong>
-						<strong><a href="https://formulaid.correlaid.org/">FormulAid</a></strong> dabei, <strong>Euer Anliegen entsprechend gängiger Standards
-						aus der Umfrageforschung zu formulieren.</strong>
-					</li>
-					<li>
-						Ihr braucht eine <strong>Vorlage für die Datenschutzinformationen</strong> Eurer Umfrage?
-						<a href="https://umfragen.civic-data.de/datenschutz">Dann haben wir genau das Richtige für Euch!</a>
-					</li>
-					</ul>
-				</div>
-
-				<div class="section-card">
-					<h3>Bei der Umsetzung Eurer Umfrage helfen Euch die folgenden Tools:</h3>
-					<ul>
-					<li>
-						Der <strong>XLSForm Standard</strong> erlaubt es Euch, Eure Umfrage ganz bequem in einem Tabellenprogramm
-						(wie z.&nbsp;B. Excel) zu erstellen und diese anschließend in verschiedene Umfragetools
-						(wie z.&nbsp;B. KoboToolbox) hochzuladen.
-					</li>
-					<li>
-						Weil nicht alle Umfragetools den XLSForm-Standard akzeptieren, haben wir Euch auch einen Konverter bereitgestellt,
-						der Eure Umfrage in das für LimeSurvey passende Format bringt.
-						→ <strong><a href="https://formtransform.correlaid.org/">Hier geht's zu FormTransform</a></strong>
-					</li>
-					</ul>
-				</div>
-
-				<div class="section-card">
-					<h3>Und auch für die Auswertung Eurer Umfrage gibt es Unterstützung:
-</h3>
-					<ul>
-					<li>
-						Oftmals reicht schon eine <strong>deskriptive Auswertung</strong> (die sogen. „beschreibende Statistik") der
-						erhobenen Daten, um einen ersten Einblick zu bekommen.
-						Was man dazu wissen muss und wie Ihr deskriptive Auswertungen mit KoboToolbox und Excel umsetzt,
-						zeigen wir Euch <a href="https://umfragen.civic-data.de/deskriptive-auswertung">hier</a>.
-					</li>
-					<li>
-						Um Euch auch darüber hinaus Möglichkeiten zur Auswertung Eurer Daten an die Hand zu geben,
-						haben wir Anleitungen und Anwendungen für statistische Auswertungen zusammengestellt:
-						<ul>
-						<li><a href="https://github.com/CorrelAid/survey-bayes"><strong>Programmierkenntnisse vorhanden</strong></a></li>
-						<li><a href="https://umfragen.civic-data.de/schliessende-statistik"><strong>Programmierkenntnisse (noch) nicht vorhanden</strong></a></li>
-						</ul>
-					</li>
-					</ul>
-				</div>
-
-				<h2>Nun kann es losgehen!</h2>
 				<p>
-					Das folgende Schaubild hilft Euch, einen Überblick zu bekommen, in welchen Phasen Eurer Umfrage
-					unsere Ressourcen zum Einsatz kommen (können).
+					Unsere Tools übersetzen zwischen Formaten und bieten Unterstützung für die notwendigen Schritte in den einzelnen Phasen. Details zu diesen Formaten könnt Ihr auf den jeweiligen Detailseiten nachlesen.
+				</p>
+				<p>
+					Dabei greifen wir nicht nur auf Eigenentwicklungen zurück: In den Workflow integrieren wir bewährte Standardsoftware (wie <a href="/kobotoolbox">KoboToolbox</a> oder <a href="/limesurvey">LimeSurvey</a>) sowie Empfehlungen für ergänzende Open-Source-Lösungen (wie <a href="/jasp">JASP</a>). So entsteht ein abgestimmtes Ökosystem in dem die verschiedenen Werkzeuge ineinandergreifen. Eine alternative Übersichtsmöglichkeit verknüpft mit einem empfohlenen Workflow findet ihr <a href="/workflow">hier</a>.
 				</p>
 
+			<section>
+				<h3 id="phasenmodel">Überblick: Ressourcen nach Phase</h3>
+				<SurveyPhases phases={phases} markers={markers} client:load />
+			</section>
+<section class="ecosystem-section">
+		
 			
 		</section>
-	
-		<section>
-			<SurveyPhases phases={phases} markers={markers} client:load />
-		</section>
-		<section>
-			<p>
-				
-				Mit dieser Sammlung schließen wir Lücken im Angebot von Hilfsmitteln zur Umsetzung von Umfragen. Denn natürlich gibt es bereits viel gute Angebote an Lern- und Unterstützungsmaterialien. Eine umfassende Sammlung findet Ihr u.a. auch in unserer <a href="https://civic-data.de/lernen/">CDL Academy</a>.
-			</p>	
-			<p>
-				Ihr wollt mit Eurer Umfrage loslegen, aber wisst doch noch nicht so richtig wie? Dann schaut vorbei in unserer Datensprechstunde. <a href="https://zeeg.me/correlaid/dss-cdl">Hier geht’s zur Terminbuchung</a>. 
-			</p>
-		</section>
+		<h2>Nun kann es losgehen!</h2>
+			<section>
+				<p>
+					Mit dieser Sammlung schließen wir Lücken im Angebot von
+					Hilfsmitteln zur Umsetzung von Umfragen. Denn natürlich gibt
+					es bereits viel gute Angebote an Lern- und
+					Unterstützungsmaterialien. Eine umfassende Sammlung findet
+					Ihr u.a. auch in unserer <a
+						href="https://civic-data.de/lernen/">CDL Academy</a
+					>.
+				</p>
+				<p>
+					Ihr wollt mit Eurer Umfrage loslegen, aber wisst doch noch
+					nicht so richtig wie? Dann schaut vorbei in unserer
+					Datensprechstunde. <a
+						href="https://zeeg.me/correlaid/dss-cdl"
+						>Hier geht’s zur Terminbuchung</a
+					>.
+				</p>
+			</section>
+
 	</body>
-</Layout>
 
-<style>
-	section {
-		margin-top: 2.5rem;
-	}
+	<style>
+		section {
+			margin-top: 2.5rem;
+		}
+.transformations-table {
+			width: 100%;
+			border-collapse: collapse;
+			margin: 1rem 0;
+			font-size: 0.9rem;
+		}
 
-	.logo-container {
-		margin-top: 1rem;
-		padding-top: 1rem;
-		margin-bottom: 2.5rem;
-		background-color: var(--color-tertiary);
-		border-radius: 2rem;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
+		.transformations-table th,
+		.transformations-table td {
+			border: 1px solid var(--color-text-primary);
+			padding: 0.5rem 0.75rem;
+			text-align: left;
+		}
 
-	.logo-container :global(svg) {
-		padding-bottom: 3.5rem;
-		padding-top: 3.5rem;
-		width: 100%;
-		max-width: 600px;
-		height: auto;
-	}
-
-	@media (max-width: 768px) {
-		.logo-container :global(svg) {
-			max-width: 100%;
-			padding: 1rem;
-			padding-bottom: 0.5rem;
+		.transformations-table thead {
+			background-color: var(--color-tertiary);
+			font-family: var(--font-family-mono);
+			font-weight: var(--font-weight-bold);
 		}
 
 		.logo-container {
-			margin-top: 3rem;
-			margin-bottom: 1rem;
-			margin-left: 1rem;
-			margin-right: 1rem;
+			margin-top: 1rem;
+			padding-top: 1rem;
+			margin-bottom: 2.5rem;
+			background-color: var(--color-tertiary);
+			border-radius: 2rem;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
 		}
-	}
-</style>
+
+		.logo-container :global(svg) {
+			padding-bottom: 3.5rem;
+			padding-top: 3.5rem;
+			width: 100%;
+			max-width: 600px;
+			height: auto;
+		}
+
+		@media (max-width: 768px) {
+			.logo-container :global(svg) {
+				max-width: 100%;
+				padding: 1rem;
+				padding-bottom: 0.5rem;
+			}
+
+			.logo-container {
+				margin-top: 3rem;
+				margin-bottom: 1rem;
+				margin-left: 1rem;
+				margin-right: 1rem;
+			}
+		}
+	</style>
+</Layout>

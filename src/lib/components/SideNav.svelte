@@ -130,7 +130,8 @@
         <hr />
     </div>
 
-    <a href="/" onclick={closeMenu} class="overview-link" class:active={isActive('')}>Übersicht</a>
+    <a href="/" onclick={closeMenu} class="overview-link" class:active={isActive('')}>Einleitung</a>
+    <a href="/workflow" onclick={closeMenu} class="overview-link" class:active={isActive('workflow')}>Workflow</a>
 
     <div class="section">
         <button
@@ -138,7 +139,7 @@
             onclick={() => (isManualOpen = !isManualOpen)}
             aria-expanded={isManualOpen}
         >
-            Inhaltsverzeichnis 
+            Wissensammlung 
             <svg
                 class="chevron"
                 class:rotated={isManualOpen}
@@ -154,7 +155,7 @@
         <div class="section-body" class:hidden={!isManualOpen}>
             <div class="section-content indented">
                 <ul>
-                    {#each navItems as item}
+                    {#each navItems.filter(item => item.slug !== 'workflow') as item}
                         <li
                             class:has-children={item.hasChildren}
                             class:expanded={expandedItems.has(item.id)}

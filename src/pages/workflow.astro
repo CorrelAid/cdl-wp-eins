@@ -1,0 +1,146 @@
+---
+import Layout from "@layouts/Layout.astro";
+import EcosystemFlowchart from "@components/EcosystemFlowchart.astro";
+import ContentBox from "@components/ContentBox.astro";
+---
+
+<Layout title="Workflow" teaser="Überblick über den empfohlenen Workflow mit den Tools dieser Ressourcensammlung.">
+    <p>
+        In dieser Umfragenwerkstatt begleiten wir Euch durch alle Phasen einer Umfrage. Um die Zusammenarbeit zwischen verschiedenen Tools und Phasen zu erleichtern, setzen wir konsequent auf offene Formate wie <a href="/xlsform-standard">XLSForm</a> und <a href="/methodik-veroeffentlichen">DDI-Codebook</a>. Wir erweitern die Nutzbarkeit dieser Formate und verbinden sie durch eigene Open-Source-Tools.
+    </p>
+    <p>
+        Dabei unterscheiden wir zwei grundlegende Ebenen:
+    </p>
+    <ul>
+        <li>Die <strong>Metadatenebene</strong> beschreibt die Umfrage selbst: die Struktur des Fragebogens, die Variablen, Antworttypen und Logiken. <a href="/xlsform-standard">XLSForm</a> dient der Erstellung, <a href="/methodik-veroeffentlichen">DDI-Codebook</a> der Standardisierung und Archivierung.</li>
+        <li>Die <strong>Ergebnisebene</strong> umfasst die eigentlichen Antwortdaten der Teilnehmenden, die nach der Feldphase vorliegen.</li>
+    </ul>
+    <p>
+        Damit diese Ebenen über den gesamten Prozess hinweg zusammenpassen, fungieren unsere Tools zum einen als Brücken. Zum anderen unterstützen sie Euch auch direkt innerhalb der einzelnen Phasen, etwa bei der statistischen Auswertung. Dabei greifen wir nicht nur auf Eigenentwicklungen zurück: In den Workflow integrieren wir bewährte Standardsoftware (wie <a href="/kobotoolbox">KoboToolbox</a> oder <a href="/limesurvey">LimeSurvey</a>) sowie Empfehlungen für ergänzende Open-Source-Lösungen (wie <a href="/jasp">JASP</a>). So entsteht ein abgestimmtes Ökosystem, in dem die verschiedenen Werkzeuge ineinandergreifen.
+    </p>
+    <p>
+        Details zu den einzelnen Formaten und deren Anwendung könnt Ihr auf den jeweiligen Detailseiten nachlesen. Die folgende Grafik visualisiert diesen Workflow und zeigt, an welchen Stellen unsere Tools den Prozess unterstützen:
+    </p>
+
+    <EcosystemFlowchart />
+
+    <p>
+        Weitere Tools findet Ihr auf der <a href="/tools">Übersichtseite</a>.
+    </p>
+
+    <ContentBox expandable>
+        <Fragment slot="header">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            Technische Details: unterstützte Transformationen
+        </Fragment>
+        <table class="transformations-table">
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Output</th>
+                    <th>Tool</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="/xlsform-standard">XLSForm</a></td>
+                    <td
+                        ><a
+                            href="https://www.limesurvey.org/manual/Tab_Separated_Value_survey_structure"
+                            >LimeSurvey TSV</a
+                        ></td
+                    >
+                    <td
+                        ><a href="/tools#formtransform">FormTransform</a> (bzw. <a
+                            href="/tools#xlsform2lstsv"
+                            ><code>xlsform2lstsv</code></a
+                        >)</td
+                    >
+                </tr>
+                <tr>
+                    <td
+                        ><a href="/xlsform-standard">XLSForm</a> + <a
+                            href="https://support.kobotoolbox.org/export_download.html#export-types"
+                            >KoboToolbox CSV</a
+                        > (Ergebnisse)</td
+                    >
+                    <td
+                        ><a href="/methodik-veroeffentlichen"
+                            >DDI Codebook XML</a
+                        > + DDI-konforme Datenstruktur</td
+                    >
+                    <td><a href="/tools#survey2ddi">survey2ddi</a></td>
+                </tr>
+                <tr>
+                    <td
+                        ><a
+                            href="https://www.limesurvey.org/manual/Tab_Separated_Value_survey_structure"
+                            >LimeSurvey TSV</a
+                        > + <a
+                            href="https://www.limesurvey.org/manual/Export_responses"
+                            >LimeSurvey CSV</a
+                        > (Ergebnisse)</td
+                    >
+                    <td
+                        ><a href="/methodik-veroeffentlichen"
+                            >DDI Codebook XML</a
+                        > + DDI-konforme Datenstruktur</td
+                    >
+                    <td><a href="/tools#survey2ddi">survey2ddi</a></td>
+                </tr>
+                <tr>
+                    <td
+                        ><a href="/methodik-veroeffentlichen"
+                            >DDI Codebook XML</a
+                        ></td
+                    >
+                    <td><a href="/xlsform-standard">XLSForm</a>-Snippets</td>
+                    <td><a href="/tools#qwac">qwacback</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            Manche Transformationen beinhalten Informationsverlust, da im
+            Ursprungsformat mehr oder andere Daten kodiert sind als im
+            Zielformat. Zudem unterstützen unsere Tools derzeit nur
+            Transformationen in eine Richtung. Sogenannte Round Trips sind nicht
+            möglich.
+        </p>
+    </ContentBox>
+</Layout>
+
+<style>
+    .transformations-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+    }
+
+    .transformations-table th,
+    .transformations-table td {
+        border: 1px solid var(--color-text-primary);
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+    }
+
+    .transformations-table thead {
+        background-color: var(--color-tertiary);
+        font-family: var(--font-family-mono);
+        font-weight: var(--font-weight-bold);
+    }
+</style>

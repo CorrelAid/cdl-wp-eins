@@ -1,0 +1,262 @@
+---
+---
+<div class="ecosystem-container">
+    <div class="flowchart">
+        <!-- Design Phase -->
+        <div class="flow-node">
+            <div class="node-label">Fragebogendesign: Erstellung einer <a href="/xlsform-standard">XLSForm</a></div>
+            <div class="node-grid">
+                <div class="node-box secondary">
+                    <p>Manuelle Erstellung im Spreadsheet-Programm</p>
+                </div>
+                <div class="node-box secondary">
+                    <p>Generierung mit <a href="/tools#formulaid">FormulAid</a></p>
+                </div>
+                <div class="node-box secondary">
+                    <p>Snippets aus Werkzeugsammlung <a href="/tools#qwac">qwac</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+        </div>
+
+        <!-- Erhebung + Aufbereitung as paired columns -->
+        <div class="flow-node">
+            <div class="sub-label">Erhebung: Import der <a href="/xlsform-standard">XLSForm</a></div>
+            <div class="node-grid">
+                <div class="node-box secondary">
+                    <p>Direkter Import in <a class="tool-link" href="https://www.kobotoolbox.org/" target="_blank" rel="noopener noreferrer">KoboToolbox</a></p>
+                </div>
+                <div class="node-box secondary">
+                    <p><svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg> Import in <a class="tool-link" href="https://www.limesurvey.org/" target="_blank" rel="noopener noreferrer">LimeSurvey</a> als <a href="https://www.limesurvey.org/manual/Tab_Separated_Value_survey_structure">TSV</a> mit <a class="tool-link" href="/tools#formtransform">FormTransform</a> (<a href="/tools#xlsform2lstsv">xlsform2lstsv</a>)</p>
+                </div>
+            </div>
+            <div class="mini-arrows-row">
+                <div class="mini-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg></div>
+                <div class="mini-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg></div>
+            </div>
+            <div class="sub-label">Aufbereitung &amp; Analyse</div>
+            <div class="sub-label sub-label-minor">Standardisierung mit <a href="/methodik-veroeffentlichen">DDI-Codebook</a></div>
+            <div class="node-grid">
+                <div class="node-box secondary">
+                    <p><svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg> Aus <a href="/xlsform-standard">XLSForm</a> + <a href="https://support.kobotoolbox.org/export_download.html#export-types">KoboToolbox CSV</a> mit <a class="tool-link" href="/tools#survey2ddi">survey2ddi</a></p>
+                </div>
+                <div class="node-box secondary">
+                    <p><svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg> Aus <a href="https://www.limesurvey.org/manual/Tab_Separated_Value_survey_structure">LimeSurvey TSV</a> + <a href="https://www.limesurvey.org/manual/Export_responses">LimeSurvey CSV</a> mit <a class="tool-link" href="/tools#survey2ddi">survey2ddi</a></p>
+                </div>
+            </div>
+            <div class="sub-phase-arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+            </div>
+            <div class="sub-label sub-label-minor">Statistische Analyse</div>
+            <div class="node-grid">
+                <div class="node-box secondary">
+                    <p>Analyse mit <a class="tool-link" href="/jasp">JASP</a></p>
+                </div>
+                <div class="node-box secondary">
+                    <p>Bayesianische Analyse mit <a class="tool-link" href="/tools#survey-bayes">survey-bayes</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+        </div>
+
+        <!-- Reuse Phase -->
+        <div class="flow-node">
+            <div class="node-label">Von Daten zu Taten: Archivieren mit DDI-Codebook</div>
+            <div class="node-box">
+                <p>Import in <a class="tool-link" href="/tools#qwac">qwac</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .ecosystem-container {
+        padding: 2rem 0;
+        display: flex;
+        justify-content: center;
+        color: var(--color-text-primary);
+    }
+
+    .flowchart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        max-width: 600px;
+        width: 100%;
+    }
+
+    .flow-node {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .node-label,
+    .sub-label {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        width: 100%;
+        font-family: var(--font-family-mono);
+        font-weight: var(--font-weight-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+        font-size: 0.85rem;
+        opacity: 0.7;
+    }
+
+    .node-label::before,
+    .node-label::after,
+    .sub-label::before,
+    .sub-label::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: currentColor;
+        opacity: 0.4;
+    }
+
+    .sub-label-minor {
+        font-size: 0.65rem;
+        opacity: 0.6;
+        justify-content: center;
+    }
+
+    .sub-label-minor::before,
+    .sub-label-minor::after {
+        flex: 0 0 1.5rem;
+        opacity: 0.3;
+    }
+
+    .node-label a,
+    .sub-label a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    .node-box {
+        background: var(--color-white);
+        border: 2px solid var(--color-text-primary);
+        border-radius: var(--radius-lg);
+        padding: 1rem;
+        width: 280px;
+        text-align: center;
+        box-shadow: 4px 4px 0 var(--color-text-primary);
+    }
+
+    .node-box.secondary {
+        width: 160px;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .node-grid {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .mini-arrows-row {
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mini-arrows-row .mini-arrow {
+        flex: 1;
+    }
+
+    .node-box p {
+        font-size: 0.8rem;
+        line-height: 1.3;
+        margin: 0;
+    }
+
+    .node-box a:not(.tool-link) {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    .tool-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--color-secondary);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    .tool-link:hover {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    .flow-arrow {
+        color: var(--color-text-primary);
+        margin: 0.5rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .flow-arrow svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .sub-phase-arrow {
+        color: var(--color-text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.5;
+    }
+
+    .sub-phase-arrow svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .mini-arrow {
+        color: var(--color-text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mini-arrow svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .transform-icon {
+        width: 13px;
+        height: 13px;
+        flex-shrink: 0;
+    }
+
+    @media (max-width: 600px) {
+        .node-grid {
+            flex-direction: column;
+            align-items: center;
+        }
+        .node-box {
+            width: 100%;
+            max-width: 280px;
+        }
+    }
+</style>

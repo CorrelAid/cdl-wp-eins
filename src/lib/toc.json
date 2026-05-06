@@ -54,25 +54,18 @@
                 "methodik-veroeffentlichen"
             ]
         },
-        {
-            "label": "Weitere Inhalte",
-            "children": [
-                "organisationsdaten"
-            ],
-            "showInGraphic": false
-        },
+        "workflow",
         "quellen"
     ],
     "tools": [
-        { "id": "datenschutzvorlagen", "label": "Datenschutzvorlagen", "type": "document", "href": "/datenschutz", "phase": 0, "section": "ressourcen" },
-        { "id": "formulaid", "label": "FormulAid", "type": "app", "href": "https://formulaid.correlaid.org/", "phase": 1, "section": "cdl" },
-        { "id": "qwac", "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 1, "section": "cdl" },
-        { "id": "tool-bewertungsmatrix", "label": "Umfragetool Bewertungsmatrix", "type": "document", "href": "https://civic-data.de/app/uploads/Umfragetools_Bewertungen.xlsx", "phase": 2, "section": "ressourcen" },
-        { "id": "formtransform", "label": "FormTransform", "type": "app", "href": "https://formtransform.correlaid.org/", "phase": 2, "section": "cdl" },
-        { "id": "xlsform2lstsv", "label": "xlsform2lstsv", "type": "package", "href": "https://github.com/CorrelAid/xlsform2lstsv", "phase": 2, "section": "cdl" },
-        { "id": "qwac", "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 4, "section": "cdl" },
-        { "id": "survey-bayes", "label": "survey-bayes", "type": "package", "href": "https://github.com/CorrelAid/survey-bayes", "phase": 3, "section": "cdl" },
-        { "id": "survey2ddi", "label": "survey2ddi", "type": "package", "href": "https://github.com/CorrelAid/survey2ddi", "phase": 3, "section": "cdl" }
+        { "id": "datenschutzvorlagen", "label": "Datenschutzvorlagen", "type": "document", "href": "/datenschutz", "phases": [0], "section": "ressourcen" },
+        { "id": "formulaid", "label": "FormulAid", "type": "app", "href": "https://formulaid.correlaid.org/", "phases": [1], "section": "cdl" },
+        { "id": "qwac", "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phases": [1, 4], "section": "cdl" },
+        { "id": "tool-bewertungsmatrix", "label": "Umfragetool Bewertungsmatrix", "type": "document", "href": "https://civic-data.de/app/uploads/Umfragetools_Bewertungen.xlsx", "phases": [2], "section": "ressourcen" },
+        { "id": "formtransform", "label": "FormTransform", "type": "app", "href": "https://formtransform.correlaid.org/", "phases": [2], "section": "cdl" },
+        { "id": "xlsform2lstsv", "label": "xlsform2lstsv", "type": "package", "href": "https://github.com/CorrelAid/xlsform2lstsv", "phases": [2], "section": "cdl" },
+        { "id": "survey-bayes", "label": "survey-bayes", "type": "package", "href": "https://github.com/CorrelAid/survey-bayes", "phases": [3], "section": "cdl" },
+        { "id": "survey2ddi", "label": "survey2ddi", "type": "package", "href": "https://github.com/CorrelAid/survey2ddi", "phases": [3], "section": "cdl" }
     ],
     "toolSections": [
         { "id": "cdl", "label": "Von uns entwickelte Tools" },
@@ -83,24 +76,12 @@
             "id": "xlsform-ecosystem",
             "label": "XLSForm-Ökosystem",
             "links": [
-                { "label": "xlsform.org", "href": "https://xlsform.org/en/", "description": "Offizielle XLSForm-Dokumentation und Referenz" },
-                { "label": "pyxform", "href": "https://github.com/XLSForm/pyxform", "description": "Python-Bibliothek zur Konvertierung von XLSForms in XForms" },
-                { "label": "ODK", "href": "https://getodk.org", "description": "Open Data Kit – Tools für mobile Datenerhebung, inkl. XLSForm-Support" },
-                { "label": "KoBoToolbox", "href": "https://kobotoolbox.org", "description": "Datenerhebungsplattform für humanitäre Einsätze und Forschung" }
-            ]
-        },
-        {
-            "id": "ddi-codebook",
-            "label": "DDI Codebook & Metadaten",
-            "links": [
-                { "label": "DDI Alliance", "href": "https://ddialliance.org", "description": "Internationale Allianz für den Data Documentation Initiative-Standard" },
-                { "label": "CESSDA Data Catalogue", "href": "https://datacatalogue.cessda.eu/", "description": "Europäischer Forschungsdatenkatalog mit DDI-Metadaten" },
-                { "label": "da|ra", "href": "https://www.da-ra.de/", "description": "Registrierungsagentur für sozial- und wirtschaftswissenschaftliche Forschungsdaten" }
+                 { "label": "XLSForm Online", "href": "https://getodk.org/xlsform/", "description": "Ein XLSForm-Formular zur vorübergehenden Vorschau in ein ODK XForm-Formular konvertieren." }
             ]
         }
     ],
     "spanning": [
-        { "label": "DDI Codebook", "href": "/methodik-veroeffentlichen", "startPhase": 1, "endPhase": 3, "column": 2 },
+        { "label": "DDI Codebook", "href": "/methodik-veroeffentlichen", "startPhase": 1, "endPhase": 4, "column": 2 },
         { "label": "XLSForm", "href": "/xlsform-standard", "startPhase": 1, "endPhase": 1, "column": 3 }
     ]
 }

@@ -23,6 +23,17 @@ function buildNavStructure(tocArray: any[]): any[] {
     return tocArray.map((item: any) => {
         if (typeof item === 'string') {
             // Special case for quellen page which is not in content collection
+            if (item === 'workflow') {
+                return {
+                    slug: item,
+                    page: {
+                        data: {
+                            tocTitle: 'Technischer Workflow',
+                            teaser: ''
+                        }
+                    }
+                };
+            }
             if (item === 'quellen') {
                 return {
                     slug: item,

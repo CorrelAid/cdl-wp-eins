@@ -71,7 +71,8 @@
     grid-template-columns: 1fr 35px 35px;
     grid-template-rows: repeat(9, auto);
     gap: 0 1.5rem;
-    margin: 4rem 0;
+    margin: 2.8rem 0;
+    margin-bottom: 4rem;
   }
 
   .spanning-marker {
