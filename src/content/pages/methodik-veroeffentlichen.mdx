@@ -1,12 +1,46 @@
 ---
-tocTitle: Methodik & Daten veröffentlichen
-teaser: Umfragedesign und Daten standardisiert teilen.
+tocTitle: Methodik veröffentlichen - DDI
+teaser: Umfragedesign standardisiert teilen mit DDI Codebook.
 ---
 
-# Methodik & Daten veröffentlichen
+# Methodik veröffentlichen
 
-<InProgressNotice />
 
 ## DDI Codebook
 
-Der Data Documentation Initiative Standard.
+Eine Umfrage ist durchgeführt, die Daten sind da – aber wie sieht es mit der Dokumentation aus? Welche Fragen wurden genau gestellt? Welche Antwortmöglichkeiten gab es? Wie sind die Antworten kodiert? Diese Informationen stecken oft nur im Umfragetool selbst oder im Kopf der Person, die den Fragebogen erstellt hat. Wenn diese Person die Organisation verlässt, geht das Wissen mit.
+
+Das macht es schwer, Ergebnisse richtig einzuordnen, eine Erhebung zu wiederholen oder Fragen über verschiedene Projekte hinweg zu vergleichen. Dabei wäre genau das wertvoll: voneinander lernen, welche Fragen funktioniert haben – und welche nicht.
+
+Eine gute Dokumentation der Methodik löst dieses Problem. Und dafür gibt es einen etablierten Standard: DDI Codebook.
+
+### Was ist DDI Codebook?
+
+[DDI Codebook](https://ddialliance.org/Specification/DDI-Codebook/) ist ein internationaler Standard zur Dokumentation von Umfragedaten, der in der Sozialforschung seit vielen Jahren eingesetzt wird. Er beschreibt strukturiert, welche Fragen in einer Erhebung gestellt wurden, welche Antwortoptionen zur Verfügung standen und wie die Daten aufgebaut sind.
+
+Wichtig dabei: Ein DDI Codebook enthält ausschließlich Metadaten – also Informationen über den Fragebogen selbst, nicht die Antworten der Teilnehmenden. Es dokumentiert, was gefragt wurde und wie, aber nicht, was jemand geantwortet hat. Deshalb ist das Teilen eines DDI Codebooks [datenschutzrechtlich](/datenschutz) unproblematisch.
+
+Technisch gesehen ist ein DDI Codebook eine XML-Datei. XML ist ein textbasiertes Datenformat, das sowohl von Menschen als auch von Software gelesen werden kann. Im Gegensatz zu einer Excel-Tabelle oder einem PDF hat XML eine feste Struktur mit sogenannten Tags – ähnlich wie Beschriftungen, die jedem Inhalt eine eindeutige Bedeutung geben.
+
+Ein Beispiel: So sieht eine einfache Single-Choice-Frage im DDI-Codebook-Format aus (siehe Tab „DDI XML"). Daneben zeigen wir, wie dieselbe Frage in XLSForm sowie in den Tools LimeSurvey und KoboToolbox aussieht – das macht sichtbar, was DDI gegenüber den tool-spezifischen Formaten leistet.
+
+<QuestionTypeBlock exampleId="single_choice" />
+
+Das `<var>`-Element beschreibt eine Variable. Innerhalb davon steht in `<qstnLit>` der genaue Fragetext, wie er den Befragten angezeigt wurde. Attribute wie `intrvl="discrete"` sagen aus, dass es sich um eine kategoriale Frage handelt, also eine mit festen Antwortmöglichkeiten. Solche Details wirken auf den ersten Blick technisch, aber sie sorgen dafür, dass die Frage eindeutig dokumentiert ist – unabhängig davon, in welchem Tool die Umfrage erstellt wurde. Eine vertiefende Übersicht der Fragetypen findet ihr unter [Antworttypen](/antworttypen).
+
+### Warum lohnt sich das?
+
+Wenn Fragen in einem einheitlichen Format beschrieben sind, werden sie auffindbar, vergleichbar und wiederverwendbar. Andere Organisationen können sehen, wie eine Frage formuliert war, und sie für eigene Erhebungen übernehmen oder anpassen. Statt bei jeder neuen Umfrage von vorne anzufangen, entsteht über die Zeit ein gemeinsamer Bestand an erprobten Instrumenten.
+
+Ihr müsst dafür kein XML von Hand schreiben. Mit [survey2ddi](/tools/survey2ddi) stellen wir ein Tool bereit, das aus bestehenden Umfragen (z.B. aus [KoboToolbox](/kobotoolbox) auf Basis von [XLSForm](/xlsform-standard)) automatisch ein DDI Codebook erzeugt.
+
+Das Ergebnis kann anschließend über unsere Fragendatenbank [QWAC](/tools/qwac) mit der Community geteilt werden. QWAC ist mehr als ein Ablageort: Erst wenn viele Organisationen ihre Instrumente dort einstellen, entsteht ein gemeinsamer Pool erprobter Fragen, aus dem alle schöpfen können. Das hat zwei konkrete Effekte:
+
+- **Bessere Umfragen für alle:** Wer eine neue Umfrage plant, kann auf Formulierungen zurückgreifen, die andere bereits getestet haben – statt jedes Mal bei Null anzufangen und dieselben Anfängerfehler zu wiederholen.
+- **Vergleichbarkeit zwischen Organisationen:** Werden gleiche oder ähnliche Fragen mehrfach eingesetzt, lassen sich Ergebnisse zwischen Projekten, Trägern und Erhebungszeitpunkten vergleichen. Ohne diese gemeinsame Basis bleibt jede Auswertung eine Insel.
+
+Je mehr Organisationen mitmachen, desto wertvoller wird der Bestand für die gesamte Zivilgesellschaft. Das Veröffentlichen eurer Methodik in QWAC ist daher kein Extra-Aufwand am Ende, sondern ein zentraler Beitrag zur Infrastruktur, von der ihr selbst beim nächsten Projekt profitiert.
+
+### Integration mit survey2ddi und qwac
+
+<InProgressNotice />
