@@ -67,6 +67,7 @@
         { "id": "datenschutzvorlagen", "label": "Datenschutzvorlagen", "type": "document", "href": "/datenschutz", "phase": 0, "section": "ressourcen" },
         { "id": "formulaid", "label": "FormulAid", "type": "app", "href": "https://formulaid.correlaid.org/", "phase": 1, "section": "cdl" },
         { "id": "qwac", "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 1, "section": "cdl" },
+        { "id": "tool-bewertungsmatrix", "label": "Umfragetool Bewertungsmatrix", "type": "document", "href": "https://civic-data.de/app/uploads/Umfragetools_Bewertungen.xlsx", "phase": 2, "section": "ressourcen" },
         { "id": "formtransform", "label": "FormTransform", "type": "app", "href": "https://formtransform.correlaid.org/", "phase": 2, "section": "cdl" },
         { "id": "xlsform2lstsv", "label": "xlsform2lstsv", "type": "package", "href": "https://github.com/CorrelAid/xlsform2lstsv", "phase": 2, "section": "cdl" },
         { "id": "qwac", "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phase": 4, "section": "cdl" },
