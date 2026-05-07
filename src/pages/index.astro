@@ -85,16 +85,17 @@ const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
 					<p>
 						<strong
 							>In unserer Ressourcensammlung bieten wir
-							Unterstützung für die einzelnen Phasen von
-							Umfragen: Empfehlungen, Wissen und Anleitungen, sowie Open-Source-Tools für die praktische Umsetzung.</strong
+							Unterstützung für die einzelnen Phasen von Umfragen:
+							Empfehlungen, Wissen und Anleitungen, sowie
+							Open-Source-Tools für die praktische Umsetzung.</strong
 						>
 					</p>
 				</div>
 
 				<h2>Wieso ist das relevant?</h2>
 				<p>
-					Für viele zivilgesellschaftliche Organisationen sind Umfragen
-					eine wichtige Datenquelle: um mehr über die <a
+					Für viele zivilgesellschaftliche Organisationen sind
+					Umfragen eine wichtige Datenquelle: um mehr über die <a
 						href="https://civic-data.de/machen/ki_im_ehrenamt_auswertung_einer_umfrage/"
 						>konkreten Bedarfe der Zielgruppe</a
 					> oder des <a
@@ -103,38 +104,62 @@ const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
 					> zu erfahren, oder um die Wirkung der eigenen Arbeit zu erfassen.
 				</p>
 				<p>
-					Dabei beobachten wir typische Fehler: Umfragen werden nicht in
-					all ihren Phasen gedacht, Erkenntnisse aus der Umfrageforschung
-					bleiben ungenutzt, und nach der Erhebung ist unklar, welche
-					Handlungen folgen sollen. Im ungünstigsten Fall werden die Daten
-					dadurch unbrauchbar oder die Auswertung erheblich erschwert.
-					Unser Unterstützungsangebot setzt hier an.
+					Dabei beobachten wir typische Fehler: Umfragen werden nicht
+					in all ihren Phasen gedacht, Erkenntnisse aus der
+					Umfrageforschung bleiben ungenutzt, und nach der Erhebung
+					ist unklar, welche Handlungen folgen sollen. Im
+					ungünstigsten Fall werden die Daten dadurch unbrauchbar oder
+					die Auswertung erheblich erschwert. Unser
+					Unterstützungsangebot setzt hier an.
 				</p>
 			</p>
 
 			<h2>Unser Ansatz</h2>
-				<p>
-					Wir setzen auf offene Formate wie <a href="/xlsform-standard">XLSForm</a> und <a href="/methodik-veroeffentlichen">DDI-Codebook</a> und verbinden sie durch eigene Open-Source-Tools.
-				</p>
-				<p>
-					Wir unterscheiden zwei Formatebenen: Die <strong>Metadatenebene</strong> beschreibt die Umfrage selbst (Fragebogenstruktur, Variablen). Die <strong>Ergebnisebene</strong> kommt nach der Erhebung hinzu und enthält die eigentlichen Antwortdaten. <a href="/xlsform-standard">XLSForm</a> eignet sich für die Erstellung der Umfrage; <a href="/methodik-veroeffentlichen">DDI-Codebook</a> dokumentiert sie langfristig und maschinenlesbar, inklusive Referenzen auf die zugehörigen Ergebnisdateien. Beide dieser Formate befinden sich auf der Metadatenebene.
-				</p>
-				<p>
-					Unsere Tools übersetzen zwischen Formaten und bieten Unterstützung für die notwendigen Schritte in den einzelnen Phasen. Details zu diesen Formaten könnt Ihr auf den jeweiligen Detailseiten nachlesen.
-				</p>
-				<p>
-					Dabei greifen wir nicht nur auf Eigenentwicklungen zurück: In den Workflow integrieren wir bewährte Standardsoftware (wie <a href="/kobotoolbox">KoboToolbox</a> oder <a href="/limesurvey">LimeSurvey</a>) sowie Empfehlungen für ergänzende Open-Source-Lösungen (wie <a href="/jasp">JASP</a>). So entsteht ein abgestimmtes Ökosystem in dem die verschiedenen Werkzeuge ineinandergreifen. Eine alternative Übersichtsmöglichkeit verknüpft mit einem empfohlenen Workflow findet ihr <a href="/workflow">hier</a>.
-				</p>
-
+			<p>
+				Die Umfragenwerkstatt verbindet zwei Bausteine: eine <strong
+					>Wissenssammlung</strong
+				> und einen abgestimmten <strong
+					>Stack aus empfohlenen und selbst entwickelten Tools</strong
+				>. Gemeinsam sollen sie die Arbeit mit Umfragen in der
+				Zivilgesellschaft erleichtern und stärker standardisieren.
+			</p>
+			<p>
+				Im Zentrum stehen <strong>offene Formate</strong> wie <a
+					href="/xlsform-standard">XLSForm</a
+				> und <a href="/methodik-veroeffentlichen">DDI-Codebook</a>: Sie
+				sind werkzeugübergreifend nutzbar, erleichtern Archivierung und
+				Nachnutzung von Daten und vermeiden Abhängigkeiten von einzelnen
+				Anbietern. Damit diese Formate in der Praxis gut funktionieren,
+				empfehlen wir einen aufeinander abgestimmten Stack bewährter
+				Tools – und schließen dort, wo das offene Ökosystem Lücken
+				lässt, mit eigenen Open-Source-Entwicklungen an. Wie Formate und
+				Tools in einem empfohlenen Workflow zusammenspielen, zeigt die <a
+					href="/workflow">Workflow-Seite</a
+				>.
+			</p>
+			<p>
+				Die Wissenssammlung bildet das inhaltliche Fundament: Sie
+				bündelt Methoden, Erfahrungen und Beispiele aus der Praxis
+				zivilgesellschaftlicher Organisationen und ist direkt auf die
+				empfohlenen Formate und Tools abgestimmt. So entsteht eine
+				gemeinsame Grundlage, die gute Praktiken breiter zugänglich
+				macht und Umfragearbeit über einzelne Projekte hinweg
+				vergleichbarer und nachnutzbarer macht.
+			</p>
 			<section>
 				<h3 id="phasenmodel">Überblick: Ressourcen nach Phase</h3>
+				<p>
+					Eine Umfrage durchläuft typischerweise mehrere Phasen – von
+					der ersten Konzeption über die Erhebung bis hin zur
+					Auswertung und Veröffentlichung. Die folgende Übersicht
+					ordnet unsere Ressourcen, Formate und Tools diesen Phasen
+					zu, sodass Ihr direkt findet, was für Euren aktuellen
+					Schritt relevant ist.
+				</p>
 				<SurveyPhases phases={phases} markers={markers} client:load />
 			</section>
-<section class="ecosystem-section">
-		
-			
-		</section>
-		<h2>Nun kann es losgehen!</h2>
+			<section class="ecosystem-section"></section>
+			<h2>Nun kann es losgehen!</h2>
 			<section>
 				<p>
 					Mit dieser Sammlung schließen wir Lücken im Angebot von
@@ -154,66 +179,66 @@ const markers = [...spanningMarkers, ...knowledgeMarkers, ...toolMarkers];
 					>.
 				</p>
 			</section>
+		</section>
 
-	</body>
+		<style>
+			section {
+				margin-top: 2.5rem;
+			}
+			.transformations-table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 1rem 0;
+				font-size: 0.9rem;
+			}
 
-	<style>
-		section {
-			margin-top: 2.5rem;
-		}
-.transformations-table {
-			width: 100%;
-			border-collapse: collapse;
-			margin: 1rem 0;
-			font-size: 0.9rem;
-		}
+			.transformations-table th,
+			.transformations-table td {
+				border: 1px solid var(--color-text-primary);
+				padding: 0.5rem 0.75rem;
+				text-align: left;
+			}
 
-		.transformations-table th,
-		.transformations-table td {
-			border: 1px solid var(--color-text-primary);
-			padding: 0.5rem 0.75rem;
-			text-align: left;
-		}
-
-		.transformations-table thead {
-			background-color: var(--color-tertiary);
-			font-family: var(--font-family-mono);
-			font-weight: var(--font-weight-bold);
-		}
-
-		.logo-container {
-			margin-top: 1rem;
-			padding-top: 1rem;
-			margin-bottom: 2.5rem;
-			background-color: var(--color-tertiary);
-			border-radius: 2rem;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-		}
-
-		.logo-container :global(svg) {
-			padding-bottom: 3.5rem;
-			padding-top: 3.5rem;
-			width: 100%;
-			max-width: 600px;
-			height: auto;
-		}
-
-		@media (max-width: 768px) {
-			.logo-container :global(svg) {
-				max-width: 100%;
-				padding: 1rem;
-				padding-bottom: 0.5rem;
+			.transformations-table thead {
+				background-color: var(--color-tertiary);
+				font-family: var(--font-family-mono);
+				font-weight: var(--font-weight-bold);
 			}
 
 			.logo-container {
-				margin-top: 3rem;
-				margin-bottom: 1rem;
-				margin-left: 1rem;
-				margin-right: 1rem;
+				margin-top: 1rem;
+				padding-top: 1rem;
+				margin-bottom: 2.5rem;
+				background-color: var(--color-tertiary);
+				border-radius: 2rem;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
 			}
-		}
-	</style>
+
+			.logo-container :global(svg) {
+				padding-bottom: 3.5rem;
+				padding-top: 3.5rem;
+				width: 100%;
+				max-width: 600px;
+				height: auto;
+			}
+
+			@media (max-width: 768px) {
+				.logo-container :global(svg) {
+					max-width: 100%;
+					padding: 1rem;
+					padding-bottom: 0.5rem;
+				}
+
+				.logo-container {
+					margin-top: 3rem;
+					margin-bottom: 1rem;
+					margin-left: 1rem;
+					margin-right: 1rem;
+				}
+			}
+		</style>
+	</body>
 </Layout>
