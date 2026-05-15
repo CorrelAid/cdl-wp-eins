@@ -21,7 +21,9 @@
         const trigger = () => {
             visible = true;
             requestAnimationFrame(() => {
-                entered = true;
+                requestAnimationFrame(() => {
+                    entered = true;
+                });
             });
             cleanupTriggers();
         };
