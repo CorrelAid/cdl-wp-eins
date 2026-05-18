@@ -5,46 +5,102 @@ teaser: Probleme finden, bevor es zu spät ist.
 
 # Pretesting
 
-<InProgressNotice />
+Bevor ein Fragebogen an die eigentliche Zielgruppe geht, sollte er mit einer kleinen Gruppe getestet werden. Das nennt man **Pretest**. Ziel ist, Probleme zu finden, solange sie sich noch beheben lassen, und nicht erst, wenn die ersten 50 Antworten unbrauchbar sind.
 
-## Research Notes -- Pretesting mit LLMs
+Ein Pretest hilft dabei,
 
-LLM generated survey responses can mimick some aspects of human responses when you know the sociodemographics of the expected human respondents and condition the LLM on that via "personas". The survey responses often reproduce averages fairly reliably but lack variance. For our purposes this seems surely good enough.
+- **Fehler** im Fragebogen zu entdecken (Tippfehler, kaputte Filter, falsche Antwortoptionen),
+- die **Verständlichkeit** der Fragen aus Sicht der Zielgruppe zu überprüfen,
+- die **Ausfülldauer** realistisch abzuschätzen,
+- **technische Probleme** zu identifizieren (Mobile-Darstellung, Browser, Ladezeiten),
+- die **Akzeptanz** zu prüfen: Wirken Fragen zu lang, zu invasiv, zu kompliziert?
+
+Das Grundvorgehen ist immer dasselbe: kleine Stichprobe testen lassen, Feedback einholen, Anpassungen vornehmen. Bei größeren Änderungen lohnt sich eine zweite Runde. **Wichtig: Auch ein sehr kleiner Pretest, etwa mit zwei oder drei Personen, ist immer besser als gar keiner.**
+
+## Methoden
+
+Es gibt verschiedene Pretest-Methoden, die unterschiedliche Arten von Problemen aufdecken. In der Praxis lassen sie sich gut kombinieren.
+
+### Expert\*innen-Review
+
+Personen mit Fachwissen zum Thema, zur Zielgruppe oder zu Methodik prüfen den Fragebogen, zum Beispiel Kolleg\*innen aus dem Team, methodisch erfahrene Partner\*innen oder Personen, die die Zielgruppe gut kennen.
+
+- **Stark bei**: methodischen Schwächen, problematischen Formulierungen, Logikfehlern.
+- **Schwach bei**: Wie eine 60-jährige Ehrenamtliche aus dem Sportverein die Frage tatsächlich versteht, lässt sich so nicht beurteilen.
+- **Aufwand**: gering. Schneller erster Check, sollte immer gemacht werden.
+
+<Praxisbeispiel>
+Eine Kollegin liest die Frage *„Wie zufrieden sind Sie mit der Zusammenarbeit mit Behörden?"* und merkt an: „Welche Behörden meint ihr? Bei mir wäre die Antwort fürs Finanzamt eine ganz andere als fürs Jugendamt." Die Frage wird daraufhin in eine Matrix mit konkret benannten Behörden umgebaut.
+</Praxisbeispiel>
+
+### Kognitive Pretests
+
+Beim kognitiven Pretest füllt eine Person aus der Zielgruppe den Fragebogen aus, während ihr daneben sitzt (oder per Video-Call zuschaut) und beobachtet, wie sie zu ihren Antworten kommt. Es gibt drei Varianten, die sich gut kombinieren lassen:
+
+- **Lautes Denken (Think-Aloud)**: Testpersonen sprechen beim Ausfüllen laut aus, was sie gerade denken. So wird sichtbar, an welchen Stellen sie stocken, rätseln oder die Frage anders verstehen als gemeint.
+- **Probing**: Gezielte Nachfragen während oder nach dem Ausfüllen, zum Beispiel *„Was haben Sie unter 'regelmäßig' verstanden?"*, *„Wie sind Sie zu der Antwort 'eher zufrieden' gekommen?"* oder *„Gab es Fragen, bei denen Sie sich unsicher gefühlt haben?"*. Probing fängt auch Aspekte ein, die im reinen Think-Aloud oft untergehen: ob Fragen als zu invasiv, zu lang oder unangenehm wahrgenommen wurden. Damit deckt diese Methode neben dem Verständnis auch die **Akzeptanz** des Fragebogens ab <Citation doi="10.15465/sdm-sg_010" mode="pa" />.
+- **Verhaltensanalyse**: Beobachten und Notieren von Zögern, Zurückspringen, Korrekturen oder unsicherer Körperhaltung. Funktioniert auch remote über geteilten Bildschirm oder Bildschirmaufnahmen. Findet unbewusste Schwierigkeiten, die Testpersonen selbst nicht benennen würden.
+
+Stark/Schwach/Aufwand zusammengefasst:
+
+- **Stark bei**: Verständnisproblemen, Mehrdeutigkeiten, unklaren Antwortoptionen, ungewohnten Frageformaten (→ [Antworttypen](/antworttypen)), Akzeptanz und unbewussten Schwierigkeiten.
+- **Schwach bei**: sensiblen Themen (laut über Einkommen sprechen ist unangenehm). Die Situation ist außerdem künstlich.
+- **Aufwand**: höher. Pro Person intensiver plus eine Person, die durchs Interview führt.
+
+<Praxisbeispiel>
+Beim Test einer Mitgliederbefragung eines Vereins sagt eine Testperson: *„'Wie häufig nutzen Sie unsere Angebote' — also Angebote, das wären für mich die Workshops. Der Newsletter ist ja kein Angebot, oder doch? Ich klick mal 'manchmal'."* Die Frage misst offenbar nicht, was gemeint war (→ [Konzepte & Konstrukte](/konzepte-konstrukte)). Lösung: Angebote explizit auflisten und als Multiple-Choice abfragen.
+</Praxisbeispiel>
+
+<Praxisbeispiel>
+Ein Vorstandsmitglied einer kleinen Initiative blättert dreimal im Fragebogen zurück, um sich die Definition von „hauptamtlich" noch einmal anzuschauen, die ganz oben einmal erklärt wurde. Erkenntnis: Definition direkt an die Frage schreiben, nicht nur in die Einleitung (→ [Fragebogenaufbau](/fragebogenaufbau)).
+</Praxisbeispiel>
+
+### Pilottest
+
+Beim Pilottest geht der Fragebogen an eine kleine Stichprobe aus der Zielgruppe. Im Unterschied zu den anderen Methoden bekommt ihr hier echte Daten unter realistischen Bedingungen.
+
+Wie groß die Stichprobe sein muss, hängt davon ab, was ihr herausfinden wollt, und ist im NPO-Kontext oft durch das begrenzt, was überhaupt machbar ist. Schon 5–10 Personen reichen, um die Ausfülldauer realistischer einzuschätzen und offensichtliche technische Probleme zu finden. Für aussagekräftige Antwortverteilungen oder Abbruchquoten bräuchte es eigentlich mehr. Das ist für die meisten kleinen Organisationen unrealistisch, aber kein Grund, ganz auf einen Pilottest zu verzichten.
+
+Worauf achten:
+
+- **Ausfülldauer** im Median: oft wird unterschätzt, wie lange das Ausfüllen wirklich dauert.
+- **Abbrüche**: An welcher Frage steigen Leute aus?
+- **Antwortverteilungen**: Klumpen alle auf einer Skalenstufe? Wählt niemand bestimmte Optionen?
+- **Filterlogik**: Landen Leute in den richtigen Zweigen?
+- **„Sonstiges"-Freitexte**: Welche Themen tauchen wiederholt auf? Hinweis auf fehlende Kategorien.
+
+<Praxisbeispiel>
+Ein Pilottest mit acht Vorstandsmitgliedern kleiner Vereine zeigt: Die geschätzte Ausfülldauer von 5 Minuten lag tatsächlich bei rund 11 Minuten. Zwei Personen brachen bei derselben Matrix mit 15 Items ab, eine dritte merkte im Nachgang an, sie habe „einfach durchgeklickt". Lösung: Matrix in zwei kleinere Blöcke aufgeteilt, drei Items gestrichen, in der Einladung „ca. 10 Minuten" angekündigt.
+</Praxisbeispiel>
+
+## Welche Methode wann?
+
+Die richtige Methode hängt ab von:
+
+- **Zeit und Ressourcen**: Habt ihr ein paar Stunden oder mehrere Tage?
+- **Komplexität und Sensibilität** des Themas: Bei heiklen Fragen sind kognitive Pretests schwierig.
+- **Digital vs. analog**: Pilottest deckt nur bei digitalen Umfragen technische Probleme auf.
+- **Zielgruppe und Erreichbarkeit**: Wenn ihr nur schwer an Befragte herankommt, ist ein großer Pilottest unrealistisch.
 
 
-### Simulating Human Opinions with Large Language Models: Opportunities and Challenges for Personalized Survey Data Modeling
+## Was tun mit den Ergebnissen?
 
-<Citation key="MH35S3ET" mode="na" /> created ASPIRE (Automated Synthetic Persona Interview and Response Engine) (Couldn't find their python code though).
+Pretesting bringt nur etwas, wenn die Ergebnisse auch in den Fragebogen einfließen. Hilfreich ist eine kurze Tabelle mit *Frage / gefundenes Problem / Änderung / Entscheidung*. Das hilft beim Überblick und später bei der Methodendokumentation. Nicht jeder Hinweis muss umgesetzt werden, aber jede bewusste Entscheidung gegen eine Änderung sollte dokumentiert und im besten Fall kurz begründet sein. Nach größeren Anpassungen lohnt sich eine zweite, kurze Runde mit ein paar neuen Testpersonen.
 
-They create personas based on real sociodemographic data:
+## Wenn gar kein Pretest möglich ist
 
-> "You are a [ethnicity] [sex] living in [state]. You were born in the year [year] in [country of birth]. Your nationality is [nationality] and you speak [language] fluently. Your education level is: [education level] and your profession is: [profession]. You describe your financial situation with [financial situation]."
+Auch das Feedback von ein, zwei Kolleg\*innen findet zuverlässig Tippfehler, ungeeignete Fragen (→ [Fragen formulieren](/gute-fragen-schreiben)) und technische Probleme wie kaputte Mobile-Darstellung oder lange Ladezeiten.
 
-**Conclusion**: Synthetic data is better than random (average agreement between synthetic and real responses was 78% (p&lt;0.001)). However, they found a positivity bias where synthetic responses are more positive than real ones. No strong evidence of sociodemographic bias was found (though this doesn't mean there's no bias!). They also observed lower variance in synthetic responses <Citation key="MH35S3ET" mode="pa" />.
-
-### Out of One, Many: Using Language Models to Simulate Human Samples
-
-<Citation key="3SZ58NRP" mode="na" /> seems to be (among the) first to look in detail at how closely LLM responses map to human responses. They claim that LLMs are very good at reproducing the biases and views of subpopulations when prompted with personas.
+Wenn wirklich kein Test möglich ist, hilft es auf bereits getestete Fragen und Skalen zurückgreifen. In unserer Fragendatenbank [QWAC](/tools#qwac) findet ihr Fragen, die im NPO-Kontext bereits erprobt wurden.
 
 
-### Synthetic Replacements for Human Survey Data? The Perils of Large Language Models.
-<Citation key="VQB2LMBX" mode="pa" />
+## KI für Pretesting
 
-**Conclusion**: Persona-based LLM reponses are good to model human averages but show less variance and non-faithful regression coefficients.
-Not surprising to me: Pre-trained LLMs have great calibration. After RLHF calibration collapses. Plus the temperature is less than 1 usually (so they sample with less variance than what they think the true next-word distribution is.
+Sprachmodelle können einen echten Pretest nicht ersetzen, aber als zusätzlicher Check sind sie nützlich, vor allem, wenn ihr keinen Zugang zu Testpersonen habt.
 
+Zwei pragmatische Anwendungen:
 
-### Large Language Models in Survey Research: Generating Synthetic Data and Unlocking New Possibilities.
-<Citation key="PYJJ3X5U" mode="pa" />
+- **Generelles Feedback**: Den Fragebogen einem Sprachmodell vorlegen und nach Klarheit, Neutralität, Reihenfolge und Verständlichkeit fragen. Findet oft offensichtliche Formulierungsprobleme.
+- **Personas**: Sprachmodelle können realistische Profile eurer Zielgruppe generieren („ehrenamtlicher Kassenwart, 64 Jahre, städtischer Sportverein") und den Fragebogen aus deren Perspektive durchgehen. Hilft, blinde Flecken zu finden, ersetzt aber keine echten Stimmen.
 
-They let the LLM generate the sociodemographic data (e.g. "73% female, 91% White, average age 41.6" and the LLM draws values to match that).
-Generally similar pattern. LLM responses are not a bad approximation but have some problems (too homogeneous, bias).
-
-
-### LLMs Reproduce Human Purchase Intent via Semantic Similarity Elicitation of Likert Ratings
-<Citation doi="10.48550/ARXIV.2510.08338" mode="pa" />
-
-Also as [blog post](https://www.pymc-labs.com/blog-posts/AI-based-Customer-Research). For Likert Scales (aka numeric responses): First let LLMs produce text, second match text with semantic similarity rating to Likert scale (very negative, negative, etc.). They had less positivity bias than humans in their experiments
-
-### Creating Synthetic User Research: Using Persona Prompting and Autonomous Agents
-[Blog Post](https://medium.com/data-science/creating-synthetic-user-research-using-persona-prompting-and-autonomous-agents-b521e0a80ab6) that let's the LLM come up with five more detailed personas and let's them have a group chat over a product with autonomous agents. Less relevant for us.
+Wichtig: KI-Antworten sind systematisch zu positiv und zu homogen. Studien zeigen, dass persona-basierte LLM-Antworten zwar Mittelwerte von menschlichen Antworten brauchbar approximieren, aber einen deutlichen Positivitäts-Bias und eine zu geringe Varianz aufweisen <Citation key="MH35S3ET" mode="pa" /><Citation key="VQB2LMBX" mode="pa" />. Sie taugen, um *grobe* Probleme zu finden, nicht, um die Zustimmung in der echten Zielgruppe abzuschätzen.
