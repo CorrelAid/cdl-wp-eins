@@ -5,14 +5,7 @@ teaser: Den richtigen statistischen Test für die eigene Forschungsfrage finden.
 
 # Welchen Test brauche ich?
 
-Welcher statistische Test passt, hängt davon ab, was ihr vergleichen oder untersuchen wollt und wie eure Daten beschaffen sind. Die folgende Tabelle gibt eine erste Orientierung für typische Fragestellungen in zivilgesellschaftlichen Organisationen.
-
-## Welche Art von Daten habe ich?
-
-Viele Tests unterscheiden zwischen **metrischen** und **kategorialen** Variablen. Als Faustregel: Ergibt es Sinn, aus den Werten einen Durchschnitt zu berechnen? Dann sind die Daten wahrscheinlich metrisch. Wenn nicht (der Durchschnitt von "Hamburg" und "Berlin" ergibt keinen Sinn), dann kategorial.
-
-- **Metrisch**: Zahlen mit sinnvollen gleichen Abständen – z. B. Alter in Jahren, investierte Stunden, Net Promoter Score (NPS, 0–10). Likert-Skalen mit 5 oder mehr Stufen werden in der Praxis oft ebenfalls als metrisch behandelt[^likert].
-- **Kategorial**: Gruppen ohne natürliche Reihenfolge – z. B. Geschlecht, Standort, Mitgliedschaftsart, Ja/Nein-Fragen.
+Welcher statistische Test passt, hängt davon ab, was ihr vergleichen oder untersuchen wollt und wie eure Daten beschaffen sind. Relevant ist dabei auch das [Skalenniveau](analyse-einleitung#skalenniveaus) eurer Variablen, also ob sie nominal, ordinal oder metrisch sind. Die folgende Tabelle gibt eine erste Orientierung für typische Fragestellungen in zivilgesellschaftlichen Organisationen.
 
 ## Standarfälle: Die passenden Tests im Überblick
 
@@ -21,7 +14,7 @@ Viele Tests unterscheiden zwischen **metrischen** und **kategorialen** Variablen
 | Vorher-Nachher-Vergleich bei denselben Personen | Hat sich die berufliche Orientierung der Teilnehmenden nach dem Programm verbessert? | Gepaarter t-Test |
 | Vergleich zweier unabhängiger Gruppen | Unterscheidet sich die Zufriedenheit zwischen Haupt- und Ehrenamtlichen? | t-Test für unabhängige Stichproben |
 | Zusammenhang zweier metrischer Variablen | Hängen Teilnahmedauer und Zufriedenheit zusammen? | Korrelation (Pearson oder Spearman) |
-| Zusammenhang zweier kategorialer Merkmale | Gibt es einen Zusammenhang zwischen Werkstattstandort und Zufriedenheitsstufe? | Kontingenztafel / Chi-Quadrat-Test |
+| Zusammenhang zweier nominaler Merkmale | Gibt es einen Zusammenhang zwischen Werkstattstandort und Zufriedenheitsstufe? | Kontingenztafel / Chi-Quadrat-Test |
 
 ## Klassisch oder Bayessch?
 
@@ -32,7 +25,3 @@ In JASP könnt ihr bei jedem Test zwischen der klassischen und der Bayesschen Va
 Als grobe Orientierung sollten pro verglichener Gruppe mindestens 20–30 Antworten vorliegen, damit ein Test überhaupt aussagekräftig sein kann. Bei sehr kleinen Gruppen ist wahrscheinlich eine [deskriptive Auswertung](deskriptive-auswertung) sinnvoller. Die Ergebnisse eines statistischen Tests wären hier so unsicher, dass sie kaum belastbare Aussagen erlauben.
 
 Eine Übersicht, wie ihr die Tests in JASP durchführt, findet ihr auf der [JASP-Seite](jasp) und in der dort verlinkten [Testübersicht](https://jasp-stats.org/how-to-use-jasp/). Passt eure Fragestellung nicht in die Tabelle, oder bringt ihr noch wenig statistisches Vorwissen mit, empfehlen wir eine statistische Beratung, z.B. in unserer [Datensprechstunde](https://zeeg.me/correlaid/dss-cdl).
-
-
-
-[^likert]: Ob Likert-Items als metrisch behandelt werden dürfen, ist statistisch umstritten. In der psychologischen Forschungspraxis wird es allerdings fast ausnahmslos so gehandhabt <Citation doi="10.1016/j.jesp.2018.08.009" mode="pa" />, weshalb wir es hier ebenfalls empfehlen.

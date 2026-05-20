@@ -1,10 +1,61 @@
 ---
 tocTitle: Einführung
-teaser: Aus Daten Wissen machen.
+teaser: Vom Rohdatensatz zum Wissen — Grundlagen der Datenauswertung.
 ---
 
 # Analyse Einleitung
 
 <InProgressNotice />
 
-Vom Rohdatensatz zur statistischen Auswertung.
+**Noch fehlende Abschnitte:**
+- Wegweiser: Rohdaten → Bereinigung → deskriptiv → schließend → visualisieren → kommunizieren
+- Wann brauche ich was? (deskriptiv vs. schließend)
+- Fehlende Werte (kurz, → [Datenbereinigung](datenbereinigung))
+
+
+## Skalenniveaus
+
+Bevor wir uns an die Auswertung der Daten wagen können, ist es wichtig, dass wir uns mit Skalenniveaus vertraut machen. Das Skalenniveau einer Variable bestimmt, welche Kennzahlen und Tests wir sinnvoll anwenden können. Wir behandeln hier die drei Skalenniveaus mit der größten praktischen Relevanz.
+
+### Nominal
+
+Nominale Daten sind Kategorien ohne natürliche Reihenfolge. Man kann sie benennen, aber nicht sinnvoll sortieren oder miteinander verrechnen.
+
+<Praxisbeispiel>
+Ihr habt in eurer Umfrage nach dem Standort gefragt. Ihr könnt dann zählen, wie viele Personen aus Berlin geantwortet haben, oder welcher Standort am häufigsten vertreten ist. Was keinen Sinn macht: einen Durchschnittsstandort zu berechnen zwischen vier Personen aus Hamburg und sieben aus Berlin.
+</Praxisbeispiel>
+
+Weitere typische Beispiele: Geschlecht, Art der Mitgliedschaft (Haupt- oder Ehrenamt), Ja/Nein-Fragen.
+
+### Ordinal
+
+Ordinale Daten haben eine natürliche Reihenfolge, aber die Abstände zwischen den Stufen sind nicht zwingend gleich groß. "Sehr zufrieden" liegt über "zufrieden" — aber ob der Abstand dazwischen genauso groß ist wie der zwischen "unzufrieden" und "sehr unzufrieden", lässt sich nicht sagen.
+
+Typische Beispiele:
+- Likert-Skalen (1 = stimme gar nicht zu bis 5 = stimme voll zu)
+- Altersgruppen (unter 18, 18–25, 26–35, 36–50 …)
+- Häufigkeitsstufen (nie / selten / manchmal / oft / immer)
+
+Was man hier sinnvoll berechnen kann: Median, Modus, Häufigkeiten.
+Mit Vorsicht zu genießen ist der Mittelwert. Der Durchschnitt von zweimal "Manchmal" und einmal "Immer" ergibt keinen Sinn. Bei Likert-Skalen mit 5 oder mehr Stufen sieht das etwas anders aus: Wenn vier Personen ihre Zufriedenheit mit 4, 4, 1 und 5 bewerten, ist es durchaus möglich den Durchschnitt, nämlich 3,5, zu berechnen. Streng genommen ist das nicht richtig, in der Praxis wird das aber häufig so gehandhabt und gilt als akzeptabel[^likert].
+
+### Metrisch
+
+Metrische Daten sind Zahlen mit gleichen, sinnvollen Abständen. Der Unterschied zwischen 10 und 20 ist genauso groß wie zwischen 40 und 50.
+
+Typische Beispiele: 
+- Alter in Jahren
+- Anzahl investierter Stunden
+- NPS-Score (0–10)[^nps]
+
+Hier könnt ihr alle gängigen Kennzahlen nutzen: Mittelwert, Standardabweichung, Korrelation.
+
+### Faustregel
+
+Ergibt es Sinn, einen Durchschnitt zu berechnen? Wenn ja, sind die Daten wahrscheinlich metrisch. Wenn nicht, dann nominal oder ordinal.
+
+In der [Testauswahl](testauswahl) seht ihr, welche statistischen Tests für welches Skalenniveau geeignet sind.
+
+[^likert]: Ob Likert-Items als metrisch behandelt werden dürfen, ist statistisch umstritten. In der psychologischen Forschungspraxis wird es allerdings fast ausnahmslos so gehandhabt <Citation doi="10.1016/j.jesp.2018.08.009" mode="pa" />, weshalb wir es hier ebenfalls so handhaben. Es ist allerdings eine Vereinfachung.
+
+[^nps]: Der NPS ist streng genommen eine ordinale Skala, da nicht klar ist, ob die Abstände zwischen den Stufen wirklich gleich groß sind. In der Praxis wird er jedoch üblicherweise als metrisch behandelt.
