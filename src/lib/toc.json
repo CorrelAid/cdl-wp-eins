@@ -16,11 +16,11 @@
             "children": [
                 "design-einleitung",
                 "operationalisierung",
-                "xlsform-standard",
+                "fragen-formulieren",
                 "antworttypen",
-                "gute-fragen-schreiben",
                 "fragebogenaufbau",
-                "pretesting"
+                "pretesting",
+                "xlsform-standard"
             ],
             "excludeFromGraphic": ["xlsform-standard"]
         },
