@@ -56,6 +56,6 @@ const sortedQuellen = usedQuellen.sort((a, b) => {
 });
 ---
 
-<Layout title="Quellen" teaser="Browse our research quellen">
+<Layout title="Quellen" teaser="Verzeichnis der in der Wissensammlung verwendeten Quellen.">
     <QuellenList client:load items={sortedQuellen} error={errorMessage} />
 </Layout>

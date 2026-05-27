@@ -16,8 +16,9 @@ interface Props {
      * Citation mode/style
      * - 'na': "Author (Year)"
      * - 'pa': "(Author, Year)"
+     * - 'dq': direct quote, "(Author, Year, p. X)" (requires pages)
      */
-    mode?: 'na' | 'pa';
+    mode?: 'na' | 'pa' | 'dq';
 
     /**
      * Whether to include page numbers (if available)
@@ -109,18 +110,29 @@ interface CitationPart {
     text: string;
 }
 
+// Page suffix for direct quotes / when pages requested
+const showPages = (mode === 'dq' || includePages) && !!pages;
+if (mode === 'dq' && !pages) {
+    console.warn("Citation mode 'dq' (direct quote) requires a 'pages' prop.");
+}
+const pageSuffix = showPages
+    ? `, ${/[-–,\s]/.test(pages!.trim()) ? 'pp.' : 'p.'} ${pages!.trim()}`
+    : '';
+
 const parts: CitationPart[] = citedItems.map(({ item }) => {
     const { creators, date } = item.data;
     const authors = formatAuthors(creators);
     const year = formatYear(date);
     const link = `/quellen#${item.id}`;
-    return { authors, year, link, text: `${authors}, ${year}` };
+    return { authors, year, link, text: `${authors}, ${year}${pageSuffix}` };
 });
 
 // Fallback if nothing was found
 const hasCitations = parts.length > 0;
 const citationClass = !hasCitations ? "citation-fallback"
-    : mode === 'na' ? "na-citation" : "pa-citation";
+    : mode === 'na' ? "na-citation"
+    : mode === 'dq' ? "dq-citation"
+    : "pa-citation";
 ---
 
 {!hasCitations ? (
@@ -128,7 +140,7 @@ const citationClass = !hasCitations ? "citation-fallback"
 ) : mode === 'na' ? (
     <span class={`citation ${citationClass}`} data-citation-mode={mode}>
         {parts.map((p, i) => (
-            <>{i > 0 && '; '}{p.authors} (<a href={p.link} class="quellen-link na-year" aria-label="View full citation">{p.year}⤴</a>)</>
+            <>{i > 0 && '; '}{p.authors} (<a href={p.link} class="quellen-link na-year" aria-label="View full citation">{p.year}⤴</a>{pageSuffix})</>
         ))}
     </span>
 ) : (

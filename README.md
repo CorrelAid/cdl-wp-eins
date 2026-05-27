@@ -45,9 +45,9 @@ Quellen is managed via a Zotero group and fetched live. To cite an item in an MD
 - `key` (optional): The Zotero item key.
 - `doi` (optional): The DOI of the item.
 - Note: Either `key` or `doi` must be provided.
-- `mode` (optional): `'pa'` (default, e.g., "(Author, Year)") or `'na'` (e.g., "Author (Year)").
-- `includePages` (optional): Boolean to include page numbers.
-- `pages` (optional): String for page numbers.
+- `mode` (optional): `'pa'` (default, e.g., "(Author, Year)"), `'na'` (e.g., "Author (Year)"), or `'dq'` for direct quotes including the page number (e.g., "(Author, Year, p. 42)"). `'dq'` requires `pages`.
+- `includePages` (optional): Boolean to include page numbers in `'pa'`/`'na'` modes (requires `pages`).
+- `pages` (optional): String for page numbers, e.g. `"42"` or `"42-45"`. A range or list renders as "pp.", a single page as "p.".
 
 ### Tool Snippets
 
