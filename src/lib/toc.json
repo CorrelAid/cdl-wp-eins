@@ -28,10 +28,8 @@
             "label": "Erhebung",
             "children": [
                 "erhebung-einleitung",
-                "feldphase-monitoring",
-                "kobotoolbox",
-                "limesurvey",
-                "lamapoll"
+                "umfragetool-einladung",
+                "feldphase-monitoring"
             ]
         },
         {
