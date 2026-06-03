@@ -5,24 +5,53 @@ teaser: Tool auswählen, Umfrage aufsetzen, Teilnehmende einladen.
 
 # Umfragetool & Einladung
 
-<InProgressNotice />
+## Auswahl des Online-Umfragetools
+Es gibt unzählige Tools für Online-Umfragen und Marktforschung. Die Auswahl hängt von vielen individuellen Faktoren Eurer Umfrage und Eurer Organisation ab. Zwar empfehlen wir zwei OpenSource Tools, die mit dem von uns verwendeten [XLSForm Standard]( https://umfragen.civic-data.de/xlsform-standard) nutzbar sind (KoboToolbox und Limesurvey). Dennoch stellen wir hier auch Fragen zusammen, mit denen Ihr für Euren jeweiligen Anwendungsfall selbst abwägen könnt, welches Tool Ihr wählt:
+* **Funktionsumfang des Fragebogens**: Könnt Ihr alle Eure gewählten Frage- und [Antworttypen]( https://umfragen.civic-data.de/fragetypen) damit umsetzen? Braucht Ihr Verzweigungen, Paginierungen und komplexe Logiken? Welche Designindividualisierungen benötigt Ihr?
+* **Funktionsumfang für Auswertungen**: Benötigt Ihr eine API für den Zugriff auf die Daten? Wird Euer erforderlicher Datentyp als Download angeboten? Möchtet Ihr grafische Darstellungen oder integrierte Berichtsfunktionen verwenden?
+* **Datenschutzkonformität**: Wenn Ihr personenbezogene Daten erhebt (, was bei Online-Umfragen durch Speicherung von IP-Adressen meist der Fall ist), ist für Euch wichtig, wo die Daten gespeichert und verarbeitet werden, welche technischen und organisatorischen Maßnahmen zu ihrem Schutz ergriffen werden, ob ihr mehrere Benutzerkonten mit getrenntem Datenzugriff habt und ob ein Auftragsverarbeitungsvertrag abgeschlossen werden kann. Bei manchen Organisationen ist aus diesem Grund fest definiert, welche Tools zu welchen Zwecken verwendet werden dürfen – erkundigt Euch ggf. bei Euren Datenschutzbeauftragten.
+* **Software-Betriebs- und Lizenzmodell**: Auch hierzu gibt es vermutlich übliche Verfahren in Eurer Organisation. Wenn Ihr sonst Software eher als Service in der Cloud nutzt (z.B. Google Suite), werdet Ihr Euch vermutlich auch beim Umfrage-Tool für ein webbasiertes Tool entscheiden. Wir empfehlen, statt proprietärer Lösungen auf Open Source Lizensierungen zu setzen, bei denen der Quellcode zugänglich ist. Auch für diese gibt es die Möglichkeit, für Euch gehostete Varianten zu nutzen – wer jedoch viele Umfragen umsetzt und die geeigneten IT-Kapazitäten hat, entscheidet sich vielleicht für Self-Hosting.
+* **Usability für Admins (Backend) und Umfrageteilnehmende (Frontend)**: Wie werden die Einrichtungsumgebung und die spätere Umfrage dargestellt und wie nutzendenfreundlich ist die Weboberfläche gestaltet? Gerade das Design der Umfrageseite kann entscheidend für den Rücklauf Eurer Umfrage sein. Es sollte daher den Nutzenden entsprechen und es Ihnen möglichst einfach machen, ggf. Vertrauen über bekannte Elemente wecken und das Eingeben der Antworten zu einem guten Erlebnis machen. Die Benutzeroberfläche im Backend kann darüber entscheiden, wie viel Einarbeitung auf Eurer Seite erforderlich ist, aber auch wie viele Funktionen einfach zugänglich sind.
+* **Preismodell**: Benötigt Ihr ein kostenfreies Tool oder könnt Ihr bezahlte Pläne abbilden? Hat Eure Organisation bereits Tools abonniert, die Ihr mitnutzen könnt?
 
-## Tool auswählen
+Wir haben 17 Tools für Euch zusammengetragen, die häufig in zivilgesellschaftlichen Organisationen zum Einsatz kommen. Ihr findet die wichtigsten Informationen zu den o.s. Kriterien in einer Excel-Tabelle als Bewertungsmatrix, damit Ihr Eure individuelle Entscheidung treffen könnt. Ihr könnt [die Bewertungsmatrix unter diesem Link]( https://civic-data.de/app/uploads/Umfragetools_Bewertungen.xlsx) herunterladen.
 
-{/* Auswahlkriterien, Bewertungsmatrix verlinken */}
+Hier stellen wir Euch noch kurz die zwei Tools vor, die wir aufgrund ihres OpenSource Lizenzmodells empfehlen:
+### KoboToolbox
+KoboToolbox ist Open Source, basiert auf dem von uns verwendeten [XLSForm Standard]( https://umfragen.civic-data.de/xlsform-standard) und ist für NPOs in der Community Variante **kostenlos gehostet**. 
 
-## Umfrage aufsetzen
+Es handelt sich um einen Form‑Builder mit komplexer Logik aber geringerem Fragendesignumfang, der insbesondere für Feldforschung im Bereich der internationalen Entwicklungszusammenarbeit eingesetzt wird. Daher ist die Offline‑Erhebung via Mobile‑App (KoboCollect/ODK) möglich. Dazu kommen Medien‑Uploads, GPS/Geodaten und Funktionen zur Team‑Kollaboration. Die Oberfläche für Nutzende ist übersichtlich und klar, jedoch nur wenig individualisierbar.
 
-{/* XLSForm-Import, Aufbau im Tool */}
+Die Umfragedaten kann man in einem einfach auswertbaren Format herunterladen oder per API mit [survey2ddi](https://github.com/CorrelAid/survey2ddi) direkt in ein mensch- und maschinenlesbares Format für die weitere Auswertung bringen.
 
-## Einladung & Verteilung
+Für die Online-Auswertung haben manche andere Tools etwas bessere Möglichkeiten zur Visualisierung, weil Antworttypen wie z.B. Single Choice, Likert Scale, und Netpromoter im Hintergrund anders behandelt werden. Bei XLSform dagegen werden diese alle als “select one” dargestellt, sodass die automatische Auswertung kein Ranking darstellt.
 
-{/* Einladungswege, Links, Reminder */}
+### Lime Survey
+LimeSurvey ist eine weitere Open Source Alternative und kann als Community Edition **kostenlos selbst gehostet** werden. Es gibt auch Anbieter, die innerhalb der EU Hosting zur Verfügung stellen, die kostenlosen Pläne haben jedoch sehr kleine Umfänge.
 
-## Tool-Notizen (Recherche)
+Anders als KoboToolbox basiert LimeSurvey nicht auf dem XLSForm-Standard, sondern ist ein eigenständiger Online-Survey-Builder mit sehr großem Fragendesignumfang und vielen Einstellungsmöglichkeiten. Wir haben für Euch eine kleine [Web-App mit dem Namen Formtransform]( https://formtransform.correlaid.org/) erstellt, mit der Ihr XLS-Form Fragebögen in das LimeSurvey-TSV-Format mit anschließender Downloadmöglichkeit umwandeln könnt.
 
-{/* Inhalte aus den alten Einzelseiten, falls gebraucht:
-- kobotoolbox.mdx
-- limesurvey.mdx
-- lamapoll.mdx
-*/}
+LimeSurvey eignet sich besonders für webbasierte Befragungen, bei denen ein differenziertes Fragebogendesign, individuelle Gestaltung, Mehrsprachigkeit, Zugangskontrolle und Datenschutzanforderungen wichtig sind.
+
+Für die Online-Auswertung bringt LimeSurvey integrierte Antwortübersichten, einfache Statistiken und Diagramme mit. Die Umfragedaten können in verschiedenen Formaten exportiert werden, unter anderem als CSV, Excel, R, STATA, SPSS, PDF oder VV-Datei. Außerdem stellt LimeSurvey eine RemoteControl-API bereit, über die Umfragen und Antworten automatisiert aus anderen Anwendungen heraus verwaltet oder exportiert werden können.
+
+Ein Vorteil gegenüber XLSForm-basierten Tools ist, dass viele Fragetypen in LimeSurvey als eigene Typen modelliert sind und dadurch in Oberfläche und Auswertung differenzierter behandelt werden können; gleichzeitig erfordert die große Flexibilität bei komplexen Fragebögen mehr Konfigurationsaufwand.
+
+### Lamapoll
+Lamapoll wird in besonders vielen zivilgesellschaftlichen Organisationen eingesetzt. Dennoch schließen wir es als von uns mit Code unterstütztes Umfragetool aus, denn es ist nicht Open Source und man kann keine Umfragen importieren. Dadurch kann nicht mit dem XLSform Standard gearbeitet werden und man ist an Lamapoll als Plattform gebunden.
+
+Die kostenfreie Funktionalität bei Lamapoll erlaubt eine Deskriptive Statistik innerhalb des Online-Tools. Außerdem ist ein Download von aggregierten Daten mit deskriptiver Analyse z.B. als Excel Sheet möglich. Für eine eigenständige weitere Auswertung der Daten braucht man allerdings die individuellen Daten, die es nur in der Bezahlversion gibt.
+
+## Einladung zur Teilnahme
+Bei der Anlegung des Fragebogens im Tool sowie der Einladung werdet Ihr vermutlich noch begleitende Texte erstellen, die es Teilnehmenden ermöglichen, den Rahmen der Erhebung einzuschätzen. Hierbei ist es wichtig, dass Ihr die Teilnehmenden damit nicht zu stark beeinflusst. Formuliert Einladungstexte und spätere Erinnerungen neutral. Vermeidet Formulierungen, die bestimmte Antworten nahelegen, z.B. „Hilf uns zu zeigen, dass unser Bildungsangebot hilfreich ist.“ Besser wäre: „Wir untersuchen Erfahrungen mit unserem Bildungsangebot.“ 
+
+Dennoch – **Motivation** ist alles, damit Ihr möglichst viele Antworten der beabsichtigten Zielgruppe erhaltet. Dabei ist es wichtig, Euch auf Eure Konzeption zur [Stichprobenauswahl]( https://umfragen.civic-data.de/sampling-theorie) zu besinnen und Euch zu überlegen, wie Ihr schon durch Eure Einladung Verzerrungen vermeiden könnt. Neben einem kurzen Fragebogendesign können dabei nämlich auch weitere Anreize helfen. Überlegt zum Beispiel, ob diese Möglichkeiten zu Eurem Setting passen könnten:
+* QR-Codes zur Umfrage schon während des zu evaluierenden Angebots aushängen
+* Einladung zur Teilnahme mit Link auf das Gerät senden, mit dem direkt teilgenommen wird – z.B. per Messengergruppen bei Jugendlichen aufs Handy (mit einem mobile ready Fragebogendesign) oder per E-Mail an Fachkräfte im Büro
+* Weiterverteilen Eurer Einladung durch Peers/ Multiplikator*innen
+* Gewinnspiel unter den Teilnehmenden (Achtung, hierfür werden vermutlich personenbezogene Daten erhoben – bitte beachtet dafür die Hinweise, die wir zum [Datenschutz]( https://umfragen.civic-data.de/datenschutz) zusammengestellt haben.
+* Information zu den Ergebnissen der Umfrage an Teilnehmende weitergeben – so tragen sie nicht nur zu den Erkenntnissen bei, sondern profitieren auch selbst davon (auch hier müssen allerdings (am besten getrennt) Kontaktdaten erhoben werden)
+
+Ihr solltet klar für Euch definieren, welche **Zielgruppe** Ihr mit der Umfrage habt und wie Ihr sie am besten erreichen könnt. Wichtig ist auch, dass Ihr einen **Zeitplan** für die Umfrage aufstellt und von Anfang an mitkommuniziert, wie lange Ihr Daten erheben wollt. Zusätzliche Erinnerungen und spätere Verlängerungen der Erhebungszeit während der [Feldphase]( https://umfragen.civic-data.de/feldphase-monitoring) sind natürlich möglich.
+
+Bei der Einladung zur Umfrageteilnahme werdet Ihr vermutlich auch die **Informationen zum Datenschutz** mitgeben und ggf. eine Einwilligung zur Verarbeitung der Daten im jeweiligen Umfang Eurer Umfrage einholen. Nicht vergessen, denn ohne Rechtsgrundlage dürft Ihr Datensätze mit Personenbezug später nicht weiter speichern und bearbeiten – dazu mehr unter zum [Datenschutz]( https://umfragen.civic-data.de/datenschutz).
