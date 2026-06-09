@@ -47,10 +47,9 @@
             "label": "Von Daten zu Taten",
             "children": [
                 "handeln-einleitung",
-                "datenvisualisierung",
-                "ergebnisse-kommunizieren",
-                "ergebnisse-zu-massnahmen",
-                "methodik-veroeffentlichen"
+                "entscheiden-lernen",
+                "kommunizieren-visualisieren",
+                "nachnutzbarkeit"
             ]
         },
         "workflow",

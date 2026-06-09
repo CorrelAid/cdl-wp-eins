@@ -86,7 +86,7 @@ function flattenToc(items: any[], level = 1): Chapter[] {
                     chapters.push({
                         slug: item,
                         level,
-                        title: entry.data.tocTitle,
+                        title: entry.data.pageTitle,
                         entry,
                     });
             }
@@ -96,7 +96,7 @@ function flattenToc(items: any[], level = 1): Chapter[] {
                 chapters.push({
                     slug: item.label,
                     level,
-                    title: parentEntry.data.tocTitle,
+                    title: parentEntry.data.pageTitle,
                     entry: parentEntry,
                 });
             chapters = chapters.concat(

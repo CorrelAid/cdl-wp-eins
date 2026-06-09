@@ -57,7 +57,7 @@
         width: 100%;
         height: 70px;
         margin-top: var(--spacing-sm);
-        margin-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-xl);
         color: var(--color-text-primary);
     }
 

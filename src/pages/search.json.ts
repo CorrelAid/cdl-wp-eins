@@ -21,7 +21,7 @@ export async function GET() {
 
         return {
             id: page.id,
-            title: page.data.tocTitle,
+            title: page.data.pageTitle,
             teaser: page.data.teaser,
             content: cleanContent
         };

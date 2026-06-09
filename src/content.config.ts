@@ -12,9 +12,13 @@ const pages = defineCollection({
         }
     }),
     schema: z.object({
-        tocTitle: z.string(),
+        pageTitle: z.string(),
+        tocTitle: z.string().optional(),
         teaser: z.string().default("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
-    })
+    }).transform((data) => ({
+        ...data,
+        tocTitle: data.tocTitle ?? data.pageTitle
+    }))
 });
 
 export const collections = { pages };   
