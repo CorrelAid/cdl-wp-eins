@@ -8,6 +8,7 @@ import XlsFormDisplay from "@components/XlsFormDisplay.astro";
 import QuestionTypeBlock from "@components/QuestionTypeBlock.astro";
 import Praxisbeispiel from "@components/Praxisbeispiel.astro";
 import InProgressNotice from "@components/InProgressNotice.astro";
+import Figure from "@components/Figure.astro";
 import toc from "@lib/toc.json";
 import "@styles/main.css";
 import "@styles/gen_tokens.css";
@@ -188,6 +189,7 @@ const renderedChapters = await Promise.all(
                                             QuestionTypeBlock,
                                             Praxisbeispiel,
                                             InProgressNotice,
+                                            Figure,
                                         }}
                                     />
                                 )}

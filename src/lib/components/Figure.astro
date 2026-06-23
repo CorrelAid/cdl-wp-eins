@@ -1,0 +1,56 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  number: number | string;
+  caption?: string;
+  id?: string;
+}
+const { src, alt, number, caption, id } = Astro.props;
+const anchor = id ?? `abbildung-${number}`;
+---
+
+<figure class="figure" id={anchor}>
+  <img src={src} alt={alt} loading="lazy" />
+  <figcaption>
+    <span class="fig-number">Abbildung {number}</span>
+    {caption && <span class="fig-caption">{caption}</span>}
+    <slot />
+  </figcaption>
+</figure>
+
+<style>
+  .figure {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .figure img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid var(--color-text-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: 4px 4px 0 var(--color-text-primary);
+    background: var(--color-white);
+  }
+
+  figcaption {
+    font-family: var(--font-family-body);
+    font-size: 0.8rem;
+    line-height: 1.45;
+    text-align: center;
+    max-width: 60ch;
+    opacity: 0.8;
+  }
+
+  .fig-number {
+    font-family: var(--font-family-mono);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 0.4rem;
+  }
+</style>

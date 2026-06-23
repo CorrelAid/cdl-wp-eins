@@ -1,7 +1,111 @@
 ---
 pageTitle: Daten visualisieren und kommunizieren
 tocTitle: Visualisieren & kommunizieren
-teaser: Diagrammtypen, Gestaltungsregeln, barrierefreie Darstellung und Ergebnisse verständlich aufbereiten und präsentieren.
+teaser: Ergebnisse verständlich aufbereiten und präsentieren.
 ---
 
-<InProgressNotice />
+import Chart from '../../lib/components/Chart.svelte';
+import { penguinSpeciesData, billLengthDistributionData, billLengthDepthCorrelationData, timeSeriesData, barChartOptions, histogramOptions, scatterOptions, lineChartOptions } from '../../lib/chartData.ts';
+
+Damit Umfrageergebnisse tatsächlich Entscheidungen beeinflussen, müssen sie bei der Zielgruppe ankommen. Im [vorherigen Kapitel](/entscheiden-lernen) hieß der entsprechende Weg **Push**: Erkenntnisse zielgruppengerecht aufbereiten und aktiv an die Entscheidungsträger:innen herantragen. 
+
+## Push-Formate gestalten: wie funktioniert Kommunikation?
+
+Dem Kooperationsprinzip zufolge <Citation key="S25E54AG"/> beruht gelingende Kommunikation darauf, dass beide Seiten implizit zusammenarbeiten: Die sprechende Person liefert genau den Beitrag, den die Situation erfordert, und die zuhörende Person geht davon aus, dass sie das tut. Dieses unausgesprochene Übereinkommen umfasst Maximen, an denen sich Verständigung in der Regel orientiert:
+
+**Quantität**: Ein Beitrag enthält so viel Information wie nötig und so wenig wie möglich; weder wird Wesentliches weggelassen noch mit Überflüssigem überfrachtet.
+
+**Qualität**: Was gesagt wird, gilt als wahr und belegt; behauptet wird nichts, wofür die Grundlage fehlt.
+
+**Relation**: Ein Beitrag bezieht sich auf die Situation und das gemeinsame Ziel, ist also relevant.
+
+**Modalität (Art und Weise)**: Die Darstellung ist klar und geordnet; sie vermeidet Mehrdeutigkeit und unnötige Komplexität.
+
+Auch wenn das Kooperationsprinzip ursprünglich beschreibt, warum Verständigung überhaupt funktioniert, lässt sich daraus ableiten, wie man Kommunikation verbessern und vor allem, was man vermeiden sollte. 
+
+Damit zusammenhängend lohnen sich folgende Fragen zu dem Material, das man erstellt: Wer liest es? Welche Entscheidung soll es unterstützen? Wie viel Zeit und Vorwissen bringt die Zielgruppe mit? 
+
+Kombiniert man die Maximen zum Beispiel mit dem Kontext, dass Entscheidungsträger:innen meist wenig Zeit haben, ergibt sich für solche oft das Format  **One-Pager** oder Factsheet mit einer Kernaussage. Für eine inhaltliche Diskussion ein ausführlicherer **Policy Brief**; und für wiederkehrende Nutzung ein **Dashboard** (das zugleich in den [User-Pull-Bereich](/entscheiden-lernen) übergeht).
+
+
+## Welche Rolle spielt Visualisierung bei der Kommunikation?
+
+Datenvisualisierung kann zwei Funktionen haben. Zum einen erlaubt sie es in Daten Muster zu erkennen (z.B. einen Zusammenhang zwischen zwei oder mehreren Variablen). Zum anderen kann man Muster oder Wissen, dass in Daten steckt, mit Visualisierungen sichtbar machen oder verdeutlichen. Wir beschäftigen uns hier vor allem mit zweiterem Anwendungsfall. 
+
+Datenvisualisierung kann man sich in beiden Anwendungsfällen als Mapping von Variablen zu visuellen Dimensionen vorzustellen. Visuelle Dimensionen sind zum Beispiel Farbe, Position oder Größe (ausführlich dargestellt in Abbildung 1). 
+
+<Figure
+  number="1"
+  src="/images/visuelle-variablen.png"
+  alt="Übersicht visueller Variablen: Position, Größe, Form, Farbe (Helligkeit, Farbton, Sättigung), Textur, Optik und Bewegung, jeweils angewandt auf geometrische, sprachliche und bildhafte Symbole."
+  caption="Visuelle Variablen und ihre Ausprägungen. Aus "
+>
+  <Citation doi="10.1073/pnas.1807180116" mode="na" />
+</Figure>
+
+Dieses Mapping explizit zu machen, erlaubt es, präzise Information für die Betrachter:in sichtbar zu machen. Einzelne Visualisierungen sind oft Kombinationen aus Mappings, die bekannten Diagramtsypen entsprechen. In einem Scatterplot werden zwei Variablen jeweils durch eine X- und Y-Koordinate (siehe Position in Abb. 1) dargestellt, was in einem Punkt resultiert. Eine kategorische Variable kann man dann zu Farben oder Formen mappen.
+
+
+## Welcher Diagrammtyp eignet sich wann?
+
+Die Wahl eines Diagramms sollte sich nicht danach richten, welche Visualisierung verfügbar ist, sondern danach, welche Frage beantwortet werden soll. Unterschiedliche Diagrammtypen unterstützen unterschiedliche Analyseaufgaben. Wir stellen hier die grundlegensten vor.
+
+Wir verwenden hier den Palmer-Pinguine-Datensatz als anschauliches Beispiel für die Möglichkeiten von Visualisierung. Es handelt sich um einen einen Datensatz, der sowohl kategoriale Merkmale (z. B. Art, Insel oder Geschlecht) als auch numerische Messwerte (z. B. Schnabellänge, Schnabeltiefe, Flossenlänge und Körpermasse) enthält <Citation key="GFS9AD3N" mode="parenthetical"/>.
+
+### Kategorien vergleichen
+
+**Frage:** Wie viele Beobachtungen gibt es pro Pinguinart?
+
+<Chart
+  client:load
+  type="bar"
+  data={penguinSpeciesData}
+  options={barChartOptions}
+/>
+
+Balken- und Säulendiagramme eignen sich für den Vergleich diskreter Kategorien. Da die Länge einer gemeinsamen Achse sehr präzise wahrgenommen werden kann, lassen sich Unterschiede schnell erkennen. Kategorien sollten nach Größe statt alphabetisch sortiert werden, außer es gibt eine natürliche Reihenfolge.
+
+### Verteilungen verstehen
+
+**Frage:** Wie verteilt sich die Schnabellänge der Pinguine?
+
+<Chart
+  client:load
+  type="bar"
+  data={billLengthDistributionData}
+  options={histogramOptions}
+/>
+
+Histogramme zeigen, wie sich Werte über einen Zahlenbereich verteilen. Sie helfen dabei, typische Werte, Ausreißer oder mehrere Gruppen innerhalb der Daten zu erkennen. Für kompakte Vergleiche mehrerer Gruppen eignen sich zusätzlich Boxplots.
+
+### Zusammenhänge untersuchen
+
+**Frage:** Gibt es einen Zusammenhang zwischen Schnabellänge und Schnabeltiefe?
+
+<Chart
+  client:load
+  type="scatter"
+  data={billLengthDepthCorrelationData}
+  options={scatterOptions}
+/>
+
+Streudiagramme (Scatterplots) zeigen die Beziehung zwischen zwei metrischen Variablen. Jeder Punkt repräsentiert eine Beobachtung. Muster in der Punktwolke können auf Korrelationen, Cluster oder Ausreißer hinweisen.
+
+### Entwicklungen über die Zeit darstellen
+
+Wenn eine Variable über die Zeit beobachtet wird, sind Liniendiagramme meist die beste Wahl. Hier werden Trends, Veränderungen und Wendepunkte sichtbar gemacht.
+
+**Frage:** Wie entwickelt sich die Anzahl der Pinguine pro Art über die Jahre?
+
+<Chart
+  client:load
+  type="line"
+  data={timeSeriesData}
+  options={lineChartOptions}
+/>
+
+
+### Wann eine Tabelle besser ist
+
+Nicht jede Information benötigt ein Diagramm. Tabellen eignen sich besonders dann, wenn exakte Werte wichtig sind oder Nutzer einzelne Beobachtungen nachschlagen möchten.
+
