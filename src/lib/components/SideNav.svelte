@@ -121,7 +121,7 @@
 
 <nav id="sidebar" class:open={isOpen}>
     <div class="sidebar-header">
-        <a href="/" onclick={closeMenu} class="logo-link">
+        <a href="https://civic-data.de/machen/" onclick={closeMenu} class="logo-link" target="_blank" rel="noopener noreferrer">
             <div class="logo-comb">
                 <div class="logo">{@html logo}</div>
                 <span class="site-title">Umfragenwerkstatt</span>
