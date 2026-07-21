@@ -159,7 +159,7 @@ Nach <Citation doi="10.1007/978-3-658-21308-4_59" mode="na" /> eignen sich die o
 <QuestionTypeBlock exampleId="text" />
 
 
-## Weitere Antwortformate
+{/* ## Weitere Antwortformate
 
 ### Endpunkt-verankerte Ratingskalen
 
@@ -175,7 +175,7 @@ Ranking-Fragen fordern Befragte auf, eine Menge von Items in eine Reihenfolge zu
 
 ### Datum / Uhrzeit
 
-Datums- und Uhrzeitfragen erfassen temporale Angaben direkt (z.B. Geburtsdatum, Zeitpunkt eines Ereignisses). In XLSForm entspricht dies den Typen `date` und `time`. Zentrale Designentscheidungen betreffen das Eingabeformat (DD.MM.YYYY vs. Datepicker) und die Mobilfreundlichkeit der gewählten Eingabemethode.
+Datums- und Uhrzeitfragen erfassen temporale Angaben direkt (z.B. Geburtsdatum, Zeitpunkt eines Ereignisses). In XLSForm entspricht dies den Typen `date` und `time`. Zentrale Designentscheidungen betreffen das Eingabeformat (DD.MM.YYYY vs. Datepicker) und die Mobilfreundlichkeit der gewählten Eingabemethode. */}
 
 ## Weitere Empfehlungen für Antwortformate
 
@@ -186,30 +186,6 @@ Eine explizite „Weiß nicht"-Option erhöht den Anteil fehlender Antworten, oh
 **„Keine Angabe" / „Möchte ich nicht beantworten"** ist konzeptionell von „Weiß nicht" zu trennen: Hier wird nicht Unfähigkeit signalisiert, sondern bewusste Antwortverweigerung. Diese Option sollte bei sensiblen Themen angeboten werden — also bei Fragen, die soziale Erwünschtheit auslösen, als intrusiv empfunden werden oder bei denen Befragte negative Konsequenzen einer Offenlegung befürchten <Citation doi="10.1037/0033-2909.133.5.859" mode="pa" />. Typische Anwendungsbereiche sind Einkommen, Gesundheit, Sexualität und politische Zugehörigkeit. Wird bei solchen Fragen stattdessen eine Antwort erzwungen (Forced Answering), steigen die Abbruchquoten — insbesondere bei hochsensiblen Items — und die Antwortqualität sinkt <Citation doi="10.2298/PSI1504311D" mode="pa" />.
 
 Bei **Multiple-Choice-Fragen** sollten "Weiß nicht" und "Keine Angabe" als exklusive Optionen implementiert werden: Sobald eine inhaltliche Option gewählt wird, ist eine gleichzeitige Angabe von „Weiß nicht" logisch widersprüchlich und sollte technisch unterbunden werden.
-
-In XLSForm wird die Exklusivität einer Option über die Spalte `exclusive` in der choices-Tabelle gesteuert:
-
-<XlsFormDisplay worksheets={[
-    {
-        id: "survey",
-        title: "survey",
-        headers: ["type", "name", "label"],
-        data: [
-            ["select_multiple angebotsnutzung", "angebotsnutzung", "Welche Angebote Ihrer Organisation nutzen Sie?"]
-        ]
-    },
-    {
-        id: "choices",
-        title: "choices",
-        headers: ["list_name", "name", "label", "exclusive"],
-        data: [
-            ["angebotsnutzung", "beratung", "Beratung", ""],
-            ["angebotsnutzung", "bildung", "Bildungsangebote", ""],
-            ["angebotsnutzung", "freizeit", "Freizeitangebote", ""],
-            ["angebotsnutzung", "keine_angabe", "Keine Angabe", "yes"]
-        ]
-    }
-]}/>
 
 ##  Nicht empfohlene Antwortformate
 
