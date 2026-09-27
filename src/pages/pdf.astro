@@ -3,9 +3,11 @@ import { getCollection, render } from "astro:content";
 // @ts-ignore
 import { getLiveCollection } from "astro:content";
 import QuellenList from "@components/Literature.svelte";
+import { usedCitations, isCited } from "@lib/utils/citations";
 import Citation from "@components/Citation.astro";
 import XlsFormDisplay from "@components/XlsFormDisplay.astro";
 import QuestionTypeBlock from "@components/QuestionTypeBlock.astro";
+import Unsupported from "@components/Unsupported.astro";
 import Praxisbeispiel from "@components/Praxisbeispiel.astro";
 
 import Figure from "@components/Figure.astro";
@@ -18,20 +20,7 @@ const allPages = await getCollection("pages");
 const pageMap = new Map(allPages.map((p) => [p.id, p]));
 
 // Find used citations
-const usedKeys = new Set<string>();
-const usedDois = new Set<string>();
-
-allPages.forEach(page => {
-  const content = page.body || "";
-  const keyMatches = content.matchAll(/<Citation[^>]*key=["']([^"']+)["'][^>]*>/g);
-  for (const match of keyMatches) {
-    usedKeys.add(match[1]);
-  }
-  const doiMatches = content.matchAll(/<Citation[^>]*doi=["']([^"']+)["'][^>]*>/g);
-  for (const match of doiMatches) {
-    usedDois.add(match[1]);
-  }
-});
+const used = usedCitations(allPages.map(page => page.body || ""));
 
 let sortedQuellen: any[] = [];
 try {
@@ -39,9 +28,7 @@ try {
     const { entries: quellen } = await getLiveCollection("quellen");
     
     // Filter to used items
-    const usedQuellen = quellen ? quellen.filter((item: any) => {
-        return usedKeys.has(item.id) || (item.data.DOI && usedDois.has(item.data.DOI));
-    }) : [];
+    const usedQuellen = quellen ? quellen.filter((item: any) => isCited(item, used)) : [];
 
     // Sort by first author's last name
     sortedQuellen = usedQuellen.sort((a: any, b: any) => {
@@ -167,6 +154,7 @@ const renderedChapters = await Promise.all(
                         {chapter.isQuellen ? (
                             <QuellenList
                                 items={sortedQuellen}
+                                showTitle
                                 client:idle
                             />
                         ) : (
@@ -188,8 +176,8 @@ const renderedChapters = await Promise.all(
                                             XlsFormDisplay,
                                             QuestionTypeBlock,
                                             Praxisbeispiel,
-
                                             Figure,
+                                            Unsupported,
                                         }}
                                     />
                                 )}
