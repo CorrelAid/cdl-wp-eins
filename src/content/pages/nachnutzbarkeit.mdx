@@ -30,14 +30,20 @@ Das `<var>`-Element beschreibt eine Variable. Innerhalb davon steht in `<qstnLit
 
 Wenn Fragen in einem einheitlichen Format beschrieben sind, werden sie auffindbar, vergleichbar und wiederverwendbar. Andere Organisationen können sehen, wie eine Frage formuliert war, und sie für eigene Erhebungen übernehmen oder anpassen. Statt bei jeder neuen Umfrage von vorne anzufangen, entsteht über die Zeit ein gemeinsamer Bestand an erprobten Instrumenten.
 
-Ihr müsst dafür kein XML von Hand schreiben. Mit [survey2ddi](/tools/survey2ddi) stellen wir ein Tool bereit, das aus bestehenden Umfragen (z.B. aus [KoboToolbox](/kobotoolbox) auf Basis von [XLSForm](/xlsform-standard)) automatisch ein DDI Codebook erzeugt.
+Ihr müsst dafür kein XML von Hand schreiben. Mit [FormTransform](/tools#formtransform) stellen wir ein Tool bereit, das aus bestehenden Umfragen (z.B. aus [KoboToolbox](/kobotoolbox) auf Basis von [XLSForm](/xlsform-standard) oder aus [LimeSurvey](/limesurvey)) automatisch ein DDI Codebook erzeugt.
 
-Das Ergebnis kann anschließend über unsere Fragendatenbank [QWAC](/tools/qwac) mit der Community geteilt werden. QWAC ist mehr als ein Ablageort: Erst wenn viele Organisationen ihre Instrumente dort einstellen, entsteht ein gemeinsamer Pool erprobter Fragen, aus dem alle schöpfen können. Das hat zwei konkrete Effekte:
+Das Ergebnis kann anschließend über unsere Fragendatenbank [QWAC](/tools#qwac) mit der Community geteilt werden. QWAC ist mehr als ein Ablageort: Erst wenn viele Organisationen ihre Instrumente dort einstellen, entsteht ein gemeinsamer Pool erprobter Fragen, aus dem alle schöpfen können. Das hat zwei konkrete Effekte:
 
 - **Bessere Umfragen für alle:** Wer eine neue Umfrage plant, kann auf Formulierungen zurückgreifen, die andere bereits getestet haben – statt jedes Mal bei Null anzufangen und dieselben Anfängerfehler zu wiederholen.
 - **Vergleichbarkeit zwischen Organisationen:** Werden gleiche oder ähnliche Fragen mehrfach eingesetzt, lassen sich Ergebnisse zwischen Projekten, Trägern und Erhebungszeitpunkten vergleichen. Ohne diese gemeinsame Basis bleibt jede Auswertung eine Insel.
 
 Je mehr Organisationen mitmachen, desto wertvoller wird der Bestand für die gesamte Zivilgesellschaft. Das Veröffentlichen eurer Methodik in QWAC ist daher kein Extra-Aufwand am Ende, sondern ein zentraler Beitrag zur Infrastruktur, von der ihr selbst beim nächsten Projekt profitiert.
 
-### Integration mit survey2ddi und qwac
+### Integration mit FormTransform und qwac
+
+Die Web-App [FormTransform](/tools#formtransform) wandelt einen XLSForm-Fragebogen oder eine LimeSurvey-TSV-Datei in ein DDI Codebook um. Gebt ihr zusätzlich den Datenexport eurer Umfrage mit, erzeugt sie auch einen Antwortdatensatz, der zur DDI-Beschreibung passt. Den Export ladet ihr direkt im Umfragetool herunter. Wie das in KoboToolbox und LimeSurvey geht, beschreibt die [Anleitung zu Antwortdaten](https://github.com/CorrelAid/formtransform/blob/main/RESPONSE_DATA.md) (englisch). Alles läuft im Browser, die Daten verlassen euer Gerät nicht. Wer lieber auf der Kommandozeile oder im eigenen Code arbeitet, nutzt die zugrunde liegende [Bibliothek formtransform](/tools#formtransform-lib).
+
+Das Codebook könnt ihr anschließend in [QWAC](/tools#qwac) mit anderen teilen. Umgekehrt lassen sich Fragen aus QWAC als XLSForm in den eigenen Fragebogen übernehmen.
+
+Um den Datensatz später mit den Beschriftungen aus dem Codebook auszuwerten, z.B. in Python mit pandas, reicht ein kurzes Skript: [`ddi_reader.py`](https://github.com/CorrelAid/formtransform/blob/main/examples/python/ddi_reader.py) liest das Codebook ein. Erklärt wird es in [Abschnitt 3 der Anleitung](https://github.com/CorrelAid/formtransform/blob/main/RESPONSE_DATA.md#3-read-the-codebook-back-in-python).
 

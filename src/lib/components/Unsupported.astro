@@ -1,0 +1,55 @@
+---
+import { SUBSET_URL, SUBSET_LINK_LABEL, UNSUPPORTED_LEAD, unsupportedVariant } from "@lib/utils/unsupported";
+
+// <Unsupported>reason</Unsupported>          not supported by the CDL pipeline
+// <Unsupported partial>reason</Unsupported>  only partly supported
+// <Unsupported intro />                      page-level note
+interface Props {
+    partial?: boolean;
+    intro?: boolean;
+}
+
+const variant = unsupportedVariant(Astro.props);
+---
+
+<aside class={`unsupported unsupported-${variant}`} data-cdl-support={variant}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div>
+        <p><strong>{UNSUPPORTED_LEAD[variant]}</strong></p>
+        {Astro.slots.has('default') && <p><slot /></p>}
+        <p><a href={SUBSET_URL} target="_blank" rel="noopener noreferrer">{SUBSET_LINK_LABEL}</a></p>
+    </div>
+</aside>
+
+<style>
+    .unsupported {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.6rem;
+        padding: 0.75rem var(--spacing-base);
+        margin: var(--spacing-xl) 0;
+        background: var(--color-white);
+        border: 1.5px solid var(--color-secondary);
+        border-radius: var(--radius-lg);
+        font-size: 0.9rem;
+        color: var(--color-text-primary);
+    }
+
+    .unsupported svg {
+        flex-shrink: 0;
+        color: var(--color-secondary);
+        margin-top: 0.15rem;
+    }
+
+    .unsupported :global(p) {
+        margin: 0 0 0.4rem;
+    }
+
+    .unsupported :global(p:last-child) {
+        margin-bottom: 0;
+    }
+</style>

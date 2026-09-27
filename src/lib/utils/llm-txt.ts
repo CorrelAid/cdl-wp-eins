@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import { getLiveCollection } from 'astro:content';
 import { EXAMPLES_API_URL } from 'astro:env/server';
 import toc from '@lib/toc.json';
+import { unsupportedText, unsupportedVariant } from '@lib/utils/unsupported';
+import { citationAttr, itemDois } from '@lib/utils/citations';
 
 export type ExampleFormat = 'none' | 'xlsform' | 'ddi';
 
@@ -34,29 +36,23 @@ function formatYear(date?: string): string {
 
 function resolveCitation(
     quellen: ZoteroItem[],
-    attrs: { key?: string; doi?: string; mode?: string }
+    attrs: { keys: string[]; dois: string[]; mode?: string }
 ): string {
-    let item: ZoteroItem | undefined;
-    if (attrs.key) {
-        item = quellen.find(q => q.id === attrs.key);
-    } else if (attrs.doi) {
-        item = quellen.find(q => {
-            if (q.data.DOI === attrs.doi) return true;
-            if (q.data.extra) {
-                const m = q.data.extra.match(/^DOI:\s*(.+)$/m);
-                if (m && m[1].trim() === attrs.doi) return true;
-            }
-            return false;
-        });
-    }
+    const items = [
+        ...attrs.keys.map(k => quellen.find(q => q.id === k)),
+        ...attrs.dois.map(d => quellen.find(q => itemDois(q).includes(d))),
+    ].filter((item): item is ZoteroItem => item !== undefined);
 
-    if (!item) return '[Citation]';
+    if (items.length === 0) return '[Citation]';
 
-    const authors = formatAuthors(item.data.creators);
-    const year = formatYear(item.data.date);
+    const cite = (item: ZoteroItem) => {
+        const authors = formatAuthors(item.data.creators);
+        const year = formatYear(item.data.date);
+        return attrs.mode === 'na' ? `${authors} (${year})` : `${authors}, ${year}`;
+    };
 
-    if (attrs.mode === 'na') return `${authors} (${year})`;
-    return `(${authors}, ${year})`;
+    if (attrs.mode === 'na') return items.map(cite).join('; ');
+    return `(${items.map(cite).join('; ')})`;
 }
 
 // --- Table formatting ---
@@ -142,12 +138,11 @@ async function processContent(body: string, quellen: ZoteroItem[], format: Examp
     // Resolve Citations (self-closing)
     content = content.replace(
         /<Citation\s+([\s\S]*?)\/>/g,
-        (_match, attrsStr: string) => {
-            const key = attrsStr.match(/key=["']([^"']+)["']/)?.[1];
-            const doi = attrsStr.match(/doi=["']([^"']+)["']/)?.[1];
-            const mode = attrsStr.match(/mode=["']([^"']+)["']/)?.[1];
-            return resolveCitation(quellen, { key, doi, mode });
-        }
+        (_match, attrsStr: string) => resolveCitation(quellen, {
+            keys: citationAttr(attrsStr, 'key'),
+            dois: citationAttr(attrsStr, 'doi'),
+            mode: citationAttr(attrsStr, 'mode')[0],
+        })
     );
 
     // Replace Praxisbeispiel blocks with quoted content
@@ -158,6 +153,21 @@ async function processContent(body: string, quellen: ZoteroItem[], format: Examp
             const quoted = trimmed.split('\n').map(line => `> ${line}`).join('\n');
             return `> **Praxisbeispiel:**\n${quoted}`;
         }
+    );
+
+    // Replace Unsupported markers with their plain-text statement
+    const unsupportedAttrs = (attrsStr: string) => ({
+        partial: /\bpartial\b/.test(attrsStr),
+        intro: /\bintro\b/.test(attrsStr),
+    });
+    content = content.replace(
+        /<Unsupported\b([^>]*?)\/>/g,
+        (_match, attrsStr: string) => unsupportedText(unsupportedVariant(unsupportedAttrs(attrsStr)), '')
+    );
+    content = content.replace(
+        /<Unsupported\b([^>]*)>([\s\S]*?)<\/Unsupported>/g,
+        (_match, attrsStr: string, inner: string) =>
+            unsupportedText(unsupportedVariant(unsupportedAttrs(attrsStr)), inner.trim().replace(/\s*\n\s*/g, ' '))
     );
 
     // Replace XlsFormDisplay with inline data (only for xlsform format)
@@ -206,16 +216,29 @@ async function processContent(body: string, quellen: ZoteroItem[], format: Examp
 interface TocSection {
     label: string;
     children: string[];
+    // Pages left out of methodology-only output (e.g. the XLSForm specification)
+    excludeFromMethodology?: string[];
 }
 
-function getOrderedSlugs(): string[] {
+export interface LlmTxtOptions {
+    // Leave out the pages each section lists in `excludeFromMethodology`
+    methodologyOnly?: boolean;
+}
+
+function sectionChildren(section: TocSection, options: LlmTxtOptions): string[] {
+    if (!options.methodologyOnly) return section.children;
+    const excluded = new Set(section.excludeFromMethodology ?? []);
+    return section.children.filter(child => !excluded.has(child));
+}
+
+function getOrderedSlugs(options: LlmTxtOptions): string[] {
     const slugs: string[] = [];
     for (const item of toc.sections) {
         if (typeof item === 'string') {
             slugs.push(item);
         } else {
             const section = item as TocSection;
-            for (const child of section.children) {
+            for (const child of sectionChildren(section, options)) {
                 slugs.push(child);
             }
         }
@@ -229,7 +252,7 @@ const FORMAT_LABELS: Record<ExampleFormat, string> = {
     ddi: 'Examples include DDI Codebook XML only (XLSForm excluded).',
 };
 
-function getSlugsForPhases(maxPhases: number): string[] {
+function getSlugsForPhases(maxPhases: number, options: LlmTxtOptions): string[] {
     const slugs: string[] = [];
     let phaseIndex = 0;
     for (const item of toc.sections) {
@@ -237,17 +260,17 @@ function getSlugsForPhases(maxPhases: number): string[] {
         const section = item as TocSection;
         phaseIndex++;
         if (phaseIndex > maxPhases) break;
-        for (const child of section.children) {
+        for (const child of sectionChildren(section, options)) {
             slugs.push(child);
         }
     }
     return slugs;
 }
 
-export async function buildLlmTxt(format: ExampleFormat, maxPhases?: number): Promise<Response> {
+export async function buildLlmTxt(format: ExampleFormat, maxPhases?: number, options: LlmTxtOptions = {}): Promise<Response> {
     const pages = await getCollection('pages');
     const pageMap = new Map(pages.map(p => [p.id, p]));
-    const orderedSlugs = maxPhases !== undefined ? getSlugsForPhases(maxPhases) : getOrderedSlugs();
+    const orderedSlugs = maxPhases !== undefined ? getSlugsForPhases(maxPhases, options) : getOrderedSlugs(options);
 
     // Load Zotero references
     let quellen: ZoteroItem[] = [];
@@ -273,7 +296,7 @@ export async function buildLlmTxt(format: ExampleFormat, maxPhases?: number): Pr
             if (maxPhases !== undefined && sectionIndex > maxPhases) break;
             const section = item as TocSection;
             tocLines.push(`\n${sectionIndex}. ${section.label}`);
-            for (const child of section.children) {
+            for (const child of sectionChildren(section, options)) {
                 const page = pageMap.get(child);
                 if (page) {
                     tocLines.push(`   - ${page.data.tocTitle}`);
@@ -299,7 +322,7 @@ export async function buildLlmTxt(format: ExampleFormat, maxPhases?: number): Pr
 > It covers the complete survey lifecycle: conception, questionnaire design, data collection,
 > data preparation & analysis, and translating results into action.
 > The content is primarily in German.
-> ${FORMAT_LABELS[format]}
+> ${FORMAT_LABELS[format]}${options.methodologyOnly ? '\n> Methodology only: the XLSForm specification is left out.' : ''}
 >
 > Source: https://umfragen.civic-data.de/
 

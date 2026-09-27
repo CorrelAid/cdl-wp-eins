@@ -2,35 +2,17 @@
 import Layout from "@layouts/Layout.astro";
 import QuellenList from "@components/Literature.svelte";
 import { getLiveCollection, getCollection } from "astro:content";
+import { usedCitations, isCited } from "@lib/utils/citations";
 
 // Get all pages to find used citations
 const allPages = await getCollection("pages");
-const usedKeys = new Set<string>();
-const usedDois = new Set<string>();
-
-allPages.forEach(page => {
-  const content = page.body || "";
-  
-  // Extract keys
-  const keyMatches = content.matchAll(/<Citation[^>]*key=["']([^"']+)["'][^>]*>/g);
-  for (const match of keyMatches) {
-    usedKeys.add(match[1]);
-  }
-  
-  // Extract DOIs
-  const doiMatches = content.matchAll(/<Citation[^>]*doi=["']([^"']+)["'][^>]*>/g);
-  for (const match of doiMatches) {
-    usedDois.add(match[1]);
-  }
-});
+const used = usedCitations(allPages.map(page => page.body || ""));
 
 // Get quellen from live collection
 const { entries: quellen, error } = await getLiveCollection("quellen");
 
 // Filter quellen to only include used items
-const usedQuellen = quellen ? quellen.filter(item => {
-  return usedKeys.has(item.id) || (item.data.DOI && usedDois.has(item.data.DOI));
-}) : [];
+const usedQuellen = quellen ? quellen.filter(item => isCited(item, used)) : [];
 
 // Prepare error message for display
 const errorMessage = error ? (error.message || 'Unknown error loading quellen') : null;

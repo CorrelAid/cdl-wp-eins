@@ -26,9 +26,11 @@
     interface Props {
         items?: QuellenItem[];
         error?: string | null;
+        // The page layout already renders the title; only standalone uses (pdf) need it here
+        showTitle?: boolean;
     }
 
-    let { items = [], error = null }: Props = $props();
+    let { items = [], error = null, showTitle = false }: Props = $props();
 
     import Card from './Card.svelte';
 
@@ -104,7 +106,9 @@
 </script>
 
 <div class="quellen-container">
-    <h1>Quellen</h1>
+    {#if showTitle}
+        <h1>Quellen</h1>
+    {/if}
     {#if error}
         <div class="error-message">
             <p>⚠️ Error loading quellen: {error}</p>
@@ -231,6 +235,8 @@
         display: block;
         border-left: 3px solid var(--color-accent);
         padding-left: 10px;
+        /* Long titles and URLs wrap inside the card instead of overflowing it */
+        overflow-wrap: anywhere;
     }
 
     .apa-authors {

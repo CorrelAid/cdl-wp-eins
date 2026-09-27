@@ -5,6 +5,8 @@ teaser: Der Standard für digitale Umfragen.
 
 > Hinweis: Diese Seite wurde (abgesehen von einigen Beispielen) maschinell aus dem Englischen übersetzt und gekürzt. Die Originalversion findet ihr unter [xlsform.org/en/](https://xlsform.org/en/). Wegen der Kürzung sollten für forgeschrittene Vorhaben immer diese Website zu Rate gezogen werden.
 
+<Unsupported intro />
+
 ## Was ist eine XLSForm?
 
 XLSForm ist ein Umfragestandard, der entwickelt wurde, um die Erstellung von Umfragen in Excel zu vereinfachen. Die Erstellung erfolgt in einem für Menschen lesbaren Format unter Verwendung eines vertrauten Tools, das fast jeder kennt - Excel. XLSForms bieten einen praktischen Standard für den Austausch und die Zusammenarbeit bei der Umfrageerstellung. Der Einstieg ist einfach, ermöglicht aber die Erstellung komplexer Umfragen durch Personen, die mit der unten beschriebenen Syntax vertraut sind.
@@ -79,17 +81,17 @@ XLSForm unterstützt eine Reihe von Fragetypen. Dies sind nur einige der Optione
 |---|---|
 | integer | Eingabe einer ganzen Zahl. |
 | decimal | Eingabe einer Dezimalzahl. |
-| range | [Bereichseingabe](#bereich) (einschließlich Bewertung) |
+| range | [Bereichseingabe](#bereich) (einschließlich Bewertung). **CDL-Pipeline: teilweise unterstützt.** |
 | text | Freitextantwort. |
 | select_one [Optionen] | Multiple-Choice-Frage; es kann nur eine Antwort ausgewählt werden. |
 | select_multiple [Optionen] | Multiple-Choice-Frage; es können mehrere Antworten ausgewählt werden. |
-| select_one_from_file [Datei] | [Multiple-Choice-Frage aus einer Datei](#mehrfachauswahl-aus-datei); es kann nur eine Antwort ausgewählt werden. |
-| select_multiple_from_file [Datei] | [Multiple-Choice-Frage aus Datei](#mehrfachauswahl-aus-datei); es können mehrere Antworten ausgewählt werden. |
-| rank [Optionen] | Rangfrage; eine Liste ordnen. |
+| select_one_from_file [Datei] | [Multiple-Choice-Frage aus einer Datei](#mehrfachauswahl-aus-datei); es kann nur eine Antwort ausgewählt werden. **CDL-Pipeline: teilweise unterstützt.** |
+| select_multiple_from_file [Datei] | [Multiple-Choice-Frage aus Datei](#mehrfachauswahl-aus-datei); es können mehrere Antworten ausgewählt werden. **CDL-Pipeline: teilweise unterstützt.** |
+| rank [Optionen] | Rangfrage; eine Liste ordnen. **CDL-Pipeline: nicht unterstützt.** |
 | note | Zeigt eine Notiz auf dem Bildschirm an, benötigt keine Eingabe. Abkürzung für type=text mit readonly=true. |
 | date | Datumsangabe. |
 | time | Zeitangabe. |
-| calculate | Eine Berechnung durchführen; siehe den Abschnitt [„Berechnung"](#berechnung) weiter unten. |
+| calculate | Eine Berechnung durchführen; siehe den Abschnitt [„Berechnung"](#berechnung) weiter unten. **CDL-Pipeline: nicht unterstützt.** |
 
 Eine vollständige Liste der Fragetypen und der Elemente, die diese in der [Vorlage und im Verweis](https://xlsform.org/en/ref-table/) anpassen können, findest du hier.
 
@@ -149,7 +151,7 @@ Klicke auf den Link, um den vollständigen [Pizza-Fragebogen](https://docs.googl
 
 Die `name` Spalte des Auswahlblatts definiert die Werte, die gespeichert werden, wenn die jeweilige Auswahl während der Datenerfassung ausgewählt wird. Antwortnamen für **select_multiple**-Fragen dürfen keine Leerzeichen enthalten, da Leerzeichen als Trennzeichen verwendet werden, wenn eine Antwort mit mehreren ausgewählten Antworten gespeichert wird. Antwortnamen für „select_one"-Fragen dürfen Leerzeichen enthalten. Wir empfehlen jedoch, diese zu vermeiden, um die Analyse zu vereinfachen. Außerdem ermöglicht dies die Umwandlung der Frage in eine **select_multiple**-Frage in einer zukünftigen Umfrageversion.
 
-Im Allgemeinen sollten die Namen der Auswahlmöglichkeiten innerhalb einer Auswahlliste eindeutig sein. Wenn zwei Auswahlmöglichkeiten derselben Liste denselben Namen haben, lassen sie sich bei der Auswertung nicht voneinander unterscheiden. Bei doppelten Namen der Auswahlmöglichkeiten wird eine Fehlermeldung angezeigt, und deine Umfrage wird nicht konvertiert. In manchen Fällen kann es jedoch sinnvoll sein, doppelte Namen für Auswahlmöglichkeiten zu verwenden. Ein Beispiel hierfür wäre die Verwendung einer [kaskadierenden Auswahl](#kaskadierende-auswahl), bei der die gleichnamigen Auswahlmöglichkeiten durch eine vorangestellte Frage voneinander unterschieden werden. Wenn du doppelte Auswahlnamen verwenden musst, kannst du die Fehler bei der Verwendung der `choice_duplicates` Einstellung:
+Im Allgemeinen sollten die Namen der Auswahlmöglichkeiten innerhalb einer Auswahlliste eindeutig sein. Wenn zwei Auswahlmöglichkeiten derselben Liste denselben Namen haben, lassen sie sich bei der Auswertung nicht voneinander unterscheiden. Bei doppelten Namen der Auswahlmöglichkeiten wird eine Fehlermeldung angezeigt, und deine Umfrage wird nicht konvertiert. In manchen Fällen kann es jedoch sinnvoll sein, doppelte Namen für Auswahlmöglichkeiten zu verwenden. Ein Beispiel hierfür wäre die Verwendung einer [kaskadierenden Auswahl](https://xlsform.org/en/#cascading-selects), bei der die gleichnamigen Auswahlmöglichkeiten durch eine vorangestellte Frage voneinander unterschieden werden. Wenn du doppelte Auswahlnamen verwenden musst, kannst du die Fehler bei der Verwendung der `choice_duplicates` Einstellung:
 
 <XlsFormDisplay worksheets={[
   {
@@ -163,6 +165,8 @@ Im Allgemeinen sollten die Namen der Auswahlmöglichkeiten innerhalb einer Auswa
 ]} />
 
 #### Werte in einer Auswahlliste nachschlagen
+
+<Unsupported>Nachschlagen per `instance()` wird nicht unterstützt.</Unsupported>
 
 Du kannst dem Auswahlblatt zusätzliche Spalten hinzufügen und dann mithilfe der [Instanzfunktion](#werte-in-auswahllisten-oder-angehängten-dateien-nachschlagen) Werte für diese Spalten nachschlagen.
 
@@ -186,6 +190,8 @@ Bei Multiple-Choice-Fragen bieten Umfragen oft die Möglichkeit, **„Sonstiges"
 
 ### Mehrfachauswahl aus Datei
 
+<Unsupported partial>`select_one_from_file` und `select_multiple_from_file` funktionieren nur mit CSV-Dateien, entweder einem registrierten Vokabular (z.B. `iso_3166_1.csv`) oder einer mitgegebenen CSV-Datei. XML- und GeoJSON-Dateien sowie `choice_filter` werden abgelehnt.</Unsupported>
+
 Wenn du die Antwortmöglichkeiten für eine Multiple-Choice-Frage in einer separaten Datei bereitstellen möchtest, verwende den Fragetyp **select_one_from_file** oder **select_multiple_from_file**. Die Verwendung separater Dateien kann die Verwaltung längerer Antwortlisten vereinfachen und die Wiederverwendung von Antwortlisten in verschiedenen Umfragen erleichtern. Es werden drei Dateiformate unterstützt: CSV-, XML- und GeoJSON-Dateien. Siehe Anwendungsbeispiele unten:
 
 <XlsFormDisplay worksheets={[
@@ -202,7 +208,7 @@ Wenn du die Antwortmöglichkeiten für eine Multiple-Choice-Frage in einer separ
   }
 ]} />
 
-Die Dateien müssen ein bestimmtes Format aufweisen. Eine CSV-Datei muss Spalten enthalten, die den Wert und die Bezeichnung der Optionen. Wenn du die Spaltennamen `Name` und `die Bezeichnung` verwendest, werden diese automatisch verwendet. Du kannst auch [die zu verwendenden Spalten angeben](#legen-sie-benutzerdefinierte-spalten-für-bezeichnung-und-wert-fest).
+Die Dateien müssen ein bestimmtes Format aufweisen. Eine CSV-Datei muss Spalten enthalten, die den Wert und die Bezeichnung der Optionen. Wenn du die Spaltennamen `Name` und `die Bezeichnung` verwendest, werden diese automatisch verwendet. Du kannst auch [die zu verwendenden Spalten angeben](https://xlsform.org/en/#specify-custom-columns-for-label-and-value).
 
 Eine XML-Datei muss die folgende Struktur aufweisen:
 
@@ -220,10 +226,12 @@ Ein GeoJSON erfordert, dass jedes Feature über eine ID und eine Titel-Eigenscha
 
 CSV-, XML- und GeoJSON-Dateien können zusätzliche Spalten, XML-Knoten oder Merkmale und benutzerdefinierte Eigenschaften enthalten, solange die oben genannten grundlegenden Anforderungen erfüllt sind.
 
-Dieser Fragetyp ist im Allgemeinen die bevorzugte Methode zum Erstellen von Auswahlfragen aus externen Daten, da er am vielseitigsten ist und anwendungsübergreifend funktioniert. Allerdings können Auswahlen aus Dateien mit Zehntausenden von Optionen die Reaktionsgeschwindigkeit der Umfrage beeinträchtigen. Wenn du lange Auswahllisten hast, prüfe, ob deine Umfrage auf dem Gerät mit der geringsten Leistung, das dein Datenerfassungsteam verwenden wird, ausreichend reaktionsschnell ist. Wenn es zu langsam ist, solltest du die Verwendung von [dynamischen Auswahlen aus vorgeladenen Daten](#dynamische-auswahl-aus-vorab-geladenen-daten) in Betracht ziehen, sofern deine Datenerfassungsanwendung dies unterstützt.
+Dieser Fragetyp ist im Allgemeinen die bevorzugte Methode zum Erstellen von Auswahlfragen aus externen Daten, da er am vielseitigsten ist und anwendungsübergreifend funktioniert. Allerdings können Auswahlen aus Dateien mit Zehntausenden von Optionen die Reaktionsgeschwindigkeit der Umfrage beeinträchtigen. Wenn du lange Auswahllisten hast, prüfe, ob deine Umfrage auf dem Gerät mit der geringsten Leistung, das dein Datenerfassungsteam verwenden wird, ausreichend reaktionsschnell ist. Wenn es zu langsam ist, solltest du die Verwendung von [dynamischen Auswahlen aus vorgeladenen Daten](https://xlsform.org/en/#dynamic-selects-from-pre-loaded-data) in Betracht ziehen, sofern deine Datenerfassungsanwendung dies unterstützt.
 
 
 ### Rang
+
+<Unsupported>`rank` ist nicht registriert.</Unsupported>
 
 Mit dem Rang-Widget können die Befragten eine Liste von Optionen ordnen. Die Antwort wird als geordnete, durch Leerzeichen getrennte Liste von Optionswerten, wobei alle Optionen immer enthalten sind. Die Syntax ist der von Multiple-Choice-Fragen sehr ähnlich.
 
@@ -248,9 +256,11 @@ Mit dem Rang-Widget können die Befragten eine Liste von Optionen ordnen. Die An
   }
 ]} />
 
-Um Verzerrungen zu vermeiden, wird oft empfohlen, die [Zufallsfunktion](#auswahlmöglichkeiten-randomisieren) in Verbindung mit diesem Widget zu verwenden.
+Um Verzerrungen zu vermeiden, wird oft empfohlen, die [Zufallsfunktion](https://xlsform.org/en/#randomize-choices) in Verbindung mit diesem Widget zu verwenden.
 
 ### Bereich
+
+<Unsupported partial>`range` wird konvertiert. LimeSurvey erzwingt die Grenzen `start` und `end` (bei ganzzahliger Schrittweite auch ganze Zahlen), aber nicht die Schrittweite selbst, und zeigt ein Zahlenfeld statt eines Schiebereglers.</Unsupported>
 
 Um die Eingabe von ganzen Zahlen oder Dezimalzahlen auf einen bestimmten Bereich zu beschränken, kannst du die Bereichsfrage verwenden. Diese Frage kann mit drei optionalen, durch Leerzeichen getrennten Parametern verwendet werden: **Start**, **Ende** und **Schritt** in einer Parameterspalte. Die Standardwerte sind jeweils 1, 10 und 1.
 
@@ -358,11 +368,13 @@ Es gibt eine besondere Art von Hinweis, die normalerweise nicht in der Umfrage a
 
 ## Formeln
 
-Formeln werden in den Spalten [„Einschränkung"](#einschränkungen), [„Relevant"](#relevant), [„Berechnung"](#berechnung) und [„Auslöser"](#trigger) sowie optional auch in den Spalten [„Standard"](#standard) und [„Erforderlich"](#erforderlich) verwendet. Mit Formeln kannst du deinen Umfragen zusätzliche Funktionen und Maßnahmen zur Datenqualität hinzufügen.
+Formeln werden in den Spalten [„Einschränkung"](#einschränkungen-constraint), [„Relevant"](#relevant), [„Berechnung"](#berechnung) und [„Auslöser"](https://xlsform.org/en/#trigger) sowie optional auch in den Spalten [„Standard"](#standard-default) und [„Erforderlich"](#erforderlich) verwendet. Mit Formeln kannst du deinen Umfragen zusätzliche Funktionen und Maßnahmen zur Datenqualität hinzufügen.
 
 Formeln bestehen aus Funktionen und Operatoren (+, *, div usw.). Eine gut dokumentierte vollständige Liste der Operatoren und Funktionen findest du in der [ODK-Dokumentation](https://docs.getodk.org/form-operators-functions/). Für technisch Interessierte ist die zugrunde liegende XForms-Spezifikation das eigentliche Quelldokument für die unterstützten [Funktionen](https://getodk.github.io/xforms-spec/#xpath-functions).
 
 ### Werte in Auswahllisten oder angehängten Dateien nachschlagen
+
+<Unsupported>Die Funktion `instance()` gehört nicht zu den unterstützten Funktionen in Formeln.</Unsupported>
 
 Du kannst Werte aus Listen abrufen, die im Auswahlblatt, in angehängten CSV-Dateien, in angehängten GeoJSON-Dateien und angehängten XML-Dateien abfragen, indem du die Instanzfunktion verwendest. Du verwendest dabei folgende allgemeine Struktur:
 
@@ -374,7 +386,7 @@ Die Instanzfunktion benötigt den Namen der Liste, in der du nach einem Wert suc
 - Um Werte in einer participants.csv-Datei nachzuschlagen, verwendest du `instance('participants')`
 - Um Werte in einer „places.geojson"-Datei nachzuschlagen, verwendest du `instance('places')`
 
-Der nächste Teil des Ausdrucks lautet `/root/item[Filterausdruck]`. `/root/item` bedeutet, dass jedes Element in die Liste, und der angegebene Filterausdruck wird verwendet, um Elemente einzubeziehen, für die der Ausdruck `wahr` und Elemente auszuschließen, für die der Ausdruck `falsch` ist. Es handelt sich um denselben Ausdruck, der auch in der Spalte [„choice_filter"](#kaskadierende-auswahl) verwendet wird. Die gängigste Art von Filterausdruck sucht nach einer exakten Übereinstimmung in der `name` Spalte eines Elements:
+Der nächste Teil des Ausdrucks lautet `/root/item[Filterausdruck]`. `/root/item` bedeutet, dass jedes Element in die Liste, und der angegebene Filterausdruck wird verwendet, um Elemente einzubeziehen, für die der Ausdruck `wahr` und Elemente auszuschließen, für die der Ausdruck `falsch` ist. Es handelt sich um denselben Ausdruck, der auch in der Spalte [„choice_filter"](https://xlsform.org/en/#cascading-selects) verwendet wird. Die gängigste Art von Filterausdruck sucht nach einer exakten Übereinstimmung in der `name` Spalte eines Elements:
 
 - Um das Element in participants.csv mit dem Namen eines gescannten Barcodes abzurufen:
   `instance('participants')/root/item[name=${barcode_id}]`
@@ -388,11 +400,13 @@ Der letzte Teil des Ausdrucks ist ein Eigenschafts- oder Spaltenname, auf den zu
 - Um den Vornamen eines aus einer Liste ausgewählten Teilnehmers abzurufen:
   `instance('participants')/root/item[name=${participant}]/fname`
 
-Dies ist in der Regel die bevorzugte Methode zum Abrufen von Werten aus angehängten Dateien, da sie am vielseitigsten ist und anwendungsübergreifend funktioniert. Das Abrufen von Werten aus Dateien mit mehreren Zehntausend Optionen kann jedoch die Reaktionsgeschwindigkeit der Umfrage beeinträchtigen. Wenn du lange Auswahllisten hast, prüfe, ob deine Umfrage auf dem Gerät mit der geringsten Leistung, das dein Datenerfassungsteam verwenden wird, ausreichend reaktionsschnell ist. Sollte es zu langsam sein, ziehe die Verwendung von [`pulldata()`](#so-rufen-sie-daten-aus-einer-csv-datei-ab) in Betracht, sofern deine Datenerfassungsanwendung dies unterstützt.
+Dies ist in der Regel die bevorzugte Methode zum Abrufen von Werten aus angehängten Dateien, da sie am vielseitigsten ist und anwendungsübergreifend funktioniert. Das Abrufen von Werten aus Dateien mit mehreren Zehntausend Optionen kann jedoch die Reaktionsgeschwindigkeit der Umfrage beeinträchtigen. Wenn du lange Auswahllisten hast, prüfe, ob deine Umfrage auf dem Gerät mit der geringsten Leistung, das dein Datenerfassungsteam verwenden wird, ausreichend reaktionsschnell ist. Sollte es zu langsam sein, ziehe die Verwendung von [`pulldata()`](https://xlsform.org/en/#how-to-pull-data-from-csv) in Betracht, sofern deine Datenerfassungsanwendung dies unterstützt.
 
 > Diese Ausdrücke verwenden eine Teilmenge von [XPath 1.0](https://developer.mozilla.org/en-US/docs/Web/XPath). Der Filterausdruck in eckigen Klammern kann ein beliebiger Ausdruck sein, der zu „wahr" oder „falsch" ausgewertet wird, einschließlich der Verwendung von Funktionen.
 
 ### Externe CSV-Daten
+
+<Unsupported>Angehängte CSV-Dateien zum Nachschlagen von Werten (`csv-external`, `pulldata()`, `instance()`) werden nicht unterstützt.</Unsupported>
 
 Wenn du eine CSV-Datei an deine Umfrage anhängen möchtest, um darin Werte nachzuschlagen, hast du mehrere Möglichkeiten. Wenn du eine Auswahl aus den Werten dieser CSV erstellen musst, kannst du [`select_one_from_file`](#mehrfachauswahl-aus-datei) verwenden. Dadurch wird die CSV an deine Umfrage angehängt und du kannst darin Werte nachschlagen, wie oben beschrieben.
 
@@ -521,6 +535,8 @@ Im Abschnitt [„Sonstiges angeben"](#anderes-angeben) wird erwähnt, dass die F
 Beachte, dass du **Sonstiges** als Antwortmöglichkeit in das Arbeitsblatt **Antwortmöglichkeiten** aufnehmen musst.
 
 ## Berechnung
+
+<Unsupported>`calculate` ist nicht registriert.</Unsupported>
 
 Deine Umfrage kann Berechnungen anhand der Werte aus den vorhergehenden Fragen durchführen. In den meisten Fällen ist die Verwendung einer Frage vom Typ **Berechnung** angemessen. In der folgenden Umfrage haben wir beispielsweise das Trinkgeld für eine Mahlzeit berechnet und es dem Benutzer angezeigt:
 
@@ -744,7 +760,7 @@ Das Hinzufügen eines Standardfelds bedeutet, dass eine Frage beim ersten Anzeig
 
 Der Befragte kann die Antwort ganz einfach ändern, indem er auf das Antwortfeld tippt und eine andere Antwort eingibt.
 
-Du kannst auch eine Standardberechnung hinzufügen, die nur einmal berechnet wird, wenn die Umfrage geladen wird oder – falls sich die Frage innerhalb einer [Wiederholung](#wiederholungen) befindet – wenn die Wiederholung hinzugefügt wird.
+Du kannst auch eine Standardberechnung hinzufügen, die nur einmal berechnet wird, wenn die Umfrage geladen wird oder – falls sich die Frage innerhalb einer [Wiederholung](https://xlsform.org/en/#repeats) befindet – wenn die Wiederholung hinzugefügt wird.
 
 <XlsFormDisplay worksheets={[
   {
@@ -807,12 +823,12 @@ Die verfügbaren Spaltenüberschriften für die Einstellungen sind:
 - **form_title**: Der Titel der Umfrage, der den Benutzern angezeigt wird. Der Umfragetitel wird aus **form_id** übernommen, wenn **form_title** leer ist oder fehlt.
 - **form_id**: Der Name, der zur eindeutigen Identifizierung der Umfrage auf dem Server verwendet wird. Die Umfrage-ID wird aus dem Namen der XLS-Datei übernommen, wenn **form_id** leer ist oder fehlt.
 - **version**: Zeichenfolge, die diese Version angibt. Eine gängige Konvention ist die Verwendung von Zeichenfolgen im Format „yyyymmddrr". Beispielsweise steht 2017021501 für die erste Überarbeitung vom 15. Februar 2017.
-- **instance_name**: Ausdruck, der Umfragefelder verwendet, um jede Umfrageübermittlung zu identifizieren. [Weitere Informationen](#geben-sie-den-namen-der-umfrageübermittlung-an).
+- **instance_name**: Ausdruck, der Umfragefelder verwendet, um jede Umfrageübermittlung zu identifizieren. [Weitere Informationen](https://xlsform.org/en/#specify-form-submission-name).
 - **default_language**: In lokalisierten Umfragen legt dies fest, welche Sprache als Standard verwendet werden soll. Es sollte dasselbe Format wie beim [Hinzufügen von Übersetzungen](#unterstützung-mehrerer-sprachen) verwendet werden, einschließlich des Sprachcodes.
-- **public_key**: Bei Umfragen mit Verschlüsselung wird hier der öffentliche Schlüssel eingefügt. [Weitere Informationen](#verschlüsselte-umfragen).
-- **submission_url**: Diese URL kann verwendet werden, um den Standard-Server zu überschreiben, an den abgeschlossene Datensätze übermittelt werden sollen. [Mehr erfahren](#geben-sie-einen-alternativen-server-an).
-- **style**: Geben Sie für Webumfragen den Umfragestil an. [Weitere Informationen](#umfragen-mit-mehreren-webseiten).
-- **name**: Name des XForms-Stammknotens. Dies ist selten erforderlich, [mehr erfahren](#geben-sie-den-namen-des-xforms-stammknotens-an).
+- **public_key**: Bei Umfragen mit Verschlüsselung wird hier der öffentliche Schlüssel eingefügt. [Weitere Informationen](https://xlsform.org/en/#encrypted-forms).
+- **submission_url**: Diese URL kann verwendet werden, um den Standard-Server zu überschreiben, an den abgeschlossene Datensätze übermittelt werden sollen. [Mehr erfahren](https://xlsform.org/en/#specify-an-alternative-server).
+- **style**: Geben Sie für Webumfragen den Umfragestil an. [Weitere Informationen](#umfragen-mit-mehreren-seiten).
+- **name**: Name des XForms-Stammknotens. Dies ist selten erforderlich, [mehr erfahren](https://xlsform.org/en/#specify-xforms-root-node-name).
 - **clean_text_values**: Diese Spalte kann verwendet werden, wenn `ja` oder `nein` um zu steuern, ob Leerzeichen in der Umfrage ausgeblendet ist (Standardwert ist „ja").
 
 

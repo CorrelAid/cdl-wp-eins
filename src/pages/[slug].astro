@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import XlsFormDisplay from "@components/XlsFormDisplay.astro";
 import QuestionTypeBlock from "@components/QuestionTypeBlock.astro";
+import Unsupported from "@components/Unsupported.astro";
 import Citation from "@components/Citation.astro";
 import Praxisbeispiel from "@components/Praxisbeispiel.astro";
 
@@ -21,5 +22,5 @@ const { Content } = await render(page);
 ---
 
 <Layout title={page.data.pageTitle} teaser={page.data.teaser}>
-    <Content components={{ Citation, XlsFormDisplay, QuestionTypeBlock, Praxisbeispiel, Figure }} />
+    <Content components={{ Citation, XlsFormDisplay, QuestionTypeBlock, Praxisbeispiel, Figure, Unsupported }} />
 </Layout>
