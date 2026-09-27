@@ -22,7 +22,8 @@
                 "pretesting",
                 "xlsform-standard"
             ],
-            "excludeFromGraphic": ["xlsform-standard"]
+            "excludeFromGraphic": ["xlsform-standard"],
+            "excludeFromMethodology": ["xlsform-standard"]
         },
         {
             "label": "Erhebung",
