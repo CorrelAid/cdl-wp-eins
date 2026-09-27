@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check:site": "bun scripts/check-site.ts",
     "astro": "astro",
     "postinstall": "[ -d node_modules/@correlaid/cdl-design/dist/favicons ] && cp node_modules/@correlaid/cdl-design/dist/favicons/* public/ || true"
   },

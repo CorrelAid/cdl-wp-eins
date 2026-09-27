@@ -11,6 +11,7 @@
 ## Build and Test Commands
 - `bun run build`: Build the project for production.
 - `bun run preview`: Preview the production build locally.
+- `bun run check:site`: After a build, check that every `toc.json` tool has DE/EN snippets (and vice versa) and that internal links in `dist/` resolve. CI runs it on every pull request.
 - `astro check`: (If configured) Run type checking on Astro files.
 
 ## Code Style
