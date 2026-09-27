@@ -6,13 +6,13 @@ import ContentBox from "@components/ContentBox.astro";
 
 <Layout title="Workflow" teaser="Überblick über den empfohlenen Workflow mit den Tools dieser Ressourcensammlung.">
     <p>
-        In dieser Umfragenwerkstatt begleiten wir Euch durch alle Phasen einer Umfrage. Um die Zusammenarbeit zwischen verschiedenen Tools und Phasen zu erleichtern, setzen wir konsequent auf offene Formate wie <a href="/xlsform-standard">XLSForm</a> und <a href="/methodik-veroeffentlichen">DDI-Codebook</a>. Wir erweitern die Nutzbarkeit dieser Formate und verbinden sie durch eigene Open-Source-Tools.
+        In dieser Umfragenwerkstatt begleiten wir Euch durch alle Phasen einer Umfrage. Um die Zusammenarbeit zwischen verschiedenen Tools und Phasen zu erleichtern, setzen wir konsequent auf offene Formate wie <a href="/xlsform-standard">XLSForm</a> und <a href="/nachnutzbarkeit">DDI-Codebook</a>. Wir erweitern die Nutzbarkeit dieser Formate und verbinden sie durch eigene Open-Source-Tools.
     </p>
     <p>
         Dabei unterscheiden wir zwei grundlegende Ebenen:
     </p>
     <ul>
-        <li>Die <strong>Metadatenebene</strong> beschreibt die Umfrage selbst: die Struktur des Fragebogens, die Variablen, Antworttypen und Logiken. <a href="/xlsform-standard">XLSForm</a> dient der Erstellung, <a href="/methodik-veroeffentlichen">DDI-Codebook</a> der Standardisierung und Archivierung.</li>
+        <li>Die <strong>Metadatenebene</strong> beschreibt die Umfrage selbst: die Struktur des Fragebogens, die Variablen, Antworttypen und Logiken. <a href="/xlsform-standard">XLSForm</a> dient der Erstellung, <a href="/nachnutzbarkeit">DDI-Codebook</a> der Standardisierung und Archivierung.</li>
         <li>Die <strong>Ergebnisebene</strong> umfasst die eigentlichen Antwortdaten der Teilnehmenden, die nach der Feldphase vorliegen.</li>
     </ul>
     <p>
@@ -65,9 +65,9 @@ import ContentBox from "@components/ContentBox.astro";
                         ></td
                     >
                     <td
-                        ><a href="/tools#formtransform">FormTransform</a> (bzw. <a
-                            href="/tools#xlsform2lstsv"
-                            ><code>xlsform2lstsv</code></a
+                        ><a href="/tools#formtransform">FormTransform</a> (Bibliothek: <a
+                            href="/tools#formtransform-lib"
+                            ><code>formtransform</code></a
                         >)</td
                     >
                 </tr>
@@ -79,11 +79,11 @@ import ContentBox from "@components/ContentBox.astro";
                         > (Ergebnisse)</td
                     >
                     <td
-                        ><a href="/methodik-veroeffentlichen"
+                        ><a href="/nachnutzbarkeit"
                             >DDI Codebook XML</a
                         > + DDI-konforme Datenstruktur</td
                     >
-                    <td><a href="/tools#survey2ddi">survey2ddi</a></td>
+                    <td><a href="/tools#formtransform">FormTransform</a></td>
                 </tr>
                 <tr>
                     <td
@@ -96,15 +96,15 @@ import ContentBox from "@components/ContentBox.astro";
                         > (Ergebnisse)</td
                     >
                     <td
-                        ><a href="/methodik-veroeffentlichen"
+                        ><a href="/nachnutzbarkeit"
                             >DDI Codebook XML</a
                         > + DDI-konforme Datenstruktur</td
                     >
-                    <td><a href="/tools#survey2ddi">survey2ddi</a></td>
+                    <td><a href="/tools#formtransform">FormTransform</a></td>
                 </tr>
                 <tr>
                     <td
-                        ><a href="/methodik-veroeffentlichen"
+                        ><a href="/nachnutzbarkeit"
                             >DDI Codebook XML</a
                         ></td
                     >
@@ -116,9 +116,9 @@ import ContentBox from "@components/ContentBox.astro";
         <p>
             Manche Transformationen beinhalten Informationsverlust, da im
             Ursprungsformat mehr oder andere Daten kodiert sind als im
-            Zielformat. Zudem unterstützen unsere Tools derzeit nur
-            Transformationen in eine Richtung. Sogenannte Round Trips sind nicht
-            möglich.
+            Zielformat. Ein DDI Codebook aus FormTransform enthält dagegen den
+            ganzen Fragebogen: Aus XLSForm → DDI Codebook → XLSForm entsteht
+            wieder derselbe Fragebogen.
         </p>
     </ContentBox>
 </Layout>
