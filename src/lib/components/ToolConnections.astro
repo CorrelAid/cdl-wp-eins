@@ -1,0 +1,274 @@
+---
+// How the CDL tools depend on each other: who feeds whom, and with what.
+// Each arrow carries a number and a short label; the numbered list below the drawing explains them.
+
+interface Node {
+    id: string;
+    label: string;
+    sub: string;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    kind: "site" | "app" | "service";
+    href?: string;
+}
+
+const H = 80;
+const nodes: Node[] = [
+    { id: "werkstatt", label: "Umfragenwerkstatt", sub: "Methodik & Wissen (diese Website)", x: 40, y: 20, w: 920, h: H, kind: "site", href: "/" },
+    { id: "formulaid", label: "FormulAid", sub: "Fragebogen generieren", x: 50, y: 180, w: 240, h: H, kind: "app", href: "/tools#formulaid" },
+    { id: "qwac", label: "qwac", sub: "Fragen finden & teilen", x: 380, y: 180, w: 240, h: H, kind: "app", href: "/tools#qwac" },
+    { id: "ftapp", label: "FormTransform-App", sub: "Formate umwandeln", x: 710, y: 180, w: 240, h: H, kind: "app", href: "/tools#formtransform" },
+    { id: "qwacback", label: "qwacback", sub: "Fragendatenbank (API)", x: 380, y: 340, w: 240, h: H, kind: "service" },
+    { id: "formtransform", label: "formtransform-Bibliothek", sub: "Fragetypen-Register, Umwandlung & Prüfung", x: 40, y: 500, w: 920, h: H, kind: "service", href: "/tools#formtransform-lib" },
+];
+
+interface Edge {
+    n: number;
+    d: string;
+    label: string;
+    at: [number, number];
+    both?: boolean;
+}
+
+// Paths run orthogonally; arrowheads point the way the data flows. `at` centres the label on the path.
+const edges: Edge[] = [
+    { n: 1, d: "M120 100 V180", label: "Methodik", at: [120, 140] },
+    { n: 2, d: "M420 340 V305 H335 V100", label: "Fragetypen-Beispiele", at: [335, 140] },
+    { n: 3, d: "M380 380 H255 V260", label: "Fragensuche", at: [264, 322] },
+    { n: 4, d: "M560 260 V340", label: "Suche · Export · Import", at: [560, 300], both: true },
+    { n: 5, d: "M180 500 V260", label: "Fragetypen & Prüfung", at: [180, 460] },
+    { n: 6, d: "M500 500 V420", label: "XLSForm ↔ DDI, Validierung", at: [500, 460] },
+    { n: 7, d: "M845 500 V260", label: "XLSForm · LimeSurvey · DDI", at: [845, 460] },
+];
+
+// Rough width of a label pill at 16px (text plus the number badge); good enough to keep the text inside.
+const pillWidth = (text: string) => Math.round(text.length * 9.3 + 52);
+
+---
+
+<figure class="tool-connections">
+    <div class="tc-scroll">
+        <svg viewBox="0 0 1000 600" role="img" aria-labelledby="tc-title tc-desc">
+            <title id="tc-title">Wie die Tools zusammenarbeiten</title>
+            <desc id="tc-desc">Die Umfragenwerkstatt liefert FormulAid die Methodik. qwacback liefert der Umfragenwerkstatt die Beispiele für Fragetypen und FormulAid die Fragensuche; qwac ist die Oberfläche für qwacback zum Suchen, Exportieren und Importieren. Die formtransform-Bibliothek liefert FormulAid die Fragetypen und die Prüfung, qwacback die Umwandlung zwischen XLSForm und DDI samt Validierung und der FormTransform-App die Umwandlungen zwischen XLSForm, LimeSurvey TSV und DDI.</desc>
+            <defs>
+                <marker id="tc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M0 0 L10 5 L0 10 z" class="tc-arrowhead" />
+                </marker>
+            </defs>
+
+            {edges.map(e => (
+                <path
+                    d={e.d}
+                    class="tc-edge"
+                    marker-end="url(#tc-arrow)"
+                    marker-start={e.both ? "url(#tc-arrow)" : undefined}
+                />
+            ))}
+
+            {nodes.map(n => {
+                const box = (
+                    <g class={`tc-node tc-${n.kind}`}>
+                        <rect x={n.x + 5} y={n.y + 5} width={n.w} height={n.h} rx="10" class="tc-shadow" />
+                        <rect x={n.x} y={n.y} width={n.w} height={n.h} rx="10" class="tc-box" />
+                        <text x={n.x + n.w / 2} y={n.y + 35} class="tc-label">{n.label}</text>
+                        <text x={n.x + n.w / 2} y={n.y + 62} class="tc-sub">{n.sub}</text>
+                    </g>
+                );
+                return n.href ? <a href={n.href}>{box}</a> : box;
+            })}
+
+            {edges.map(e => {
+                const w = pillWidth(e.label);
+                return (
+                    <g class="tc-pill" aria-hidden="true">
+                        <rect x={e.at[0] - w / 2} y={e.at[1] - 14} width={w} height="28" rx="14" />
+                        <circle cx={e.at[0] - w / 2 + 14} cy={e.at[1]} r="11" />
+                        <text x={e.at[0] - w / 2 + 14} y={e.at[1] + 5} class="tc-num">{e.n}</text>
+                        <text x={e.at[0] + 14} y={e.at[1] + 5}>{e.label}</text>
+                    </g>
+                );
+            })}
+        </svg>
+    </div>
+
+    <figcaption>
+        <ol class="tc-list">
+            <li><strong>Methodik:</strong> Die Kapitel zu Konzeption und Fragebogendesign fließen als Wissensbasis in FormulAid ein (über <a href="/llm-phases12.txt"><code>llm-phases12.txt</code></a>).</li>
+            <li><strong>Fragetypen-Beispiele:</strong> Die Beispiele auf der Seite <a href="/fragetypen">Fragetypen</a> (XLSForm und DDI) stammen aus qwacback.</li>
+            <li><strong>Fragensuche:</strong> FormulAid sucht während der Generierung in qwacback nach erprobten Fragen und übernimmt Demografie-Vorlagen.</li>
+            <li><strong>Suche, Export, Import:</strong> qwac ist die Oberfläche für qwacback: Fragen suchen, als XLSForm oder DDI exportieren, eigene Codebooks hochladen.</li>
+            <li><strong>Fragetypen & Prüfung:</strong> FormulAid kennt die erlaubten Fragetypen aus der formtransform-Bibliothek und prüft damit jeden Fragebogen vor dem Download.</li>
+            <li><strong>Umwandlung & Validierung:</strong> qwacback wandelt mit der formtransform-Bibliothek zwischen XLSForm und DDI um (z.B. für den XLSForm-Export von Fragen) und prüft hochgeladene Codebooks.</li>
+            <li><strong>Umwandlung im Browser:</strong> Die FormTransform-App ist die Oberfläche der formtransform-Bibliothek: Sie wandelt XLSForm in LimeSurvey TSV um und erzeugt aus XLSForm oder LimeSurvey TSV ein DDI Codebook.</li>
+        </ol>
+        <p class="tc-note">
+            Welche XLSForm-Funktionen unterstützt werden, legt das Register der formtransform-Bibliothek für alle Tools gemeinsam fest.
+            qwacback ist über einen MCP-Server auch direkt in KI-Assistenten nutzbar.
+            Fragebögen und Datenexporte zwischen den Apps und <a href="/kobotoolbox">KoboToolbox</a> oder <a href="/limesurvey">LimeSurvey</a> bewegt ihr selbst per Download und Import, siehe den <a href="/workflow">Workflow</a>.
+        </p>
+        <ul class="tc-key" aria-label="Legende">
+            <li><span class="tc-swatch tc-swatch-app"></span>App für euch</li>
+            <li><span class="tc-swatch tc-swatch-service"></span>Dienst im Hintergrund</li>
+        </ul>
+    </figcaption>
+</figure>
+
+<style>
+    .tool-connections {
+        margin: 2rem 0;
+        color: var(--color-text-primary);
+    }
+
+    .tc-scroll {
+        overflow-x: auto;
+    }
+
+    svg {
+        display: block;
+        width: 100%;
+        min-width: 640px;
+        height: auto;
+        font-family: var(--font-family-sans, inherit);
+    }
+
+    .tc-box {
+        fill: var(--color-white);
+        stroke: var(--color-text-primary);
+        stroke-width: 2;
+    }
+
+    .tc-shadow {
+        fill: var(--color-text-primary);
+    }
+
+    .tc-service .tc-box,
+    .tc-site .tc-box {
+        fill: var(--color-tertiary);
+    }
+
+    .tc-site .tc-box {
+        fill: var(--color-white);
+        stroke-width: 3;
+    }
+
+    .tc-label {
+        text-anchor: middle;
+        font-family: var(--font-family-mono);
+        font-weight: var(--font-weight-bold);
+        font-size: 22px;
+        fill: var(--color-text-primary);
+    }
+
+    .tc-sub {
+        text-anchor: middle;
+        font-size: 17px;
+        fill: var(--color-text-primary);
+        opacity: 0.8;
+    }
+
+    svg a {
+        text-decoration: none;
+    }
+
+    a:hover .tc-box,
+    a:focus-visible .tc-box {
+        stroke: var(--color-secondary);
+        stroke-width: 3;
+    }
+
+    a:hover .tc-label {
+        text-decoration: underline;
+    }
+
+    .tc-edge {
+        fill: none;
+        stroke: var(--color-text-primary);
+        stroke-width: 2;
+    }
+
+    .tc-arrowhead {
+        fill: var(--color-text-primary);
+    }
+
+    .tc-pill rect {
+        fill: var(--color-secondary);
+    }
+
+    .tc-pill text {
+        text-anchor: middle;
+        font-size: 16px;
+        font-weight: var(--font-weight-bold);
+        fill: var(--color-white);
+    }
+
+    figcaption {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .tc-pill circle {
+        fill: var(--color-white);
+    }
+
+    .tc-pill .tc-num {
+        font-family: var(--font-family-mono);
+        font-size: 14px;
+        fill: var(--color-secondary);
+    }
+
+    .tc-list {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+
+    .tc-list li {
+        margin-bottom: 0.35rem;
+    }
+
+    .tc-list li::marker {
+        font-family: var(--font-family-mono);
+        font-weight: var(--font-weight-bold);
+        color: var(--color-secondary);
+    }
+
+    .tc-note {
+        margin: 0.75rem 0;
+    }
+
+    .tc-key {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.85rem;
+    }
+
+    .tc-key li {
+        display: inline-flex;
+        margin: 0;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .tc-swatch {
+        display: inline-block;
+        width: 1.1rem;
+        height: 0.8rem;
+        border: 2px solid var(--color-text-primary);
+        border-radius: 3px;
+    }
+
+    .tc-swatch-app {
+        background: var(--color-white);
+    }
+
+    .tc-swatch-service {
+        background: var(--color-tertiary);
+    }
+
+</style>

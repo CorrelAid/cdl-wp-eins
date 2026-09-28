@@ -2,6 +2,7 @@
 import Layout from "../../lib/layouts/Layout.astro";
 import toc from "@lib/toc.json";
 import ContentBox from "@components/ContentBox.astro";
+import ToolConnections from "@components/ToolConnections.astro";
 
 const snippets = import.meta.glob<string>(
     "/src/content/snippets/*/*.html",
@@ -24,6 +25,10 @@ const unsectioned = tools.filter(t => !(t as any).section);
 
 <Layout title="Tools" teaser="Open-Source-Tools und Ressourcen für verschiedene Phasen einer Umfrage.">
     <p>Informationen dazu wie sich einige der hier aufgelistet Tools zu einem Workflow zusammensetzen findet ihr <a href="/workflow">hier</a>.</p>
+
+    <h2 id="zusammenspiel">Wie unsere Tools zusammenarbeiten</h2>
+    <p>Hinter den Apps stehen gemeinsame Bausteine: Die Fragendatenbank qwacback und die formtransform-Bibliothek werden von mehreren Tools genutzt, und diese Website liefert Wissen an FormulAid.</p>
+    <ToolConnections />
     <div class="tool-list">
         {toolSections.map(section => section.tools.length > 0 && (
             <div class="tool-section">
