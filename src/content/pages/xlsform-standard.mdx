@@ -42,7 +42,7 @@ Beide Arbeitsblätter enthalten eine Reihe von Pflichtspalten, die vorhanden sei
     title: 'survey',
     headers: ['type', 'name', 'label'],
     data: [
-      ['heute', 'heute', ''],
+      ['today', 'heute', ''],
       ['select_one Bildungsabschluss', 'Bildungsabschluss', 'Höchster Bildungsabschluss?'],
       ['integer', 'Alter', 'Alter des Befragten?']
     ]
@@ -138,9 +138,9 @@ Beachte, dass das Feld **ja_nein** im Arbeitsblatt **survey** mit dem Feld **ja_
     title: 'choices',
     headers: ['list_name', 'name', 'label'],
     data: [
-      ['Pizzabeläge', 'Käse', 'Käse'],
-      ['Pizzabeläge', 'Peperoni', 'Peperoni'],
-      ['Pizzabeläge', 'Wurst', 'Wurst']
+      ['pizza_toppings', 'Käse', 'Käse'],
+      ['pizza_toppings', 'Peperoni', 'Peperoni'],
+      ['pizza_toppings', 'Wurst', 'Wurst']
     ]
   }
 ]} />
@@ -198,7 +198,7 @@ Wenn du die Antwortmöglichkeiten für eine Multiple-Choice-Frage in einer separ
   {
     id: 'survey',
     title: 'survey',
-    headers: ['type', 'name', 'label', 'Auswahlfilter'],
+    headers: ['type', 'name', 'label', 'choice_filter'],
     data: [
       ['select_multiple_from_file country.csv', 'liv', 'In welchen Ländern hast du gelebt?', ''],
       ['select_one_from_file countries.xml', 'cou', 'In welchem Land lebst du jetzt?', ''],
@@ -241,17 +241,17 @@ Mit dem Rang-Widget können die Befragten eine Liste von Optionen ordnen. Die An
     title: 'survey',
     headers: ['type', 'name', 'label'],
     data: [
-      ['Rang pizza_toppings', 'Beläge', 'Bestelle Pizza-Beläge mit deinem Lieblingsbelag']
+      ['rank pizza_toppings', 'Beläge', 'Bestelle Pizza-Beläge mit deinem Lieblingsbelag']
     ]
   },
   {
     id: 'choices',
-    title: 'Auswahl',
+    title: 'choices',
     headers: ['list_name', 'name', 'label'],
     data: [
-      ['Pizzabeläge', 'Käse', 'Käse'],
-      ['Pizzabeläge', 'Peperoni', 'Peperoni'],
-      ['Pizzabeläge', 'Wurst', 'Wurst']
+      ['pizza_toppings', 'Käse', 'Käse'],
+      ['pizza_toppings', 'Peperoni', 'Peperoni'],
+      ['pizza_toppings', 'Wurst', 'Wurst']
     ]
   }
 ]} />
@@ -262,7 +262,7 @@ Um Verzerrungen zu vermeiden, wird oft empfohlen, die [Zufallsfunktion](https://
 
 <Unsupported partial>`range` wird konvertiert. LimeSurvey erzwingt die Grenzen `start` und `end` (bei ganzzahliger Schrittweite auch ganze Zahlen), aber nicht die Schrittweite selbst, und zeigt ein Zahlenfeld statt eines Schiebereglers.</Unsupported>
 
-Um die Eingabe von ganzen Zahlen oder Dezimalzahlen auf einen bestimmten Bereich zu beschränken, kannst du die Bereichsfrage verwenden. Diese Frage kann mit drei optionalen, durch Leerzeichen getrennten Parametern verwendet werden: **Start**, **Ende** und **Schritt** in einer Parameterspalte. Die Standardwerte sind jeweils 1, 10 und 1.
+Um die Eingabe von ganzen Zahlen oder Dezimalzahlen auf einen bestimmten Bereich zu beschränken, kannst du die Bereichsfrage verwenden. Diese Frage kann mit drei optionalen, durch Leerzeichen getrennten Parametern verwendet werden: **start**, **end** und **step** in der Spalte **parameters**. Die Standardwerte sind jeweils 1, 10 und 1.
 
 Das folgende Beispiel erstellt eine Frage, die Eingaben von 0 bis 17 mit einem Schritt von 1 zulässt. Die Verwendung eines Dezimalschritts führt dazu, dass Dezimalwerte erfasst werden.
 
@@ -456,7 +456,7 @@ Wenn du deiner Einschränkung eine Meldung hinzufügen möchtest, die dem Benutz
     title: 'survey',
     headers: ['type', 'name', 'label', 'constraint', 'constraint_message'],
     data: [
-      ['integer', 'Alter des Befragten', 'Alter des Befragten', '. >=18', 'Der Befragte muss mindestens 18 Jahre alt sein, um an der Umfrage teilzunehmen.']
+      ['integer', 'alter', 'Alter des Befragten', '. >=18', 'Der Befragte muss mindestens 18 Jahre alt sein, um an der Umfrage teilzunehmen.']
     ]
   }
 ]} />
@@ -474,7 +474,7 @@ Eine großartige Funktion von XLSForm ist die Möglichkeit, eine Frage zu übers
     headers: ['type', 'name', 'label', 'relevant'],
     data: [
       ['select_one ja_nein', 'mag_Pizza', 'Magst du Pizza?', ''],
-      ['select_multiple Pizzabeläge oder_anderes', 'Lieblingsbelag', 'Lieblingsbelag', "${mag_Pizza} = 'ja'"]
+      ['select_multiple pizza_toppings or_other', 'Lieblingsbelag', 'Lieblingsbelag', "${mag_Pizza} = 'ja'"]
     ]
   }
 ]} />
@@ -490,7 +490,7 @@ Die Festlegung der Relevanz basierend auf dem Wert einer select_multiple-Frage u
     headers: ['type', 'name', 'label', 'relevant'],
     data: [
       ['select_one ja_nein', 'mag_Pizza', 'Magst du Pizza?', ''],
-      ['select_multiple Pizzabeläge', 'Lieblingsbelag', 'Was sind deine Lieblings-Pizzabeläge?', "${mag_Pizza} = 'ja'"]
+      ['select_multiple pizza_toppings', 'Lieblingsbelag', 'Was sind deine Lieblings-Pizzabeläge?', "${mag_Pizza} = 'ja'"]
     ]
   },
   {
@@ -498,9 +498,9 @@ Die Festlegung der Relevanz basierend auf dem Wert einer select_multiple-Frage u
     title: 'choices',
     headers: ['list_name', 'name', 'label'],
     data: [
-      ['Pizzabeläge', 'Käse', 'Käse'],
-      ['Pizzabeläge', 'Peperoni', 'Peperoni'],
-      ['Pizzabeläge', 'Wurst', 'Wurst']
+      ['pizza_toppings', 'Käse', 'Käse'],
+      ['pizza_toppings', 'Peperoni', 'Peperoni'],
+      ['pizza_toppings', 'Wurst', 'Wurst']
     ]
   }
 ]} />
@@ -524,10 +524,10 @@ Im Abschnitt [„Sonstiges angeben"](#anderes-angeben) wird erwähnt, dass die F
     title: 'choices',
     headers: ['list_name', 'name', 'label'],
     data: [
-      ['Pizzabeläge', 'Käse', 'Käse'],
-      ['Pizzabeläge', 'Peperoni', 'Peperoni'],
-      ['Pizzabeläge', 'Wurst', 'Wurst'],
-      ['Pizzabeläge', 'Sonstiges', 'Sonstiges']
+      ['pizza_toppings', 'Käse', 'Käse'],
+      ['pizza_toppings', 'Peperoni', 'Peperoni'],
+      ['pizza_toppings', 'Wurst', 'Wurst'],
+      ['pizza_toppings', 'Sonstiges', 'Sonstiges']
     ]
   }
 ]} />
@@ -606,7 +606,7 @@ Beachte den Unterschied zum ersten Formular in diesem Abschnitt: Der berechnete 
 
 Es ist ganz einfach, bestimmte Fragen in deiner Umfrage als Pflichtfelder zu kennzeichnen. Wenn du sie als Pflichtfelder kennzeichnest, kann der Benutzer nicht zur nächsten Frage übergehen oder die Umfrage absenden, ohne eine Antwort auf diese Frage eingegeben zu haben.
 
-Um Fragen als Pflichtfelder zu kennzeichnen, füge deinem Umfrage-Arbeitsblatt eine Spalte **erforderlich** hinzu. Markiere die Fragen in dieser Spalte als Pflichtfelder, indem du **ja** eintragst. Siehe das folgende Beispiel:
+Um Fragen als Pflichtfelder zu kennzeichnen, füge deinem Arbeitsblatt **survey** eine Spalte **required** hinzu. Markiere die Fragen in dieser Spalte als Pflichtfelder, indem du **yes** eintragst. Siehe das folgende Beispiel:
 
 <XlsFormDisplay worksheets={[
   {
@@ -614,7 +614,7 @@ Um Fragen als Pflichtfelder zu kennzeichnen, füge deinem Umfrage-Arbeitsblatt e
     title: 'survey',
     headers: ['type', 'name', 'label', 'constraint', 'erforderlich'],
     data: [
-      ['integer', 'Alter', 'Wie alt bist du?', '. <= 150', 'ja']
+      ['integer', 'Alter', 'Wie alt bist du?', '. <= 150', 'yes']
     ]
   }
 ]} />
@@ -629,7 +629,7 @@ Wenn du die Meldung anpassen möchtest, die Benutzern angezeigt wird, wenn sie e
     title: 'survey',
     headers: ['type', 'name', 'label', 'required', 'required_message'],
     data: [
-      ['integer', 'Alter des Befragten', 'Alter des Befragten', 'ja', 'Entschuldigung, diese Antwort ist erforderlich.']
+      ['integer', 'alter', 'Alter des Befragten', 'yes', 'Entschuldigung, diese Antwort ist erforderlich.']
     ]
   }
 ]} />
@@ -654,7 +654,7 @@ Um eine Gruppe von Fragen in deiner Umfrage zu erstellen, verwende die Syntax **
 
 Dies ist eine gute Möglichkeit, verwandte Fragen für den Datenexport und die Analyse zu gruppieren. Beachte, dass **end_group** keinen Namen oder keine Bezeichnung benötigt, da sie in der Umfrage ausgeblendet ist.
 
-In deiner Umfrage kannst du die Darstellung als Feldliste für eine Gruppe verwenden, um mehrere Fragen auf demselben Bildschirm anzuzeigen.
+In deiner Umfrage kannst du die Darstellung **field-list** für eine Gruppe verwenden, um mehrere Fragen auf demselben Bildschirm anzuzeigen.
 
 ### Gruppen innerhalb von Gruppen verschachteln
 
@@ -834,9 +834,9 @@ Die verfügbaren Spaltenüberschriften für die Einstellungen sind:
 
 ### Umfragen mit mehreren Seiten
 
-Webumfragen können mithilfe des Stils **Theme Pages** auf mehrere Seiten aufgeteilt werden.
+Webumfragen können mithilfe des Stils **pages** (Theme Pages) auf mehrere Seiten aufgeteilt werden.
 
-Ein Beispiel für eine Umfrage, die auf mehrere Seiten aufgeteilt ist, findest du im Webformular [„Widgets auf Seiten"](https://enketo.ona.io/x/#YjeC). Erstelle auf der Registerkarte **Einstellungen** eine Spalte mit dem Namen **Stil** und lege diese wie folgt auf **Seiten** fest:
+Ein Beispiel für eine Umfrage, die auf mehrere Seiten aufgeteilt ist, findest du im Webformular [„Widgets auf Seiten"](https://enketo.ona.io/x/#YjeC). Erstelle auf dem Arbeitsblatt **settings** eine Spalte mit dem Namen **style** und lege diese wie folgt auf **pages** fest:
 
 <XlsFormDisplay worksheets={[
   {
@@ -844,12 +844,12 @@ Ein Beispiel für eine Umfrage, die auf mehrere Seiten aufgeteilt ist, findest d
     title: 'settings',
     headers: ['form_title', 'form_id', 'style'],
     data: [
-      ['Beispieltitel', 'Beispiel-ID', 'Seiten']
+      ['Beispieltitel', 'Beispiel-ID', 'pages']
     ]
   }
 ]} />
 
-Gruppiere auf der Registerkarte **Umfrage** die Fragen, die auf jeder Seite erscheinen sollen, und lege dann die Darstellung der Gruppe auf **Feldliste** fest. Siehe das folgende Beispiel.
+Gruppiere auf dem Arbeitsblatt **survey** die Fragen, die auf jeder Seite erscheinen sollen, und lege dann die Darstellung (**appearance**) der Gruppe auf **field-list** fest. Siehe das folgende Beispiel.
 
 <XlsFormDisplay worksheets={[
   {
@@ -857,7 +857,7 @@ Gruppiere auf der Registerkarte **Umfrage** die Fragen, die auf jeder Seite ersc
     title: 'survey',
     headers: ['type', 'name', 'label', 'appearance'],
     data: [
-      ['begin_group', 'Gruppe1', '', 'Feldliste'],
+      ['begin_group', 'Gruppe1', '', 'field-list'],
       ['text', 'name', 'Name des Befragten', ''],
       ['integer', 'Alter', 'Alter des Befragten', ''],
       ['text', 'Adresse', 'Adresse des Befragten', ''],
@@ -874,7 +874,7 @@ Der Grid-Stil ermöglicht es deiner Umfrage, das Aussehen traditioneller Papierf
 
 Bitte klicke auf den Link, um ein Beispiel für ein [Webformular im Grid-Design](https://enketo.ona.io/x/#Yn4R) zu sehen.
 
-Um eine Umfrage im Raster-Stil zu erstellen, gib auf der Registerkarte **Einstellungen** in der Spalte **Stil** wie folgt **theme-grid** ein:
+Um eine Umfrage im Raster-Stil zu erstellen, gib auf dem Arbeitsblatt **settings** in der Spalte **style** wie folgt **theme-grid** ein:
 
 <XlsFormDisplay worksheets={[
   {
@@ -887,7 +887,7 @@ Um eine Umfrage im Raster-Stil zu erstellen, gib auf der Registerkarte **Einstel
   }
 ]} />
 
-Gruppiere auf der Registerkarte **Umfrage** die Fragen, die in den einzelnen Abschnitten erscheinen sollen, und lege dann die Darstellung für jedes Feld entsprechend der gewünschten Breite fest (die Standardbreite ist 4). Siehe das folgende Beispiel.
+Gruppiere auf dem Arbeitsblatt **survey** die Fragen, die in den einzelnen Abschnitten erscheinen sollen, und lege dann die Darstellung für jedes Feld entsprechend der gewünschten Breite fest (die Standardbreite ist 4). Siehe das folgende Beispiel.
 
 <XlsFormDisplay worksheets={[
   {
