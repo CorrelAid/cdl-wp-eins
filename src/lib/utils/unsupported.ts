@@ -7,11 +7,11 @@ export type UnsupportedVariant = 'unsupported' | 'partial' | 'intro';
 
 export const UNSUPPORTED_LEAD: Record<UnsupportedVariant, string> = {
     unsupported:
-        'Nicht unterstützt in der CDL-Pipeline: FormTransform und qwacback lehnen einen Fragebogen ab, der diese Funktion verwendet.',
+        'Nicht unterstützt in der CDL-Pipeline: Die formtransform-Bibliothek (und damit die FormTransform-App, qwacback und FormulAid) lehnt einen Fragebogen ab, der diese Funktion verwendet.',
     partial:
-        'Nur teilweise unterstützt in der CDL-Pipeline: Was über die unterstützte Form hinausgeht, lehnen FormTransform und qwacback ab.',
+        'Nur teilweise unterstützt in der CDL-Pipeline: Was über die unterstützte Form hinausgeht, lehnt die formtransform-Bibliothek (und damit die FormTransform-App, qwacback und FormulAid) ab.',
     intro:
-        'Hinweis zur CDL-Pipeline: Diese Seite beschreibt XLSForm allgemein. FormTransform und qwacback unterstützen nur eine Teilmenge davon und lehnen Fragebögen mit anderen Funktionen ab. Abschnitte zu nicht oder nur teilweise unterstützten Funktionen sind markiert.',
+        'Hinweis zur CDL-Pipeline: Diese Seite beschreibt XLSForm allgemein. Die formtransform-Bibliothek (und damit die FormTransform-App, qwacback und FormulAid) unterstützt nur eine Teilmenge davon und lehnt Fragebögen mit anderen Funktionen ab. Abschnitte zu nicht oder nur teilweise unterstützten Funktionen sind markiert.',
 };
 
 export const SUBSET_LINK_LABEL = 'Unterstützte XLSForm-Teilmenge';

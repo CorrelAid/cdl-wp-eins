@@ -30,7 +30,7 @@ Das `<var>`-Element beschreibt eine Variable. Innerhalb davon steht in `<qstnLit
 
 Wenn Fragen in einem einheitlichen Format beschrieben sind, werden sie auffindbar, vergleichbar und wiederverwendbar. Andere Organisationen können sehen, wie eine Frage formuliert war, und sie für eigene Erhebungen übernehmen oder anpassen. Statt bei jeder neuen Umfrage von vorne anzufangen, entsteht über die Zeit ein gemeinsamer Bestand an erprobten Instrumenten.
 
-Ihr müsst dafür kein XML von Hand schreiben. Mit [FormTransform](/tools#formtransform) stellen wir ein Tool bereit, das aus bestehenden Umfragen (z.B. aus [KoboToolbox](/kobotoolbox) auf Basis von [XLSForm](/xlsform-standard) oder aus [LimeSurvey](/limesurvey)) automatisch ein DDI Codebook erzeugt.
+Ihr müsst dafür kein XML von Hand schreiben. Mit der [FormTransform-App](/tools#formtransform) stellen wir ein Tool bereit, das aus bestehenden Umfragen (z.B. aus [KoboToolbox](/kobotoolbox) auf Basis von [XLSForm](/xlsform-standard) oder aus [LimeSurvey](/limesurvey)) automatisch ein DDI Codebook erzeugt.
 
 Das Ergebnis kann anschließend über unsere Fragendatenbank [QWAC](/tools#qwac) mit der Community geteilt werden. QWAC ist mehr als ein Ablageort: Erst wenn viele Organisationen ihre Instrumente dort einstellen, entsteht ein gemeinsamer Pool erprobter Fragen, aus dem alle schöpfen können. Das hat zwei konkrete Effekte:
 
@@ -41,7 +41,7 @@ Je mehr Organisationen mitmachen, desto wertvoller wird der Bestand für die ges
 
 ### Integration mit FormTransform und qwac
 
-Die Web-App [FormTransform](/tools#formtransform) wandelt einen XLSForm-Fragebogen oder eine LimeSurvey-TSV-Datei in ein DDI Codebook um. Gebt ihr zusätzlich den Datenexport eurer Umfrage mit, erzeugt sie auch einen Antwortdatensatz, der zur DDI-Beschreibung passt. Den Export ladet ihr direkt im Umfragetool herunter. Wie das in KoboToolbox und LimeSurvey geht, beschreibt die [Anleitung zu Antwortdaten](https://github.com/CorrelAid/formtransform/blob/main/RESPONSE_DATA.md) (englisch). Alles läuft im Browser, die Daten verlassen euer Gerät nicht. Wer lieber auf der Kommandozeile oder im eigenen Code arbeitet, nutzt die zugrunde liegende [Bibliothek formtransform](/tools#formtransform-lib).
+Die [FormTransform-App](/tools#formtransform) wandelt einen XLSForm-Fragebogen oder eine LimeSurvey-TSV-Datei in ein DDI Codebook um. Gebt ihr zusätzlich den Datenexport eurer KoboToolbox-Umfrage mit, erzeugt sie auch einen Antwortdatensatz, der zur DDI-Beschreibung passt. Für einen LimeSurvey-Export geht das bisher über die formtransform-Bibliothek (siehe unten). Den Export ladet ihr direkt im Umfragetool herunter. Wie das in KoboToolbox und LimeSurvey geht, beschreibt die [Anleitung zu Antwortdaten](https://github.com/CorrelAid/formtransform/blob/main/RESPONSE_DATA.md) (englisch). Alles läuft im Browser, die Daten verlassen euer Gerät nicht. Wer lieber auf der Kommandozeile oder im eigenen Code arbeitet, nutzt die zugrunde liegende [formtransform-Bibliothek](/tools#formtransform-lib).
 
 Das Codebook könnt ihr anschließend in [QWAC](/tools#qwac) mit anderen teilen. Umgekehrt lassen sich Fragen aus QWAC als XLSForm in den eigenen Fragebogen übernehmen.
 

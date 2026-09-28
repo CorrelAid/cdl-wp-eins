@@ -61,7 +61,7 @@
         { "id": "formulaid", "label": "FormulAid", "type": "app", "href": "https://formulaid.correlaid.org/", "phases": [1], "section": "cdl" },
         { "id": "qwac", "label": "qwac", "type": "app", "href": "https://qwac.correlaid.org/", "phases": [1, 4], "section": "cdl" },
         { "id": "tool-bewertungsmatrix", "label": "Umfragetool Bewertungsmatrix", "type": "document", "href": "https://civic-data.de/app/uploads/Umfragetools_Bewertungen.xlsx", "phases": [2], "section": "ressourcen" },
-        { "id": "formtransform", "label": "FormTransform", "type": "app", "href": "https://formtransform.correlaid.org/", "phases": [2], "section": "cdl" },
+        { "id": "formtransform", "label": "FormTransform (App)", "type": "app", "href": "https://formtransform.correlaid.org/", "phases": [2], "section": "cdl" },
         { "id": "formtransform-lib", "label": "formtransform (Bibliothek)", "type": "package", "href": "https://github.com/CorrelAid/formtransform", "phases": [2, 3], "section": "cdl" },
         { "id": "survey-bayes", "label": "survey-bayes", "type": "package", "href": "https://github.com/CorrelAid/survey-bayes", "phases": [3], "section": "cdl" }
     ],

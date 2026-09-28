@@ -58,67 +58,43 @@ import ContentBox from "@components/ContentBox.astro";
             <tbody>
                 <tr>
                     <td><a href="/xlsform-standard">XLSForm</a></td>
-                    <td
-                        ><a
-                            href="https://www.limesurvey.org/manual/Tab_Separated_Value_survey_structure"
-                            >LimeSurvey TSV</a
-                        ></td
-                    >
-                    <td
-                        ><a href="/tools#formtransform">FormTransform</a> (Bibliothek: <a
-                            href="/tools#formtransform-lib"
-                            ><code>formtransform</code></a
-                        >)</td
-                    >
+                    <td><a href="https://www.limesurvey.org/manual/Tab_Separated_Value_survey_structure">LimeSurvey TSV</a></td>
+                    <td><a href="/tools#formtransform">FormTransform-App</a>, <a href="/tools#formtransform-lib">formtransform-Bibliothek</a></td>
                 </tr>
                 <tr>
-                    <td
-                        ><a href="/xlsform-standard">XLSForm</a> + <a
-                            href="https://support.kobotoolbox.org/export_download.html#export-types"
-                            >KoboToolbox CSV</a
-                        > (Ergebnisse)</td
-                    >
-                    <td
-                        ><a href="/nachnutzbarkeit"
-                            >DDI Codebook XML</a
-                        > + DDI-konforme Datenstruktur</td
-                    >
-                    <td><a href="/tools#formtransform">FormTransform</a></td>
+                    <td><a href="/xlsform-standard">XLSForm</a> (+ <a href="https://support.kobotoolbox.org/export_download.html#export-types">KoboToolbox-Export</a> der Ergebnisse)</td>
+                    <td><a href="/nachnutzbarkeit">DDI Codebook XML</a> (+ passender Datensatz)</td>
+                    <td><a href="/tools#formtransform">FormTransform-App</a>, <a href="/tools#formtransform-lib">formtransform-Bibliothek</a></td>
                 </tr>
                 <tr>
-                    <td
-                        ><a
-                            href="https://www.limesurvey.org/manual/Tab_Separated_Value_survey_structure"
-                            >LimeSurvey TSV</a
-                        > + <a
-                            href="https://www.limesurvey.org/manual/Export_responses"
-                            >LimeSurvey CSV</a
-                        > (Ergebnisse)</td
-                    >
-                    <td
-                        ><a href="/nachnutzbarkeit"
-                            >DDI Codebook XML</a
-                        > + DDI-konforme Datenstruktur</td
-                    >
-                    <td><a href="/tools#formtransform">FormTransform</a></td>
+                    <td><a href="https://www.limesurvey.org/manual/Tab_Separated_Value_survey_structure">LimeSurvey TSV</a> (+ <a href="https://www.limesurvey.org/manual/Export_responses">LimeSurvey-Export</a> der Ergebnisse)</td>
+                    <td><a href="/nachnutzbarkeit">DDI Codebook XML</a> (+ passender Datensatz)</td>
+                    <td><a href="/tools#formtransform">FormTransform-App</a> (nur DDI), <a href="/tools#formtransform-lib">formtransform-Bibliothek</a></td>
                 </tr>
                 <tr>
-                    <td
-                        ><a href="/nachnutzbarkeit"
-                            >DDI Codebook XML</a
-                        ></td
-                    >
-                    <td><a href="/xlsform-standard">XLSForm</a>-Snippets</td>
-                    <td><a href="/tools#qwac">qwacback</a></td>
+                    <td><a href="https://www.limesurvey.org/manual/Tab_Separated_Value_survey_structure">LimeSurvey TSV</a></td>
+                    <td><a href="/xlsform-standard">XLSForm</a></td>
+                    <td><a href="/tools#formtransform-lib">formtransform-Bibliothek</a></td>
+                </tr>
+                <tr>
+                    <td><a href="/nachnutzbarkeit">DDI Codebook XML</a></td>
+                    <td><a href="/xlsform-standard">XLSForm</a></td>
+                    <td><a href="/tools#formtransform-lib">formtransform-Bibliothek</a>, in <a href="/tools#qwac">qwac</a> für Fragen und Studien</td>
                 </tr>
             </tbody>
         </table>
         <p>
-            Manche Transformationen beinhalten Informationsverlust, da im
-            Ursprungsformat mehr oder andere Daten kodiert sind als im
-            Zielformat. Ein DDI Codebook aus FormTransform enthält dagegen den
-            ganzen Fragebogen: Aus XLSForm → DDI Codebook → XLSForm entsteht
-            wieder derselbe Fragebogen.
+            Alle Transformationen laufen über die formtransform-Bibliothek. Die
+            FormTransform-App bietet die ersten drei im Browser an; den
+            Datensatz aus einem LimeSurvey-Export und die Wege zurück nach
+            XLSForm gibt es über die Bibliothek bzw. ihr Kommandozeilen-Tool.
+            Innerhalb der <a
+                href="https://github.com/CorrelAid/formtransform#supported-xlsform-subset"
+                >unterstützten XLSForm-Teilmenge</a
+            > bleibt der Fragebogen vollständig erhalten: Aus XLSForm → DDI
+            Codebook → XLSForm entsteht wieder derselbe Fragebogen. Nur wenige
+            Details lassen sich nicht in jedem Format abbilden, z.B. verschachtelte
+            Gruppen in LimeSurvey.
         </p>
     </ContentBox>
 </Layout>
