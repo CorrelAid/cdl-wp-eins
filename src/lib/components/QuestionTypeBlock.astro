@@ -1,7 +1,7 @@
 ---
 import { Tabs } from "@correlaid/cdl-design";
 import { codeToHtml } from "shiki";
-import { EXAMPLES_API_URL } from "astro:env/server";
+import { getExample } from "@lib/utils/examples";
 
 interface Props {
     exampleId: string;
@@ -11,16 +11,13 @@ interface Props {
 
 const { exampleId, limesurveySrc: limesurveySrcProp, koboSrc: koboSrcProp } = Astro.props;
 
-const response = await fetch(`${EXAMPLES_API_URL}/api/examples/${exampleId}`);
-if (!response.ok) {
-    throw new Error(`Failed to fetch example "${exampleId}": ${response.status} ${response.statusText}`);
-}
-const example = await response.json();
+// Unavailable examples render a note instead of failing the build (qwacback down or rate-limited).
+const example = await getExample(exampleId);
 
-const xlsform = example.xlsform;
-const ddiXml: string | undefined = example.ddi;
-const limesurveySrc: string | undefined = limesurveySrcProp ?? example.limesurveySrc;
-const koboSrc: string | undefined = koboSrcProp ?? example.koboSrc;
+const xlsform = example?.xlsform ?? { survey: [] };
+const ddiXml: string | undefined = example?.ddi;
+const limesurveySrc: string | undefined = limesurveySrcProp ?? example?.limesurveySrc;
+const koboSrc: string | undefined = koboSrcProp ?? example?.koboSrc;
 
 // Build XLSForm HTML — stacked sheet cards
 function escapeAttr(str: string): string {
@@ -80,7 +77,9 @@ const tabs = [
 ];
 ---
 
-<Tabs client:load tabs={tabs} expandLabel="Mehr anzeigen" collapseLabel="Weniger anzeigen" />
+{example
+    ? <Tabs client:load tabs={tabs} expandLabel="Mehr anzeigen" collapseLabel="Weniger anzeigen" />
+    : <div class="qt-card"><div class="qt-card-body"><div class="qt-placeholder">Beispiel gerade nicht verfügbar</div></div></div>}
 
 <script>
     document.addEventListener("click", (e) => {

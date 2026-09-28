@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
 // @ts-ignore
 import { getLiveCollection } from 'astro:content';
-import { EXAMPLES_API_URL } from 'astro:env/server';
+import { getExample } from '@lib/utils/examples';
 import toc from '@lib/toc.json';
 import { unsupportedText, unsupportedVariant } from '@lib/utils/unsupported';
 import { citationAttr, itemDois } from '@lib/utils/citations';
@@ -80,9 +80,8 @@ function formatRecordTable(sheetName: string, records: Record<string, string>[])
 
 async function fetchExample(exampleId: string, format: ExampleFormat): Promise<string> {
     try {
-        const res = await fetch(`${EXAMPLES_API_URL}/api/examples/${exampleId}`);
-        if (!res.ok) return `[Example "${exampleId}" unavailable]`;
-        const data = await res.json();
+        const data: any = await getExample(exampleId);
+        if (!data) return `[Example "${exampleId}" unavailable]`;
 
         const parts: string[] = [];
 
