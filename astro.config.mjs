@@ -44,7 +44,7 @@ export default defineConfig({
       }),
       EXAMPLES_API_URL: envField.string({
         context: "server",
-        access: "secret",
+        access: "public",
         optional: false,
         default: "https://qwacback.correlaid.org"
       })

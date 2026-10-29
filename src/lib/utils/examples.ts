@@ -52,7 +52,16 @@ export function getExample(id: string): Promise<Example | null> {
         pending = load(id);
         cache.set(id, pending);
         // Don't keep a failure around; the next render may succeed.
-        pending.then(result => { if (!result) cache.delete(id); });
+        pending.then(result => {
+            if (result) return;
+            cache.delete(id);
+            console.warn(`[examples] WARNING: example "${id}" is unavailable, the page shows a placeholder note instead. Rebuild once qwacback is reachable.`);
+            // Opt-in guard for CI: catches a renamed or missing example id before it ships.
+            if (process.env.EXAMPLES_STRICT === '1') {
+                console.error(`[examples] EXAMPLES_STRICT=1: failing the build because "${id}" is unavailable`);
+                process.exit(1);
+            }
+        });
     }
     return pending;
 }

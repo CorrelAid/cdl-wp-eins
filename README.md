@@ -17,7 +17,7 @@
 | `ZOTERO_GROUP_ID` | Numeric ID of the Zotero group library. Find it in the URL when viewing the group on zotero.org (e.g. `https://www.zotero.org/groups/<ID>/...`). |
 | `EXAMPLES_API_URL` | Base URL of the [qwackback](https://github.com/CorrelAid/qwackback) API that serves XLSForm examples. Set to `http://localhost:8090` for local development. |
 
-The app builds without `ZOTERO_API_KEY`/`ZOTERO_GROUP_ID` — citations will simply be empty. `EXAMPLES_API_URL` is required at build time wherever `<QuestionTypeBlock>` is used in content.
+The app builds without `ZOTERO_API_KEY`/`ZOTERO_GROUP_ID` — citations will simply be empty. `EXAMPLES_API_URL` has a default. If the API is unreachable or rate-limited, the build still succeeds: each affected example shows "Beispiel gerade nicht verfügbar" (llm*.txt: `[Example "id" unavailable]`) and the build log prints `[examples] WARNING`. Set `EXAMPLES_STRICT=1` (e.g. in CI) to fail the build instead.
 
 ## Contribution
 
@@ -53,21 +53,16 @@ Quellen is managed via a Zotero group and fetched live. To cite an item in an MD
 
 HTML fragments in `src/content/snippets/` contain short descriptions for individual tools (e.g. FormulAid, QWAC). Each file is a `<section>` of prose that can be embedded into any page.
 
-When the site is deployed, every snippet is also served as a plain HTML file at `/snippets/<filename>`, for example:
-
-```
-https://your-domain.example/snippets/formulaid.html
-https://your-domain.example/snippets/qwac.html
-```
-
-External applications can fetch these URLs to embed up-to-date descriptions without duplicating content:
+Snippets live at `src/content/snippets/<id>/<lang>.html` (`<lang>` is `de` or `en`), for example `formulaid/de.html`. The site does not serve them. Apps (formulaid, formtransform-app, qwac) fetch them from GitHub, e.g.:
 
 ```js
-const res = await fetch('https://your-domain.example/snippets/formulaid.html');
+const res = await fetch('https://raw.githubusercontent.com/CorrelAid/cdl-wp-eins/main/src/content/snippets/formulaid/de.html');
 document.querySelector('#description').innerHTML = await res.text();
 ```
 
-To add a new snippet, create an `.html` file in `src/content/snippets/` — it will be served automatically.
+Do not rename the directories `formtransform/`, `qwac/`, `formulaid/` and `liability/`: those apps depend on the paths.
+
+To add a new snippet, create `<id>/de.html` and `<id>/en.html` in `src/content/snippets/` (`bun run check:site` checks that every tool in `toc.json` has both).
 
 ### LLM.txt
 
