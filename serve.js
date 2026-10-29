@@ -12,16 +12,6 @@ if (existsSync(distPath)) {
   console.log(`✅ dist directory exists`);
   const files = readdirSync(distPath);
   console.log(`dist contents: ${files.join(', ')}`);
-
-  // Check for page subdirectories
-  const einleitung = existsSync('./dist/einleitung');
-  const surveyTools = existsSync('./dist/survey_tools');
-  console.log(`einleitung dir exists: ${einleitung}`);
-  console.log(`survey_tools dir exists: ${surveyTools}`);
-
-  if (einleitung) {
-    console.log(`einleitung contents: ${readdirSync('./dist/einleitung').join(', ')}`);
-  }
 } else {
   console.error(`❌ dist directory NOT FOUND at ${distPath}`);
   console.log(`Current directory contents:`, readdirSync('.'));
@@ -40,16 +30,6 @@ const server = Bun.serve({
     // Default to index.html for directory requests
     if (pathname.endsWith("/")) {
       pathname += "index.html";
-    }
-
-    // Serve files from src/content/snippets for /snippets/ requests
-    if (pathname.startsWith("/snippets/")) {
-      const snippetPath = `./src/content/snippets${pathname.slice("/snippets".length)}`;
-      const snippetFile = Bun.file(snippetPath);
-      if (await snippetFile.exists()) {
-        console.log(`  → Serving snippet: ${snippetPath}`);
-        return new Response(snippetFile);
-      }
     }
 
     // Try to serve the file directly
